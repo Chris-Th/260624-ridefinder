@@ -1618,7 +1618,7 @@ Reputation
 
 ---
 
-# Database Design Strategy
+# ==Database Design Strategy==
 
 A common solo-developer mistake is over-normalizing too early.
 
@@ -3013,3 +3013,1112 @@ When multiple solutions are possible, choose the solution that is:
 Not the solution that is theoretically the most flexible.
 
 One additional rule you may want to add later, once the project has some momentum, is a **"No Silent Refactors"** principle: agents should not restructure unrelated code while working on a feature. That single rule prevents a surprising amount of AI-generated churn in Laravel projects.
+
+
+PROMPT
+Inside the livewire starting kit there is a folder .agents/skills containing subfolders like laravel-best-practices containing a file SKILL.md and another  nested folder called rules with items like routing.md and others. Is .agents a good place to put deveopment-principles.md  and/or project-context.md and if yes, what should their respective subfolders be called?
+
+
+REPLY
+Yes, I think `.agents/skills` is actually a very good place for both documents **if their primary audience is coding agents**.
+
+The distinction I'd make is:
+
+### project-context.md
+
+Answers:
+
+> What are we building?
+
+### development-principles.md
+
+Answers:
+
+> How do we build it?
+
+Those are effectively two separate skills.
+
+I'd probably structure it like this:
+
+```text
+.agents/
+└── skills/
+    ├── laravel-best-practices/
+    │   ├── SKILL.md
+    │   └── rules/
+    │       ├── routing.md
+    │       ├── ...
+    │
+    ├── ride-match-context/
+    │   └── SKILL.md
+    │
+    └── ride-match-development/
+        ├── SKILL.md
+        └── rules/
+            ├── testing.md
+            ├── livewire.md
+            ├── javascript.md
+            └── architecture.md
+```
+
+---
+
+## ride-match-context
+
+This becomes your project vision skill.
+
+```text
+.agents/skills/ride-match-context/SKILL.md
+```
+
+Contents:
+
+- project overview
+    
+- product goals
+    
+- target users
+    
+- MVP scope
+    
+- excluded features
+    
+- success metrics
+    
+
+Essentially your current `project-context.md`.
+
+This file changes relatively infrequently.
+
+---
+
+## ride-match-development
+
+This becomes your implementation skill.
+
+```text
+.agents/skills/ride-match-development/SKILL.md
+```
+
+A short overview:
+
+```md
+# RideMatch Development Principles
+
+This skill defines how the project is implemented.
+
+Consult rule documents for:
+
+- testing
+- livewire architecture
+- javascript
+- project structure
+```
+
+Then split the actual guidance into rule files.
+
+---
+
+### testing.md
+
+Contains:
+
+- feature tests first
+    
+- TDD for essential features
+    
+- tests as development roadmap
+    
+- avoid testing framework behavior
+    
+
+---
+
+### livewire.md
+
+Contains:
+
+- full page components by default
+    
+- co-location philosophy
+    
+- extraction rules
+    
+- blade vs livewire component decisions
+    
+
+---
+
+### javascript.md
+
+Contains your Alpine preferences.
+
+Example:
+
+```md
+# JavaScript Rules
+
+Interactive behavior should generally be implemented
+using reusable Alpine.data objects.
+
+Prefer:
+
+<div x-data="carousel">
+
+<script>
+Alpine.data('carousel', () => ({
+    ...
+}));
+</script>
+
+Avoid large collections of inline Alpine expressions.
+
+Keep component behavior close to the component
+that owns it.
+```
+
+---
+
+### architecture.md
+
+Contains:
+
+- simplest solution first
+    
+- avoid repositories unless justified
+    
+- avoid premature abstractions
+    
+- agents must not expand scope
+    
+- no speculative architecture
+    
+
+---
+
+## Why I Prefer Multiple Rule Files
+
+Agents are surprisingly good at consuming:
+
+```text
+rules/testing.md
+```
+
+when asked:
+
+> write feature tests
+
+and
+
+```text
+rules/javascript.md
+```
+
+when asked:
+
+> add an image carousel
+
+This tends to produce better results than a single 2,000-line document.
+
+---
+
+## One Additional Skill I'd Add Later
+
+Once the project grows:
+
+```text
+.agents/skills/ride-match-domain/
+```
+
+Containing:
+
+```text
+ride.md
+user.md
+participation.md
+reputation.md
+```
+
+This becomes the canonical source for business terminology.
+
+For example:
+
+```md
+# Ride
+
+A Ride is an event organized by a Host.
+
+A Ride has:
+
+- discipline
+- pace
+- ride style
+- meeting point
+- start time
+
+A Ride is not:
+
+- a GPX route
+- a ride recording
+```
+
+This prevents agents from gradually inventing conflicting concepts over time.
+
+So my recommendation would be:
+
+- Put **project-context.md** into `.agents/skills/ride-match-context/SKILL.md`
+    
+- Put **development-principles.md** into `.agents/skills/ride-match-development/SKILL.md`
+    
+- Move the detailed implementation guidance into a `rules/` directory under `ride-match-development`
+    
+
+That structure scales nicely from MVP to a much larger project without becoming a dumping ground of unrelated instructions.
+
+
+PROMPT
+Can you please create appropriate basic content for the 4 files inside rules folder, following the overviews provided by you?
+
+REPLY
+# testing.md
+
+# Testing Rules
+
+## Purpose
+
+Tests serve two purposes:
+
+1. Verify essential application behavior.
+    
+2. Guide development.
+    
+
+Tests should describe what the system is expected to do from a user's perspective.
+
+---
+
+## Feature Tests First
+
+Feature tests are the primary testing tool for this project.
+
+Examples:
+
+- User can create a ride.
+    
+- User can join a ride.
+    
+- User cannot edit another user's ride.
+    
+- User can filter rides by discipline.
+    
+- User can leave a ride.
+    
+
+Feature tests should generally be written before implementation.
+
+---
+
+## TDD For Essential Features
+
+Use a test-first workflow for important business functionality.
+
+Recommended workflow:
+
+1. Define expected behavior.
+    
+2. Create feature tests.
+    
+3. Run tests and verify failure.
+    
+4. Implement functionality.
+    
+5. Refactor once tests pass.
+    
+
+Examples of features that should normally use TDD:
+
+- Ride creation
+    
+- Ride participation
+    
+- Authorization
+    
+- Validation
+    
+- Discovery and filtering
+    
+- Reputation calculations
+    
+
+---
+
+## Do Not Test Framework Behavior
+
+Do not create tests that simply verify Laravel, Livewire, Alpine, or PHP behavior.
+
+Focus on project-specific business rules.
+
+Bad examples:
+
+- Framework validation already guaranteed by Laravel.
+    
+- Livewire rendering behavior without project logic.
+    
+
+Good examples:
+
+- Guests cannot create rides.
+    
+- Ride hosts can edit their own rides.
+    
+- A rider cannot join the same ride twice.
+    
+
+---
+
+## Prefer Behavior Over Implementation
+
+Tests should describe outcomes rather than internal implementation.
+
+Prefer:
+
+"User can join a ride."
+
+Over:
+
+"JoinRideAction was called."
+
+---
+
+## Test Only What Matters
+
+Do not create tests solely to increase coverage.
+
+If a behavior is not important enough to justify a test, question whether it is important enough to justify implementation complexity.
+
+---
+
+## When Agents Add Features
+
+Before implementing significant functionality:
+
+1. Identify essential business behavior.
+    
+2. Add or update feature tests.
+    
+3. Implement the simplest solution that satisfies those tests.
+    
+
+# livewire.md
+
+# Livewire Architecture Rules
+
+## Full Page Components By Default
+
+Pages should generally be implemented as Livewire Full Page Components.
+
+Examples:
+
+- Ride discovery
+    
+- Ride details
+    
+- Ride creation
+    
+- User profile
+    
+
+Prefer full page components unless there is a clear reason not to.
+
+---
+
+## Follow Co-Location Principles
+
+Keep related concerns together whenever practical.
+
+A component should own:
+
+- State
+    
+- Actions
+    
+- Validation
+    
+- Markup
+    
+- Component-specific JavaScript
+    
+
+Avoid unnecessary separation of closely related concerns.
+
+---
+
+## Extract Components Only When Needed
+
+Create reusable components when:
+
+- A component is used multiple times.
+    
+- A component has become difficult to understand.
+    
+- Extraction improves maintainability.
+    
+
+Do not extract components preemptively.
+
+---
+
+## Blade vs Livewire
+
+Use Blade partials when:
+
+- Rendering is purely presentational.
+    
+- No state is required.
+    
+- No user interaction is required.
+    
+
+Use Livewire components when:
+
+- State exists.
+    
+- User interaction exists.
+    
+- Server communication exists.
+    
+
+---
+
+## Keep Components Focused
+
+Components should generally have a single responsibility.
+
+Examples:
+
+Good:
+
+- RideFilter
+    
+- ParticipantList
+    
+- JoinRideButton
+    
+
+Avoid large components responsible for unrelated behavior.
+
+---
+
+## Prefer Explicit Behavior
+
+Favor readable methods and clearly named actions.
+
+Avoid hiding important business logic inside complex view expressions.
+
+Business logic belongs in PHP.
+
+---
+
+## Avoid Premature Abstractions
+
+Do not introduce additional architectural layers unless a real need exists.
+
+Examples that require justification:
+
+- Repository pattern
+    
+- Service layers
+    
+- Custom infrastructure
+    
+
+Simple solutions are preferred until complexity demands otherwise.
+
+# javascript.md
+
+# JavaScript Rules
+
+## General Principle
+
+JavaScript is encouraged when it improves user experience or simplifies implementation.
+
+There is no requirement to force all interactivity through Livewire.
+
+Use the simplest solution that produces maintainable behavior.
+
+---
+
+## Prefer Alpine Data Objects
+
+Interactive behavior should generally be implemented using Alpine.data objects.
+
+Preferred structure:
+
+```php
+<div x-data="carousel">
+    ...
+</div>
+
+<script>
+    Alpine.data('carousel', () => ({
+        // state
+
+        // computed properties
+
+        // methods
+    }));
+</script>
+```
+
+Avoid large collections of anonymous inline Alpine expressions.
+
+---
+
+## Keep JavaScript Local
+
+Component-specific behavior should remain inside the component that owns it.
+
+Whenever practical:
+
+- Alpine component definition
+    
+- Template
+    
+- Related markup
+    
+
+should live together.
+
+This aligns with Livewire's co-location philosophy.
+
+---
+
+## Prefer Explicit State
+
+Favor clearly named state properties.
+
+Example:
+
+```js
+open: false,
+
+toggle() {
+    this.open = !this.open
+}
+```
+
+Avoid deeply nested or difficult-to-follow expressions.
+
+---
+
+## Favor Reusable Alpine Components
+
+When behavior appears in multiple places, extract it into a reusable Alpine.data object.
+
+Examples:
+
+- Modal
+    
+- Dropdown
+    
+- Carousel
+    
+- Tabs
+    
+
+Do not duplicate identical JavaScript across multiple components.
+
+---
+
+## Minimize Global Scripts
+
+Avoid creating global JavaScript unless behavior is intentionally shared application-wide.
+
+Prefer local ownership over centralized script files.
+
+---
+
+## Business Logic Stays In PHP
+
+JavaScript should primarily handle:
+
+- Interaction
+    
+- Presentation state
+    
+- Client-side UX
+    
+
+Business rules and domain logic belong in PHP.
+
+---
+
+## Progressive Enhancement
+
+Features should continue to function whenever reasonable without relying entirely on client-side JavaScript.
+
+Use JavaScript to enhance the experience, not to replace core functionality.
+
+# architecture.md
+
+# Architecture Rules
+
+## Build The Simplest Thing That Works
+
+Implement the smallest solution that satisfies:
+
+- Current requirements
+    
+- Existing tests
+    
+- MVP scope
+    
+
+Avoid solving future problems before they exist.
+
+---
+
+## Behavior Before Architecture
+
+Working behavior is more important than architectural purity.
+
+Prioritize:
+
+- Clarity
+    
+- Readability
+    
+- Simplicity
+    
+
+before introducing additional abstractions.
+
+---
+
+## Avoid Premature Abstractions
+
+Do not introduce patterns because they might be useful later.
+
+Examples requiring clear justification:
+
+- Repository pattern
+    
+- Service layers
+    
+- DTOs
+    
+- Complex event systems
+    
+- Custom infrastructure
+    
+
+Use framework conventions first.
+
+---
+
+## Optimize For Readability
+
+Future maintainability is more important than theoretical flexibility.
+
+Prefer:
+
+- Clear names
+    
+- Explicit code
+    
+- Small focused methods
+    
+
+Avoid:
+
+- Clever code
+    
+- Deep indirection
+    
+- Over-generalization
+    
+
+---
+
+## Follow Existing Conventions
+
+Before introducing a new pattern, inspect the existing codebase.
+
+Prefer consistency over personal preference.
+
+A slightly imperfect but consistent codebase is preferable to multiple competing styles.
+
+---
+
+## No Silent Refactors
+
+When implementing a feature:
+
+- Modify only the code required for the task.
+    
+- Do not restructure unrelated areas.
+    
+- Do not perform broad architectural rewrites.
+    
+
+Large refactors should be separate, intentional tasks.
+
+---
+
+## Agents Must Not Expand Scope
+
+Implement requested functionality.
+
+Do not introduce:
+
+- Additional features
+    
+- Alternative workflows
+    
+- Future-facing architecture
+    
+
+unless explicitly requested.
+
+---
+
+## Refactor Only After Behavior Exists
+
+Prefer this order:
+
+1. Define behavior.
+    
+2. Write tests.
+    
+3. Implement.
+    
+4. Refactor.
+    
+
+Avoid designing elaborate architecture before working behavior exists.
+
+---
+
+## Decision Rule
+
+When multiple solutions are possible, choose the solution that is:
+
+1. Easiest to understand.
+    
+2. Easiest to test.
+    
+3. Easiest to change later.
+    
+
+Not the solution that is theoretically the most flexible.
+
+
+PROMPT
+What information should a user profile contain?
+
+REPLY
+For the MVP, I'd be very careful not to let the profile turn into a mini-Strava profile.
+
+The profile exists to answer:
+
+> "Would I enjoy riding with this person?"
+
+not
+
+> "How strong is this cyclist?"
+
+---
+
+# MVP Profile
+
+## Basic Information
+
+- Display name
+    
+- Profile photo (optional)
+    
+- Home area / city
+    
+- Short bio (optional)
+    
+
+Example:
+
+```text
+Chris
+Zurich
+
+Road, Gravel
+
+Enjoy long social rides, climbing days,
+and coffee stops.
+```
+
+That's enough human context.
+
+---
+
+## Disciplines
+
+Multi-select.
+
+Examples:
+
+- Road
+    
+- Gravel
+    
+- MTB
+    
+- Touring
+    
+- E-Bike
+    
+- Commuting
+    
+
+This becomes useful for filtering and matching.
+
+---
+
+## Ride Preferences
+
+This is probably the most important section.
+
+Examples:
+
+### Enjoys
+
+- Coffee Rides
+    
+- Climbing
+    
+- Endurance
+    
+- Scenic Rides
+    
+- Bikepacking
+    
+- Training
+    
+
+### Avoids (optional)
+
+- Race Pace
+    
+- Technical MTB
+    
+- Sprint Training
+    
+
+This helps set expectations.
+
+---
+
+## Pace Preference
+
+I'd avoid exact numbers initially.
+
+Instead:
+
+```text
+Easy
+Social
+Brisk
+Fast
+Race
+```
+
+Most cyclists overestimate consistency of average speed because:
+
+- terrain varies
+    
+- wind varies
+    
+- group size varies
+    
+
+The labels communicate intent better.
+
+---
+
+## Ride Expectations
+
+Checkbox-style attributes.
+
+Examples:
+
+```text
+✓ No-Drop Rides
+
+✓ Coffee Stops
+
+✓ Regroup At Climbs
+
+✗ Competitive Training
+```
+
+This may be more valuable than fitness information.
+
+---
+
+# Reputation Section
+
+Only after rides exist.
+
+Example:
+
+```text
+Joined: 18 rides
+
+Hosted: 6 rides
+
+Attendance: 100%
+```
+
+and later:
+
+```text
+Ride Description Accuracy: 95%
+```
+
+These are trust metrics.
+
+---
+
+# Things I Would Avoid Initially
+
+## FTP
+
+```text
+FTP: 312
+```
+
+No.
+
+Very niche.
+
+---
+
+## Power Data
+
+No.
+
+---
+
+## Bike Collection
+
+Fun but not relevant to ride matching.
+
+---
+
+## Strava Statistics
+
+No.
+
+You aren't building Strava.
+
+---
+
+## Followers
+
+No.
+
+---
+
+## Likes
+
+No.
+
+---
+
+# One Thing I Would Add
+
+A "Typical Ride" section.
+
+Something like:
+
+```text
+Typical Ride
+
+Road
+70-100 km
+
+Social Pace
+
+Coffee Stop Required
+```
+
+or
+
+```text
+Typical Ride
+
+Gravel
+40-60 km
+
+Brisk Pace
+
+Exploration Focused
+```
+
+This gives an immediate picture of the rider.
+
+---
+
+# If I Were Designing the Profile Screen
+
+I'd structure it like this:
+
+```text
+[Photo]
+
+Chris
+Zurich
+
+Road • Gravel
+
+----------------
+
+About
+
+Enjoy climbing, coffee rides
+and weekend adventures.
+
+----------------
+
+Typical Ride
+
+Road
+70-100 km
+Social Pace
+
+----------------
+
+Preferences
+
+☕ Coffee Rides
+⛰ Climbing
+🌄 Scenic Routes
+
+----------------
+
+Reliability
+
+Joined 18 rides
+Hosted 6 rides
+Attendance 100%
+```
+
+Notice what's missing:
+
+- power numbers
+    
+- fitness metrics
+    
+- leaderboards
+    
+- followers
+    
+
+The profile is optimized for **ride compatibility and trust**, which aligns directly with the core purpose of the app.
