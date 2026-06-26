@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Ride::class);
             $table->foreignIdFor(User::class);
-            $table->enum('matched_description', ['yes', 'mostly', 'mostly not', 'no']);
+            $table->enum('matched_description', App\Enums\IsAgreeing::cases());
             $table->timestamps();
         });
     }

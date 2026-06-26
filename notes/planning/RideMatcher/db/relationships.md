@@ -1,40 +1,49 @@
 # Relationship Overview
 
-```text
-User
-│
-├── hasOne Profile
-│
-├── hasMany Hosted Rides
-│
-└── belongsToMany Rides
-      through ride_user
+# Relationships
 
+## User
 
-Profile
-│
-├── belongsTo User
-│
-├── belongsTo Typical Discipline
-│
-├── belongsTo Typical Pace
-│
-├── belongsTo Typical Distance Range
-│
-├── belongsToMany Disciplines
-│
-└── belongsToMany Ride Types
+* hasOne Profile
+* hasMany Ride
+* belongsToMany Ride (through ride_user)
+* hasMany RideFeedback
 
+## Profile
 
-Ride
-│
-├── belongsTo Host(User)
-│
-├── belongsTo Discipline
-│
-├── belongsTo Pace
-│
-├── belongsToMany Types
-│
-└── belongsToMany Participants
-```
+* belongsTo User
+* belongsTo Discipline
+* belongsToMany Pace
+* belongsToMany Discipline
+* belongsToMany RideType
+* belongsTo Discipline (as typicalDiscipline())
+
+## Discipline
+
+* hasMany Profile
+* hasMany Ride
+* belongsToMany Profile
+
+## Pace
+
+* hasMany Profile
+* hasMany Ride
+
+## RideType
+
+* belongsToMany Profile
+* hasMany Ride
+
+## Ride
+
+* belongsTo User
+* belongsTo Discipline
+* belongsTo Pace
+* belongsToMany RideType
+* belongsToMany User (through ride_user)
+* hasMany RideFeedback
+
+## RideFeedback
+
+* belongsTo Ride
+* belongsTo User

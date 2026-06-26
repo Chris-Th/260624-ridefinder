@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\ZurichCantonCity;
+use App\Models\Discipline;
+use App\Models\Pace;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,8 +21,29 @@ class ProfileFactory extends Factory
      */
     public function definition(): array
     {
+
+
+        $locations = collect(ZurichCantonCity::cases());
+        $range = $this->getDistanceRange();
+
         return [
-            //
+            'user_id' => User::all()->pluck('id')->random(),
+            'discipline_id' => Discipline::all()->pluck('id')->random(),
+            'pace_id' => Pace::all()->pluck('id')->random(),
+            'location' => $locations->random(),
+            'bio' => fake()->paragraph(2),
+            'distance_min_km' => $range[0],
+            'distance_max_km' => $range[1],
         ];
+    }
+
+    protected function getDistanceRange () {
+        $dists = collect([0, 25, 50, 75, 100]);
+        $maxIndex = $dists->count() - 1;
+        $maxDs = $dists->splice(rand(1, $maxIndex));
+
+        $range = $maxIndex === 4 ? [ 100, null ] : [ $dists->random(), $maxDs->random()];
+
+        return $range;
     }
 }

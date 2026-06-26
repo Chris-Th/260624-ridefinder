@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\RideType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class RideTypeSeeder extends Seeder
 {
@@ -11,9 +13,13 @@ class RideTypeSeeder extends Seeder
      * Run the database seeds.
      */
 
-    protected
     public function run(): void
     {
-        //
+        $rides = collect(['Coffee Ride', 'Training', 'Climbing', 'Scenic Ride', 'Endurance', 'Bikepacking']);
+
+        $rides->each(fn ($ride) => RideType::create([
+            'name' => $ride,
+            'slug' => Str::of($ride)->slug('-')
+        ]));
     }
 }

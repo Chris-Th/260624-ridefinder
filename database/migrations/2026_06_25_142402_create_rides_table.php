@@ -1,7 +1,8 @@
 <?php
 
 use App\Models\Discipline;
-use App\Models\PaceLevel;
+use App\Models\Pace;
+use App\Models\RideType;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,17 +17,18 @@ return new class extends Migration
     {
         Schema::create('rides', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class); // host
             $table->string('title');
             $table->string('description')->nullable();
             $table->foreignIdFor(Discipline::class);
-            $table->foreignIdFor(PaceLevel::class);
+            $table->foreignIdFor(Pace::class);
+            $table->foreignIdFor(RideType::class);
             $table->decimal('distance_km', 5, 1);
             $table->integer('elevation_m');
             $table->string('meeting_point_name');
             $table->string('meeting_point_address');
             $table->dateTime('meets_at');
-            $table->dateTime('starts_at')->nullable();
+            $table->dateTime('leaves_at')->nullable();
             $table->integer('max_riders')->nullable();
             $table->boolean('no_drop')->default(false);
             $table->boolean('regroup_at_climbs')->default(false);

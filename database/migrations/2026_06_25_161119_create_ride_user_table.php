@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RiderStatus;
 use App\Models\Ride;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -13,11 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ride_users', function (Blueprint $table) {
+        Schema::create('ride_user', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ride::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
-            $table->enum('status', ['joined', 'cancelled', 'attended', 'no-show']);
+            $table->enum('status', RiderStatus::cases());
             $table->timestamps();
         });
     }

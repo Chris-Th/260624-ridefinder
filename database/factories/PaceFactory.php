@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\PaceLevel;
+use App\Models\Pace;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<PaceLevel>
+ * @extends Factory<Pace>
  */
-class PaceLevelFactory extends Factory
+class PaceFactory extends Factory
 {
     /**
      * Define the model's default state.

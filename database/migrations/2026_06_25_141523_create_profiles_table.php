@@ -1,7 +1,8 @@
 <?php
 
+use App\Enums\ZurichCantonCity;
 use App\Models\Discipline;
-use App\Models\PaceLevel;
+use App\Models\Pace;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,13 +18,13 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->string('location');
+            $table->foreignIdFor(Discipline::class)->nullable()->constrained();
+            $table->foreignIdFor(Pace::class)->nullable()->constrained();
+            $table->enum('location', ZurichCantonCity::cases());
             $table->string('bio');
             $table->string('profile_photo_path')->nullable();
             $table->smallInteger('distance_min_km');
             $table->smallInteger('distance_max_km')->nullable();
-            $table->foreignIdFor(Discipline::class)->nullable()->constrained();
-            $table->foreignIdFor(PaceLevel::class)->nullable()->constrained();
             $table->timestamps();
         });
     }

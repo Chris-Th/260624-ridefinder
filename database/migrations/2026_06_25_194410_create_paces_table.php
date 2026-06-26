@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pace_levels', function (Blueprint $table) {
+        Schema::create('paces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('sort_order');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pace_levels');
+        Schema::dropIfExists('paces');
     }
 };

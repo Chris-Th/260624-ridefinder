@@ -38,7 +38,7 @@ created_at                  timestamp
 updated_at                  timestamp
 
 
-pace_levels
+paces
 -----------
 id                          bigint PK
 name                        string

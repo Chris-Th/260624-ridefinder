@@ -27,3 +27,6 @@ Because cyclists often decide:
 before they decide:
 
 "How many kilometers?"
+
+
+change model Pace to Pace
