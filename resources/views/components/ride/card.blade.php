@@ -1,7 +1,37 @@
-@props([ 'root' ])
 
 <div class="ridecard w-2/3 text-xs">
 
+    <div class="border-x-2 border-t-2 col-span-12">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-l-2">&nbsp;</div>
+    <div class="border-x-2 border-b-2 col-span-12">&nbsp;</div>
+
+    <div {{ $attributes->merge([ 'class' => 'row-span-10 col-span-10' ]) }}>{{ $slot }}</div>
+
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+    <div class="border-r-2">&nbsp;</div>
+
+</div>
+
+
+{{-- Uncomment to visualise --}}
+{{-- <div class="ridecard w-2/3 text-xs">
     <div class="border-x-2 border-t-2 col-span-12">1</div>
     <div class="border-l-2">2</div>
     <div class="border-l-2">3</div>
@@ -27,8 +57,4 @@
     <div class="border-r-2">13</div>
     <div class="border-r-2">14</div>
     <div class="border-r-2">15</div>
-
-    {{-- <div class="border">-2</div> --}}
-    {{-- <div class="border">-2</div> --}}
-    {{-- <div class="border">-2</div> --}}
-</div>
+</div> --}}

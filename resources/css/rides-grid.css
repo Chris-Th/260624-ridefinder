@@ -1,5 +1,5 @@
 .ridecard {
-    display: grid;
+    display: inline-grid;
     aspect-ratio: 1.62;
     /* height: 160px; */
     /* display: inline-grid; */
