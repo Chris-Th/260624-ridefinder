@@ -38,6 +38,10 @@
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
     --color-accent-foreground: var(--color-white);
+
+    --shadow-hard-md:3px 4px 0 -1px rgb(0 0 0 / 0.1), 1.5px 2px 0 -2px rgb(0 0 0 / 0.1);
+    --shadow-hard-sm:1.5px 2px 0 0 rgb(0 0 0 / 0.1), 1px 1.5px 0 0 rgb(0 0 0 / 0.1);
+    --shadow-firm-sm-inner:inset -3px 3px 1px rgb(0 0 0 / 0.05);
 }
 
 @layer theme {

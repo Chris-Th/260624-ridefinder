@@ -3,7 +3,11 @@
 
 <div  class="ridecard py-1 relative {{ $rootclass }}">
 
+    {{-- Top Thin Full Width Ceiling Grid item --}}
     <div class="border-x-2 border-t-2 col-span-12"></div>
+
+    {{-- Left Grid Track 'Wall of Bricks' --}}
+
     <div class="border-l-2"></div>
     <div class="border-l-2"></div>
     <div class="border-l-2"></div>
@@ -18,56 +22,27 @@
     <div class="border-l-2"></div>
     <div class="border-l-2"></div>
 
-    <div class="border-x-2 border-b-2 col-span-12"></div> <div {{ $attributes->merge([ 'class' => 'translate-y-1.5 row-span-13 col-span-10' ]) }}>{{ $slot }}</div>
+    {{-- Bottom Full Width Floor Grid Item --}}
+    <div class="border-x-2 border-b-2 col-span-12"></div>
 
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
+    {{-- Content Space Grid Area --}}
+    <div {{ $attributes->merge([ 'class' => 'translate-y-1.5 row-span-13 col-span-10' ]) }}>{{ $slot }}</div>
 
+    {{-- Far Right Grid Track --}}
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
+    <div class="border-r-2"></div>
 </div>
-
-{{-- <div  class="ridecard py-1 {{ $rootclass }}">
-
-    <div class="border-x-2 border-t-2 col-span-12"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-
-    <div class="border-x-2 border-b-2 col-span-12"></div> <div {{ $attributes->merge([ 'class' => 'row-span-12 col-span-10' ]) }}>{{ $slot }}</div>
-
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-
-</div> --}}
 
 <style>
     .ridecard {
@@ -81,6 +56,11 @@
     grid-template-columns: repeat(12, 1fr);
     grid-auto-flow: column;
     row-gap: 4px;
+}
+.brickwall {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-template-columns: subgrid;
 }
 
 /* .ridecard > .i7 {

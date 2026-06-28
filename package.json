@@ -20,6 +20,8 @@
         "lightningcss-linux-x64-gnu": "^1.29.1"
     },
     "devDependencies": {
-        "daisyui": "^5.6.3"
+        "daisyui": "^5.6.3",
+        "prettier": "^3.9.1",
+        "prettier-plugin-blade": "^3.2.2"
     }
 }
