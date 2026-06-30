@@ -49,3 +49,8 @@ geometric symbols
 bold typography
 almost no decoration
 extremely intentional spacing
+
+
+
+
+SVG

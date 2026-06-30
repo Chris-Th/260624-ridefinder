@@ -10,4 +10,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::livewire('/rides', 'pages::ride.discover')->name('discover');
 
+Route::livewire('/sandbox', 'pages::sandbox')->name('sandbox');
+
 require __DIR__.'/settings.php';

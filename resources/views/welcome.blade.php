@@ -48,73 +48,10 @@
             @endif
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
+
             <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
                 <div class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-es-lg rounded-ee-lg lg:rounded-ss-lg lg:rounded-ee-none">
-                    <h1 class="mb-1 font-medium">Let's get started</h1>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">Laravel has an incredibly rich ecosystem. <br>We suggest starting with the following.</p>
-                    <ul class="flex flex-col mb-4 lg:mb-6">
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Read the
-                                <a href="https://laravel.com/docs" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
-                                    <span>Documentation</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:start-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Watch video tutorials at
-                                <a href="https://laracasts.com" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
-                                    <span>Laracasts</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                    </ul>
-                    <ul class="flex gap-3 text-sm leading-normal">
-                        <li>
-                            <a href="https://cloud.laravel.com" target="_blank" class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
-                                Deploy now
-                            </a>
-                        </li>
-                    </ul>
+
                 </div>
                 <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/364] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
                     {{-- Laravel Logo --}}
@@ -190,8 +127,39 @@
                             <path d="M129.529 167.6H104.329V105.2H197.329V400.2H129.529V167.6Z" stroke="var(--stroke-color)" stroke-width="2.4" mask="url(#path-5-mask)"/>
                         </g>
                     </svg>
+                    <svg class="w-[438px] max-w-none relative -mt-[6.6rem] -ml-8 lg:ml-0 [--stroke-color:#1B1B18] dark:[--stroke-color:#FF750F]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" xmlns:bx="https://boxy-svg.com">
+                    <circle style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 4px;" cx="250" cy="250" r="54.854"
+                        transform="matrix(0.963941, 0, 0, 0.959035, 9.01476, 10.241254)" />
+                        <path style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 4px;"
+                            :d="`${getJitterCirc(55, 60, 60, 0.6)}`" />
+                    <circle style="stroke: rgb(0, 0, 0); fill: red;" cx="60" cy="60" r="48.884" />
+                    <text
+                        style="fill: rgb(51, 51, 51); font-family: &quot;IBM Plex Mono&quot;; font-size: 9.34512px; letter-spacing: 2.5px; word-spacing: 0.5px; white-space: pre; transform-origin: 242.478px 250px 0px;"
+                        transform="matrix(0.908109, 0.003933, 0.044239, 0.963062, 8.758744, -23.62421)">
+                        <textPath href="#text-path-0" startOffset="8">CAFE DE LA GARE</textPath>
+                    </text>
+                    <defs>
+                        <style bx:fonts="IBM Plex Mono">
+                            @import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Mono%3Aital%2Cwght%400%2C100%3B0%2C200%3B0%2C300%3B0%2C400%3B0%2C500%3B0%2C600%3B0%2C700%3B1%2C100%3B1%2C200%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C600%3B1%2C700&amp;display=swap);
+                        </style>
+                        <path style="fill: none;" id="path-0" d="M 250 248.144 L 251.06 246.288 L 251.06 246.023" />
+                        <path style="fill: none;" id="path-1"
+                            d="M 251.326 245.758 L 251.326 243.902 C 251.256 243.902 251.326 240.167 251.326 239.661" />
+                        <path id="text-path-0" d="M 197.813 278.232 C 196.789 221.828 288.425 217.36 282.718 278.177" />
+                        <path id="text-path-1" d="M 202.011 262.82 C 202.496 317.835 277.877 328.258 283.554 260.109" />
+                    </defs>
+                    <text
+                        style="fill: rgb(51, 51, 51); font-family: &quot;Arial&quot;, sans-serif; font-size: 6.13684px; letter-spacing: 0.9px; white-space: pre;"
+                        transform="matrix(1.127943, 0, 0, 0.977702, -22.967751, -4.137547)">
+                        <textPath href="#text-path-1" startOffset="16">BREVET DE RANDONNEURS</textPath>
+                    </text>
+                    <text
+                        style="fill: rgb(51, 51, 51); font-family: &quot;IBM Plex Mono&quot;; font-size: 8px; font-weight: 500; letter-spacing: 0.4px; white-space: pre;"
+                        x="210.94" y="255.567" transform="matrix(0.905127, 0, 0, 1.2, 19.072605, -49.469711)">29 JUN 2026 04:57</text>
+                </svg>
                     <div class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"></div>
                 </div>
+                <x-vectors.stamps.stamp />
             </main>
         </div>
 

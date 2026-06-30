@@ -34,7 +34,7 @@
     <div class="border-l-2"></div>
 
     {{-- Bottom Full Width Floor Grid Item --}}
-    <div class="border-x-2 border-b-2 col-span-12"></div>
+    <div class="border-x-2 border-b-2 col-span-12 shadow-hard-md"></div>
 
     {{-- Content Space Grid Area --}}
     <div {{ $attributes->merge([ 'class' => 'translate-y-1.5 row-span-19 col-span-10' ]) }}>{{ $slot }}</div>
