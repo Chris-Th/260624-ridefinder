@@ -15,11 +15,11 @@ export default (config = {}) => ({
 
     get outerRadius() { return this.radius; },
     get innerRadius() { return this.radius - 6; },
-    get textRadius() { return this.radius - (this.radius * 0.22); }, // Scales comfortably with radius sizes
+    get textRadius() { return this.radius - (this.radius * 0.3); }, // Scales comfortably with radius sizes
 
     // DYNAMIC FONT SCALING FORMULAS
-    get borderFontSize() { return Math.max(8, Math.round(this.radius * 0.14)); },
-    get centerFontSize() { return Math.max(9, Math.round(this.radius * 0.16)); },
+    get borderFontSize() { return Math.max(14, Math.round(this.radius * 0.16)); },
+    get centerFontSize() { return Math.max(18, Math.round(this.radius * 0.2)); },
 
     generateJitteredCircle(r) {
       const k = 0.55228474983;

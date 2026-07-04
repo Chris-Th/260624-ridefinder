@@ -1,85 +1,68 @@
-@props([ 'rootclass' => $attributes->has('rootclass') ? $attributes->get('rootclass') : '' ])
+@props(['rootclass' => $attributes->has('rootclass') ? $attributes->get('rootclass') : '', 'rows' => 19, 'cols' => 12])
 
+<div x-data="{
+    rows: 0,
+    cols: 0,
+    init() {
+        this.rows = Number({{ $rows }}),
+        this.cols = Number({{ $cols }})
+    }
+}">
+    <div class="ridecard {{ $rootclass }} relative py-1">
+        {{--
+        Whenever inserting new rows to subgrid passed to {{ $slot }}:
+            - add a grid item (brick) to each l + R brickwall grid Track
+            - increase row-span-* of content space grid area {{ $slot }}
+            - increase grid-template-rows number n: 16px repeat(n, 1fr) 16px; of .ridecard selector.
+        --}}
+        {{-- Top Thin Full Width Ceiling Grid item --}}
+        <div class="col-span-{{ $cols}} grid-flow-col border-x-2 grid grid-cols-subgrid gap-x-1 items-start">
+            <template x-for="i in (cols)">
+                <div class="place-self-stretch border-t-2"></div>
+            </template>
+        </div>
 
-<div  class="ridecard py-1 relative {{ $rootclass }}">
-    {{--
-    Whenever inserting new rows to subgrid passed to {{ $slot }}:
-        - add a grid item (brick) to each l + R brickwall grid Track
-        - increase row-span-* of content space grid area {{ $slot }}
-        - increase grid-template-rows number n: 16px repeat(n, 1fr) 16px; of .ridecard selector.
-    --}}
-    {{-- Top Thin Full Width Ceiling Grid item --}}
-    <div class="border-x-2 border-t-2 col-span-12"></div>
+        {{-- Left Grid Track 'Wall of Bricks' --}}
+        <template x-for="i in rows">
+            <div class="border-l-2"></div>
+        </template>
 
-    {{-- Left Grid Track 'Wall of Bricks' --}}
+        {{-- Bottom Full Width Floor Grid Item --}}
 
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
-    <div class="border-l-2"></div>
+         <div class="col-span-{{ $cols}} grid-flow-col border-x-2 grid grid-cols-subgrid gap-x-1 items-start">
+            <template x-for="i in (cols)">
+                <div class="place-self-stretch border-t-2 border row-span-full"></div>
+            </template>
+        </div>
 
-    {{-- Bottom Full Width Floor Grid Item --}}
-    <div class="border-x-2 border-b-2 col-span-12 shadow-hard-md"></div>
+        {{-- Content Space Grid Area --}}
+        <div {{ $attributes->merge(['class' => 'row-span-'.$rows.' col-span-'.$cols - 2]) }}>
+            {{ $slot }}
+        </div>
 
-    {{-- Content Space Grid Area --}}
-    <div {{ $attributes->merge([ 'class' => 'translate-y-1.5 row-span-19 col-span-10' ]) }}>{{ $slot }}</div>
+         {{-- Far Right Grid Track --}}
+        <template x-for="i in rows">
+            <div class="border-r-2"></div>
+        </template>
+    </div>
 
-    {{-- Far Right Grid Track --}}
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
-    <div class="border-r-2"></div>
+    <style>
+        .ridecard {
+            display: grid;
+            grid-template-rows: 16px repeat({{ $rows }}, 1fr) 16px;
+            grid-template-columns: repeat({{ $cols }}, 1fr);
+            grid-auto-flow: column;
+            row-gap: 4px;
+        }
+
+        .brickwall {
+            display: grid;
+            grid-template-rows: subgrid;
+            grid-template-columns: subgrid;
+        }
+
+       /*  .ridecard>div {
+            padding-top: 6px;
+        } */
+    </style>
 </div>
-
-<style>
-    .ridecard {
-    display: grid;
-    grid-template-rows: 16px repeat(19, 1fr) 16px;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-flow: column;
-    row-gap: 4px;
-}
-.brickwall {
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-template-columns: subgrid;
-}
-
-.ridecard > div {
-
-
-    vertical-align: bottom;
-    padding-top: 6px;
-
-}
-</style>

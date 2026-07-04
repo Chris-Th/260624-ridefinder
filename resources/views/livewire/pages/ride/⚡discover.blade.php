@@ -16,10 +16,12 @@ new class extends Component
 };
 ?>
 
-<div class="container mx-auto h-full w-full text-base/6 grid grid-cols-[repeat(auto-fit,minmax(340px,1fr))] gap-6">
+<div x-data class="container mx-auto h-full w-full text-base/6 grid grid-cols-[repeat(auto-fit,minmax(340px,1fr))] gap-6">
 
     @foreach ($this->rides as $ride)
         <livewire:ride.card :$ride />
     @endforeach
 
+    {{-- svg filter available in entire component (used on ink stamps) --}}
+    <x-vectors.filters.ink-grit-filter />
 </div>

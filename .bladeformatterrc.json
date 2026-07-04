@@ -1,0 +1,10 @@
+{
+  "write": true,
+  "indentSize": 4,
+  "wrapLineLength": 120,
+  "wrapAttributes": "auto",
+  "sortTailwindClasses": true,
+  "sortAttributes": "none",
+  "noCustomDirectives": false,
+  "noPhpSyntaxCheck": false
+}
