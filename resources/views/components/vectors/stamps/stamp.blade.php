@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'stamp-blueprint mix-blend-multiply']) }}
+<div {{ $attributes->merge(['class' => 'stamp-blueprint']) }}
 
     {{-- style="
     /* display: inline-block;
@@ -10,20 +10,18 @@
   " --}}
   style="
   font-family: 'Courier New', Courier, monospace;
-  mix-blend-mode: multiply;
-  font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
+  /* opacity: 0.5; */
   "
-  :class="`rotate-[${r}deg] translate-x-[${tX}px] translate-y-[${tY}px] skew-x-[${sY}deg] skew-x-[${sY}deg]`"
+
     x-bind:style="{
         width: size + 'px',
         height: size + 'px',
-        translate: tX + 'px ' + tY + 'px',
-        rotate: r + 'deg',
-
+        translate: transform.tx + 'px ' + transform.ty + 'px',
+        rotate: transform.rot + 'deg',
     }">
-    <svg
 
+    <svg
     xmlns="http://w3.org" class="h-full w-full" x-bind:viewBox="viewBox" fill="none" stroke="currentColor">
         {{-- <filter id="noise">
             <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" result="turbulence" />
@@ -43,7 +41,7 @@
             <path x-bind:d="generateJitteredCircle(innerRadius)" stroke-width="1.5" filter="url(#noise)" />
 
             <!-- Upper Arched Text (Dynamic Font Scaling) -->
-            <text x-bind:font-size="borderFontSize" font-weight="bold" fill="currentColor" stroke="currentColor"
+            <text x-bind:font-size="borderFontSize" font-weight="normal" fill="currentColor" stroke="currentColor"
                 letter-spacing="1">
                 <textPath x-bind:href="'#' + id + '-top'" startOffset="50%" text-anchor="middle">
                     <tspan x-text="upperText"></tspan>
@@ -55,16 +53,26 @@
                 letter-spacing="1">
                 <!-- dy="0.8em" pushes the right-side up text comfortably down into the bottom margin -->
                 <textPath x-bind:href="'#' + id + '-bottom'" startOffset="50%" text-anchor="middle" dy="0.8em">
-                    <tspan x-text="bottomText"></tspan>
+                    <tspan dy="5%" x-text="bottomText"></tspan>
                 </textPath>
             </text>
 
-            <!-- Center Variable Text Line (Dynamic Font Scaling) -->
-            <text x-bind:x="center" x-bind:y="center" x-bind:font-size="centerFontSize"
-                font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">
-                <tspan x-text="middleText"></tspan>
-            </text>
+            @if($slot->isEmpty())
+                <!-- Center Variable Text Line (Dynamic Font Scaling) -->
+                <text x-bind:x="center" x-bind:y="center" x-bind:font-size="centerFontSize"
+                    font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">
+                    <tspan x-text="middleText"></tspan>
+                </text>
+            @endif
         </g>
+
+        @if(!$slot->isEmpty())
+            <g filter="url(#soft-ink-grit-filter)">
+                    {{ $slot }}
+            </g>
+
+
+        @endif
 
     </svg>
 </div>

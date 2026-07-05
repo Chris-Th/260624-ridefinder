@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 new class extends Component {
     public RIDE $ride;
 
-     #[Computed]
+    #[Computed]
     public function listItems()
     {
         return collect([
@@ -22,21 +22,21 @@ new class extends Component {
             'SIZE' => $this->ride->max_riders,
             'DATE' => $this->meetsOnDate(),
             'TIME' => $this->meetsAtTime(),
-            'MEET' => $this->meetsAtPlace()
+            'MEET' => $this->meetsAtPlace(),
         ]);
     }
 
-    protected function meetsOnDate():string
+    protected function meetsOnDate(): string
     {
         return Str::of($this->ride->meets_at)->split('/[\s ]+/')[0];
     }
 
-    protected function meetsAtTime():string
+    protected function meetsAtTime(): string
     {
         return Str::of($this->ride->meets_at)->split('/[\s ]+/')[1];
     }
 
-    protected function meetsAtPlace():string
+    protected function meetsAtPlace(): string
     {
         return Str::of($this->ride->meeting_point_address)->split('/[\s ]+/')[3];
     }
@@ -59,15 +59,27 @@ new class extends Component {
 <x-ride.card.skeletton rootclass="place-content-center"
     class="text-start! place-content-start! grid grid-flow-row grid-cols-subgrid grid-rows-subgrid uppercase">
 
-     <div class="col-span-10 row-span-1"></div>
+    <div class="col-span-10 row-span-1"></div>
 
     <div
-        class="relative col-span-4 row-span-3 flex items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs text-gray-400 bg-base-300">
-        {{-- <img class="object-fill object-left h-26 align-middle flex items-center justify-center size-full" src="{{ $this->rideImgSrc }}"  alt="Illustration of {{ $ride->rideType?->name }}"> --}}
+        class="bg-base-300 relative col-span-4 row-span-3 flex items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs text-gray-400">
+        {{-- <img class="object-fill object-left h-26 align-middle flex items-center justify-center size-full" src="{{ $this->rideImgSrc }}"  alt="Illustration of {{ $ride->rideType?->name }}">  --}}
 
-        <div x-data="stampTransforms" x-init="randomizeTransforms">
-             <x-vectors.stamps.stamp class="text-purple-400" x-data="stamp({ radius: 60, maxJitter: 0.8, upperText: '{{ $this->listItems['TYPE'] }}', middleText: '{{ $this->listItems['DATE'] }}', bottomText: '* {{ $this->listItems['DISC'] }} *' })"  />
-        </div>
+
+        <x-vectors.stamps.stamp class="text-purple-500/50 mix-blend-lighten absolute" x-data="stamp({
+            radius: 65,
+            maxJitter: 0.6,
+            upperText: '{{ $this->listItems['TYPE'] }}',
+            middleText: '{{ $this->listItems['DATE'] }}',
+            bottomText: '* {{ $this->listItems['DISC'] }} *',
+            maxTransform: { tx: 20, ty: 20, rot: 30 },
+        })">
+            <x-vectors.stamps.ride-type-motives.climbing x-bind:x="iconRect.x"
+            x-bind:y="iconRect.y"
+            x-bind:width="iconRect.width"
+            x-bind:height="iconRect.height" />
+        </x-vectors.stamps.stamp>
+
 
     </div>
 
@@ -117,7 +129,7 @@ new class extends Component {
         <div class="col-span-4 flex items-end">{{ $key }}</div>
         <div class="col-span-4 flex items-end">{{ $value }}</div>
     @endforeach
-{{--
+    {{--
     <div class="col-span-4 flex items-end">HOST</div>
     <div class="col-span-6 italic">Hans-Ruedi</div>
     <div class="col-span-4">TYPE</div>

@@ -6,7 +6,7 @@
     init() {
         this.rows = Number({{ $rows }}),
         this.cols = Number({{ $cols }})
-    }
+    },
 }">
     <div class="ridecard {{ $rootclass }} relative py-1">
         {{--

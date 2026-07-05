@@ -7,19 +7,44 @@ export default (config = {}) => ({
     middleText: config.middleText || "29 JUN 2026",
     bottomText: config.bottomText || "* BREVET *",
     maxJitter: config.maxJitter !== undefined ? config.maxJitter : 0.6,
+    maxTransform: {
+        tx: config.maxTransform?.tx || 0,
+        ty: config.maxTransform?.ty || 0,
+        rot: config.maxTransform?.rot || 0
+    },
 
-    get padding() { return Math.max(4, this.maxJitter * 3); },
+
+
+    get padding() { return Math.max(5, this.maxJitter * 3); },
     get size() { return (this.radius * 2) + (this.padding * 2); },
     get center() { return this.radius + this.padding; },
     get viewBox() { return `0 0 ${this.size} ${this.size}`; },
 
     get outerRadius() { return this.radius; },
     get innerRadius() { return this.radius - 6; },
-    get textRadius() { return this.radius - (this.radius * 0.3); }, // Scales comfortably with radius sizes
+    get textRadius() { return this.radius - (this.radius * 0.33); }, // Scales comfortably with radius sizes
 
     // DYNAMIC FONT SCALING FORMULAS
-    get borderFontSize() { return Math.max(14, Math.round(this.radius * 0.16)); },
-    get centerFontSize() { return Math.max(18, Math.round(this.radius * 0.2)); },
+    get borderFontSize() { return Math.max(10, Math.round(this.radius * 0.20)); },
+    get centerFontSize() { return Math.max(12, Math.round(this.radius * 0.24)); },
+    // available space for center icon
+    get iconRect() {
+        const size = this.radius;
+        return {
+            width: size,
+            height: size,
+            x: this.center - size / 2,
+            y: this.center - size / 2
+        }
+    },
+
+    get transform() {
+        return {
+            tx: Math.floor((Math.random() * 2 - 1) * this.maxTransform.tx),
+            ty: Math.floor((Math.random() * 2 - 1) * this.maxTransform.ty),
+            rot: Math.floor((Math.random() * 2 - 1) * this.maxTransform.rot)
+        };
+    },
 
     generateJitteredCircle(r) {
       const k = 0.55228474983;
@@ -60,9 +85,10 @@ export default (config = {}) => ({
     // FIXED: Clockwise bottom path (Left-to-Right under the belly)
     // Changing the sweep-flag from '1' to '0' flips the text right-side up
     get bottomTextPath() {
-      const cx = this.center;
-      const cy = this.center;
-      const r = this.textRadius;
-      return `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
-    }
+        const cx = this.center;
+        const cy = this.center;
+        const r = this.textRadius;
+        return `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
+    },
+
   });
