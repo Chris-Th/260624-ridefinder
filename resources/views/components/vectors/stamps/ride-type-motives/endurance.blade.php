@@ -1,26 +1,7 @@
-<svg {{ $attributes }} xmlns="http://www.w3.org/2000/svg" viewBox="627 841 120 203">
-  <g style="pointer-events:none">
-    <path fill="#f37e30" d="M677 960c-7 0-43 1-49-1l-1-1c2-7 49-65 57-76 3-5 28-38 32-41q2 0 3 2c0 6-4 18-5 24l-15 59 35-1q8-1 13 3c0 6-21 31-26 38l-5 5c-16 24-36 46-52 70q-1 3-5 3l-1-2c-1-7 17-70 19-82"/>
-    <path fill="#f5a66f" d="M713 969h-7v-1l12-2z"/>
-    <path fill="#f46a24" d="M718 966h3l-5 5-3-2z"/>
-    <path fill="#ef8032" d="m667 920 2-3c6 0 3 2 7 2v-3l1-2 6-4v2l-2 6 1 1q-1 10 2 18 2 2 6 1 3 0 4 3l-1 1-3 1 3 3-1 1h-2l-2-2h-9l1-2-8-6h-2l-2-7-5-1h-1q1-4 5-9"/>
-    <path fill="#f7f6f2" d="M672 937h-2l-2-7-5-1h-1q1-4 5-9l6 8c2 5 0 3-1 9"/>
-    <path fill="#ef8032" d="M714 935c4-3 14-2 17 3l2 4-4 6-3 2-2 1c-3-3-2-1-3-5l-8 2-2 1-4 2-1-1v-3c0-3 3-2 2-7h-2v-1c4-2 2-2 7-1l2 2v-2z"/>
-    <path fill="#ef792b" d="M708 940q4 0 7 2v4l-2 2-2 1-4 2-1-1v-3c0-3 3-2 2-7"/>
-    <path fill="#f1d5c0" d="m706 947 5 2-4 2-1-1zm9-1q3-2 7-2l-1 2-8 2z"/>
-    <path fill="#f49b5c" d="m733 942-4 6h-3l-1-1zm-19-7 12 1v1h-8l-1-1-2 2z"/>
-    <path fill="#f1d5c0" d="M708 940h-2v-1c4-2 2-2 7-1z"/>
-    <path fill="#ee873a" d="m686 888 3 1v2q-6 2-9 6l1 2c4 3 4 1 8 3v2c-4 4-12 2-16 5q0 3-3 6l-1-2c1-6 12-20 17-25"/>
-    <path fill="#ef8032" d="M675 989h3c2 3 2 2 2 5q-1 6-5 9 2-2 2-5h-4 1-1l1-2 3-4z"/>
-    <path fill="#f49b5c" d="M689 974h3l-4 15h-1v1q0-9 2-16"/>
-    <path fill="#ef792b" d="m683 912 1 2h4l1 1c0 6-2 3-2 6v3c-2-3-1-6-5-8l-1 2 1 1-1-1z"/>
-    <path fill="#f6f1f1" d="m697 944 3 2c2 4 1 3 0 7h-4q-1-4 1-9"/>
-    <path fill="#f1d5c0" d="m724 951 2-1q-1 6-7 8l-1-1c1-4 2-3 6-6"/>
-    <path fill="#f6f1f1" d="m699 936 4 4-1 2-4 1q-1-3 1-7"/>
-    <path fill="#f1d5c0" d="m695 954 2 4-3 4v1l-1-1z"/>
-    <path fill="#ef792b" d="M675 949h6l-1 3h-3z"/>
-    <path fill="#f5a66f" d="m704 954 4 4h-1l-3-1-1 3q-1-3 1-6"/>
-    <path fill="#f1d5c0" d="M689 974q1-3 4-4l1 1 1-1c-1 4-1 2-3 4zm6-89 1 2-3 3h-1q0-3 3-5"/>
-    <path fill="#f49b5c" d="m687 921 2 1v1l-2 1z"/>
-  </g>
+<svg {{ $attributes }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 203">
+    <g style="pointer-events:none" fill="currentColor" fill-opacity="0.5" stroke="currentColor" stroke-width="2"
+        fill-rule="evenodd">
+        <path
+            d="M50 119c-7 0-43 1-49-1l-1-1c2-7 51-62 59-73 3-5 26-41 30-44l3 2c0 6-4 18-5 24L72 85l35-1q8-1 13 3c0 6-21 31-26 38l-5 5c-16 24-36 46-52 70q-1 3-5 3l-1-2c-1-7 17-70 19-82" />
+    </g>
 </svg>

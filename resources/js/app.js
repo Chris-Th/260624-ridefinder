@@ -1,5 +1,5 @@
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
-import stamp from './stamps.js';
+import stamp from './stamp.js';
 import stampRect from './stampRect.js';
 import stampTransforms from './stampTransforms.js';
 Alpine.data('stamp', stamp);

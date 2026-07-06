@@ -1,3 +1,4 @@
+
 <svg {{ $attributes }} xmlns="http://w3.org" viewBox="0 0 178 192">
   <defs>
     <clipPath id="NW-quadrant-cutout-clip" clip-rule="evenodd">

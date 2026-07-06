@@ -100,10 +100,12 @@ new class extends Component {
             upperText: '{{ $this->listItems['TYPE'] }}',
             middleText: '{{ $this->listItems['DATE'] }}',
             bottomText: '* {{ $this->listItems['DISC'] }} *',
-            maxTransform: { tx: 20, ty: 20, rot: 30 },
+            /* maxTransform: { tx: 20, ty: 20, rot: 30 }, */
         })">
             <x-dynamic-component
+                uniqueid="{{ $ride->id }}"
                 :component="$this->rideTypeMotive"
+                x-bind:class="`size-[${iconRect.width}px]`"
                 x-bind:x="iconRect.x"
                 x-bind:y="iconRect.y"
                 x-bind:width="iconRect.width"
