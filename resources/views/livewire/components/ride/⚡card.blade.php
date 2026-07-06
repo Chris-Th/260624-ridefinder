@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 new class extends Component {
     public RIDE $ride;
 
+
     #[Computed]
     public function listItems()
     {
@@ -24,6 +25,33 @@ new class extends Component {
             'TIME' => $this->meetsAtTime(),
             'MEET' => $this->meetsAtPlace(),
         ]);
+    }
+
+    #[Computed]
+    public function rideTypeMotive()
+    {
+        // 'Coffee Ride', 'Training', 'Climbing', 'Scenic Ride', 'Endurance', 'Bikepacking'
+        // Climbing, Gravel, Coffee Ride, Social, Bikepacking, Endurance, XC / Trails, Adventure
+        switch ($this->ride->rideType?->name) {
+            case 'Coffee Ride':
+                return 'vectors.stamps.ride-type-motives.coffee';
+            case 'Climbing':
+                return 'vectors.stamps.ride-type-motives.climbing';
+            case 'Gravel':
+                return 'vectors.stamps.ride-type-motives.gravel';
+            case 'Social':
+                return 'vectors.stamps.ride-type-motives.social';
+            case 'Bikepacking':
+                return 'vectors.stamps.ride-type-motives.bikepacking';
+            case 'Endurance':
+                return 'vectors.stamps.ride-type-motives.endurance';
+            case 'Adventure':
+                return 'vectors.stamps.ride-type-motives.adventure';
+            case 'Trails':
+                return 'vectors.stamps.ride-type-motives.trails';
+            default:
+                return 'vectors.stamps.ride-type-motives.default';
+        }
     }
 
     protected function meetsOnDate(): string
@@ -74,10 +102,13 @@ new class extends Component {
             bottomText: '* {{ $this->listItems['DISC'] }} *',
             maxTransform: { tx: 20, ty: 20, rot: 30 },
         })">
-            <x-vectors.stamps.ride-type-motives.climbing x-bind:x="iconRect.x"
-            x-bind:y="iconRect.y"
-            x-bind:width="iconRect.width"
-            x-bind:height="iconRect.height" />
+            <x-dynamic-component
+                :component="$this->rideTypeMotive"
+                x-bind:x="iconRect.x"
+                x-bind:y="iconRect.y"
+                x-bind:width="iconRect.width"
+                x-bind:height="iconRect.height"
+                class="mt-4" />
         </x-vectors.stamps.stamp>
 
 

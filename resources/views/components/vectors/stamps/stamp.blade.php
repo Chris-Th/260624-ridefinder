@@ -57,7 +57,7 @@
                 </textPath>
             </text>
 
-            @if($slot->isEmpty())
+            @if(!$slot->hasActualContent())
                 <!-- Center Variable Text Line (Dynamic Font Scaling) -->
                 <text x-bind:x="center" x-bind:y="center" x-bind:font-size="centerFontSize"
                     font-weight="bold" fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central">
@@ -66,7 +66,7 @@
             @endif
         </g>
 
-        @if(!$slot->isEmpty())
+        @if($slot->hasActualContent())
             <g filter="url(#soft-ink-grit-filter)">
                     {{ $slot }}
             </g>
