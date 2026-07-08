@@ -67,7 +67,7 @@
         </g>
 
         @if($slot->hasActualContent())
-            <g filter="{{-- url(#soft-ink-grit-filter) --}}">
+            <g filter="url(#soft-ink-grit-filter)">
                     {{ $slot }}
             </g>
 

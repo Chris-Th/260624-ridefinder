@@ -37,8 +37,8 @@ new class extends Component {
                 return 'vectors.stamps.ride-type-motives.coffee';
             case 'Climbing':
                 return 'vectors.stamps.ride-type-motives.climbing';
-            case 'Gravel':
-                return 'vectors.stamps.ride-type-motives.gravel';
+            case 'Family Ride':
+                return 'vectors.stamps.ride-type-motives.family';
             case 'Social':
                 return 'vectors.stamps.ride-type-motives.social';
             case 'Bikepacking':
@@ -100,7 +100,7 @@ new class extends Component {
             upperText: '{{ $this->listItems['TYPE'] }}',
             middleText: '{{ $this->listItems['DATE'] }}',
             bottomText: '* {{ $this->listItems['DISC'] }} *',
-            /* maxTransform: { tx: 20, ty: 20, rot: 30 }, */
+            maxTransform: { tx: 20, ty: 20, rot: 30 },
         })">
             <x-dynamic-component
                 uniqueid="{{ $ride->id }}"

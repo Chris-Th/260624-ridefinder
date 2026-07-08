@@ -15,7 +15,7 @@ class RideTypeSeeder extends Seeder
 
     public function run(): void
     {
-        $rides = collect(['Coffee Ride', 'XC / Trails', 'Climbing', 'Social', 'Endurance', 'Bikepacking', 'Adventure', 'Gravel']);
+        $rides = collect(['Coffee Ride', 'Trails', 'Climbing', 'Social', 'Endurance', 'Bikepacking', 'Adventure', 'Family Ride' ]);
 
         $rides->each(fn ($ride) => RideType::create([
             'name' => $ride,

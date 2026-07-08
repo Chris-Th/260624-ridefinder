@@ -69,10 +69,10 @@
     --}}
 
       <!-- 3. Generate a separate, softer distortion noise for edge bleed -->
-      <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="1" result="distortionNoise" />
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="distortionNoise" />
 
       <!-- 4. Warp the edges of the original vector graphics using the soft noise -->
-      <feDisplacementMap in="SourceGraphic" in2="distortionNoise" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="warpedVector" />
+      <feDisplacementMap in="SourceGraphic" in2="distortionNoise" scale="4" result="warpedVector" />
 
       <!-- 5. Overlay the sharp grit holes on top of the warped vector graphics -->
       <feComposite in="warpedVector" in2="sharpGrit" operator="out" />
