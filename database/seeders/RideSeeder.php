@@ -25,12 +25,12 @@ class RideSeeder extends Seeder
     public function run(): void
     {
         foreach($this->hosts as $host) {
-            $rides = Ride::factory()->count(rand(1, 20))->create();
+            $rides = Ride::factory()->count(rand(5, 25))->create();
             $rides->each(fn ($ride) => $ride->host()->associate($ride));
         }
 
         Ride::all()->each(function (Ride $ride) {
-            $riders = $this->riders->random(rand(2, 20));
+            $riders = $this->riders->random(rand(5, 25));
 
             foreach($riders as $rider) {
                 if($rider->id != $ride->user_id) {

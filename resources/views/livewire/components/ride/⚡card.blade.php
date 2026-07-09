@@ -2,13 +2,13 @@
 
 use Livewire\Component;
 use App\Models\Ride;
+use App\Models\RideType;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 new class extends Component {
     public RIDE $ride;
-
 
     #[Computed]
     public function listItems()
@@ -32,7 +32,7 @@ new class extends Component {
     {
         // 'Coffee Ride', 'Training', 'Climbing', 'Scenic Ride', 'Endurance', 'Bikepacking'
         // Climbing, Gravel, Coffee Ride, Social, Bikepacking, Endurance, XC / Trails, Adventure
-        switch ($this->ride->rideType?->name) {
+        /* switch ($this->ride->rideType?->name) {
             case 'Coffee Ride':
                 return 'vectors.stamps.ride-type-motives.coffee';
             case 'Climbing':
@@ -49,9 +49,15 @@ new class extends Component {
                 return 'vectors.stamps.ride-type-motives.adventure';
             case 'Trails':
                 return 'vectors.stamps.ride-type-motives.trails';
+            case 'Paceline':
+                return 'vectors.stamps.ride-type-motives.paceline';
             default:
                 return 'vectors.stamps.ride-type-motives.default';
-        }
+        } */
+
+        return RideType::pluck('icon_view_component')
+            ->filter(fn ($value) => $value == $this->ride->rideType['icon_view_component'])
+            ->first();
     }
 
     protected function meetsOnDate(): string
@@ -105,7 +111,7 @@ new class extends Component {
             <x-dynamic-component
                 uniqueid="{{ $ride->id }}"
                 :component="$this->rideTypeMotive"
-                x-bind:class="`size-[${iconRect.width}px]`"
+                x-bind:class="`w-[${iconRect.width}px] h-[${iconRect.height}px]`"
                 x-bind:x="iconRect.x"
                 x-bind:y="iconRect.y"
                 x-bind:width="iconRect.width"

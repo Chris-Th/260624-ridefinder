@@ -15,11 +15,12 @@ class RideTypeSeeder extends Seeder
 
     public function run(): void
     {
-        $rides = collect(['Coffee Ride', 'Trails', 'Climbing', 'Social', 'Endurance', 'Bikepacking', 'Adventure', 'Family Ride' ]);
+        $rides = collect(['Coffee Ride', 'Trails', 'Climbing', 'Social', 'Endurance', 'Bikepacking', 'Adventure', 'Family Ride', 'Paceline' ]);
 
         $rides->each(fn ($ride) => RideType::create([
             'name' => $ride,
-            'slug' => Str::of($ride)->slug('-')
+            'slug' => Str::of($ride)->slug('-'),
+            'icon_view_component' => 'vectors.stamps.ride-type-motives.' . Str::of($ride)->slug('-')
         ]));
     }
 }
