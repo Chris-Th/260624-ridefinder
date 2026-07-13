@@ -79,15 +79,15 @@ new class extends Component
         $rideType = Str::before(Str::lcfirst($rideType), ' ');
         // [hue, sat, [lum light mode, lum dark mode]]
         $hsl = [
-            'adventure' => ['28', '100%', ['46%', '50%']],
-            'bikepacking' => ['72', '100%', ['34%', '50%']],
-            'climbing' => ['357', '100%', ['42%', '61%']],
-            'endurance' => ['215', '100%', ['40%', '62%']],
+            'adventure' => ['28', '100%', ['46%', '75%']],
+            'bikepacking' => ['72', '100%', ['34%', '65%']],
+            'climbing' => ['357', '100%', ['42%', '75%']],
+            'endurance' => ['215', '100%', ['40%', '85%']],
             'coffee' => ['27', '100%', ['31%', '56%']],
             'family' => ['95', '100%', ['51%', '62%']],
-            'paceline' => ['70', '100%', ['48%', '59%']],
-            'social' => ['269', '100%', ['48%', '70%']],
-            'trails' => ['168', '100%', ['24%', '44%']],
+            'paceline' => ['70', '100%', ['48%', '70%']],
+            'social' => ['269', '100%', ['48%', '80%']],
+            'trails' => ['168', '100%', ['24%', '60%']],
             'default' => ['0', '0%', ['35%', '65%']],
         ];
 
@@ -161,11 +161,11 @@ new class extends Component
             :color="$rideTypeHsl"
             class="absolute text-[color:hsl({{ $rideTypeHslTw }})] mix-blend-lighten"
             x-data="stamp({
-            radius: 50,
+            radius: 70,
             maxJitter: 0.6,
             upperText: '{{ $this->listItems['TYPE'] }}',
-            middleText: '{{ $this->listItems['DATE'] }}',
-            bottomText: '* {{ $this->listItems['DISC'] }} *',
+            middleText: '{{ $this->listItems['DISC'] }}',
+            bottomText: '* {{ $this->listItems['DATE'] }} *',
             maxTransform: { tx: 20, ty: 20, rot: 30 },
         })"
         >

@@ -10,13 +10,15 @@
     color: #4b1fa3; */
     font-family: 'Courier New', Courier, monospace;
   " --}}
-    :style="`
+    x-bind:style="`
         /* font-family: 'Courier New', Courier, monospace; */
         font-weight: bold;
         /* opacity: 0.5; */
         translate: ${transform.tx}px ${transform.ty}px;
         color: hsl({{ $color }});
         rotate: ${transform.rot}deg;
+        width: size + 'px';
+        height: size + 'px';
         `"
     {{-- x-bind:style="{
         width: size + 'px',
