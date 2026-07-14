@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RideTypeSeeder::class,
             DisciplineSeeder::class,
-            PaceSeeder::class
+            PaceSeeder::class,
         ]);
 
         $userSeeder = new UserSeeder(200);
@@ -25,12 +25,12 @@ class DatabaseSeeder extends Seeder
         $profileSeeder = new ProfileSeeder($users);
         $profileSeeder->run();
 
-        $rideSeeder = new RideSeeder($users, $users->random(30));
+        $rideSeeder = new RideSeeder($users, $users->random(60));
         $rideSeeder->run();
 
         $this->call([
             RideFeedbackSeeder::class,
-            PaceProfileSeeder::class
+            PaceProfileSeeder::class,
         ]);
     }
 }

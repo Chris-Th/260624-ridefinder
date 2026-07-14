@@ -79,13 +79,13 @@ new class extends Component
         $rideType = Str::before(Str::lcfirst($rideType), ' ');
         // [hue, sat, [lum light mode, lum dark mode]]
         $hsl = [
-            'adventure' => ['28', '100%', ['46%', '75%']],
-            'bikepacking' => ['72', '100%', ['34%', '65%']],
-            'climbing' => ['357', '100%', ['42%', '75%']],
+            'adventure' => ['40', '100%', ['46%', '75%']],
+            'bikepacking' => ['85', '100%', ['34%', '65%']],
+            'climbing' => ['359', '100%', ['42%', '75%']],
             'endurance' => ['215', '100%', ['40%', '85%']],
-            'coffee' => ['27', '100%', ['31%', '56%']],
-            'family' => ['95', '100%', ['51%', '62%']],
-            'paceline' => ['70', '100%', ['48%', '70%']],
+            'coffee' => ['27', '100%', ['31%', '66%']],
+            'family' => ['115', '100%', ['51%', '62%']],
+            'paceline' => ['65', '100%', ['48%', '70%']],
             'social' => ['269', '100%', ['48%', '80%']],
             'trails' => ['168', '100%', ['24%', '60%']],
             'default' => ['0', '0%', ['35%', '65%']],
@@ -173,8 +173,11 @@ new class extends Component
                 uniqueid="{{ $ride->id }}"
                 :component="$this->rideTypeMotive"
                 x-bind:class="`w-[${iconRect.width}px] h-[${iconRect.height}px]`"
-                x-bind:style=" '{{ $this->rideType }}' == 'Climbing' ? 'vector-effect: non-scaling-stroke; stroke-width: 1; fill-opacity: 1'
-                    : '{{ $this->rideType }}' == 'Endurance' ? 'stroke-width: 0.25; fill-opacity: 0.5;' : ''"
+                x-bind:style=" '{{ $this->rideType }}' == 'Climbing'
+                    ? 'vector-effect: non-scaling-stroke; stroke-width: 1; fill-opacity: 1'
+                    /* : '{{ $this->rideType }}' == 'Endurance'
+                        ? 'stroke-width: 0.25; fill-opacity: 0.5;'  */
+                    : ''"
                 x-bind:x="iconRect.x"
                 x-bind:y="iconRect.y"
                 x-bind:width="iconRect.width"
