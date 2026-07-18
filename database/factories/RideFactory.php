@@ -8,8 +8,8 @@ use App\Models\Pace;
 use App\Models\Ride;
 use App\Models\RideType;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Ride>
@@ -27,6 +27,8 @@ class RideFactory extends Factory
         $meetsAt = Carbon::parse($meetsAt)->roundUnit('minute', 5);
         $leavesAt = $meetsAt->addMinutes(rand(1, 6) * 5);
         $leavesAt = rand(1, 10) < 7 ? $leavesAt : null;
+        $r = rand(1, 10);
+        $ebike = $r > 7 ? false : ($r > 3 ? true : null);
 
         return [
             'user_id' => User::all()->pluck('id')->random(),
@@ -38,7 +40,7 @@ class RideFactory extends Factory
             'distance_km' => rand(200, 2000) / 10,
             'elevation_m' => rand(20, 3000),
             'meeting_point_name' => fake()->word(),
-            'meeting_point_address' => fake()->word() . 'strasse ' . rand(1, 300) . ', ' . rand(8000, 8999) . ' ' . collect(ZurichCantonCity::cases())->pluck('value')->random(),
+            'meeting_point_address' => fake()->word().'strasse '.rand(1, 300).', '.rand(8000, 8999).' '.collect(ZurichCantonCity::cases())->pluck('value')->random(),
             'meets_at' => $meetsAt,
             'leaves_at' => $leavesAt,
             'max_riders' => rand(2, 15),
@@ -46,6 +48,7 @@ class RideFactory extends Factory
             'regroup_at_climbs' => rand(1, 10) > 3 ? true : false,
             'coffee_stop' => rand(1, 10) > 3 ? true : false,
             'beginner_friendly' => rand(1, 10) > 3 ? true : false,
+            'ebike_friendly' => $ebike,
         ];
     }
 }

@@ -34,6 +34,7 @@ return new class extends Migration
             $table->boolean('regroup_at_climbs')->default(false);
             $table->boolean('coffee_stop')->default(false);
             $table->boolean('beginner_friendly')->default(false);
+            $table->boolean('ebike_friendly')->nullable()->default(null);
             $table->timestamps();
         });
     }

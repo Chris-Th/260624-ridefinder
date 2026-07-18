@@ -1,41 +1,118 @@
 export default (config = {}) => ({
     // Generate a unique ID instance suffix so multiple stamps don't collide
     id: 'stamp-' + Math.random().toString(36).substring(2, 9),
-
+    opacity: config.opacity || 1,
     radius: config.radius || 60,
-    upperText: config.upperText || "CONTROL REGIONAL",
-    middleText: config.middleText || "29 JUN 2026",
-    bottomText: config.bottomText || "* BREVET *",
+    outerBorder: config.outerBorder ?? 4.5,
+    innerBorder: config.innerBorder || 0,
+    padding: config.padding -2  || -2,
+    topText: config.topText || null,
+    centerText: config.centerText || null,
+    bottomText: config.bottomText || null,
+    iconFilter: config.iconFilter || false,
+
+    fontSize: {
+        top: config.font?.top?.size || 0,
+        center: config.font?.center?.size || 0,
+        bottom: config.font?.bottom?.size || 0
+    },
+    fontWeight: {
+        top: config.font?.top?.weight || 'normal',
+        center: config.font?.center?.weight || 'normal',
+        bottom: config.font?.bottom?.weight || 'normal'
+    },
     maxJitter: config.maxJitter !== undefined ? config.maxJitter : 0.6,
     maxTransform: {
         tx: config.maxTransform?.tx || 0,
         ty: config.maxTransform?.ty || 0,
         rot: config.maxTransform?.rot || 0
     },
+    icon: {
+        ['x-bind:y']() {
+            return this.iconRect.y
+        },
+        ['x-bind:x']() {
+            return this.iconRect.x
+        },
+        ['x-bind:width']() {
+            return this.iconRect.width
+        },
+        ['x-bind:height']() {
+            return this.iconRect.height
+        }
+    },
 
 
-
-    get padding() { return Math.max(5, this.maxJitter * 3); },
-    get size() { return (this.radius * 2) + (this.padding * 2); },
-    get center() { return this.radius + this.padding; },
-    get viewBox() { return `0 0 ${this.size} ${this.size}`; },
+    get iconFilterUrl() {
+        if(config.iconFilter === 'soft') {
+            return 'url(#soft-ink-grit-filter)';
+        } else if (config.iconFilter === 'softer') {
+            return 'url(#softer-ink-grit-filter)';
+        } else if (config.iconFilter === 'none') {
+            return '';
+        } else {
+            return 'url(#ink-grit-filter)';
+        }
+    },
+    get iconPadding() { return Math.max(5, this.maxJitter * 3); },
+    get size() { return (this.radius * 2) + (this.iconPadding * 2); },
+    get center() { return this.radius + this.iconPadding; },
+    get viewBox() { console.log('size', this.size); return `0 0 ${this.size} ${this.size}`; },
 
     get outerRadius() { return this.radius; },
-    get innerRadius() { return this.radius - 6; },
-    get textRadius() { return this.radius - (this.radius * 0.33); }, // Scales comfortably with radius sizes
+    get innerRadius() { return this.outerBorder === 'none' ? this.radius : this.radius - (this.outerBorder + 1.5); },
+    get textRadius() {
+        const inner = this.innerBorder === 'none' ? 0 : this.innerBorder;
+        const outer = this.outerBorder === 'none' ? 0 : this.outerBorder;
+        return this.innerRadius - this.topFontSize - this.padding;
+    },
+    get topTextRadius() {
+        return this.innerRadius - this.topFontSize - this.padding;
+    },
+    get bottomTextRadius() {
+        return this.innerRadius - this.padding;
+    },
 
     // DYNAMIC FONT SCALING FORMULAS
-    get borderFontSize() { return Math.max(10, Math.round(this.radius * 0.20)); },
-    get centerFontSize() { return Math.max(12, Math.round(this.radius * 0.24)); },
+
+    get topFontSize() {
+        if (typeof this.fontSize.top === 'number') return this.fontSize.top;
+
+        const factor = this.fontSize.top === 'lg'
+            ? 1.3 : this.fontSize.top === 'sm'
+                ? 0.7 : 1;
+        return Math.max(10, Math.round(this.radius * 0.20 * factor));
+    },
+    get centerFontSize() {
+        if (typeof this.fontSize.center === 'number') return this.fontSize.center;
+
+        const factor = this.fontSize.center === 'lg'
+            ? 1.3 : this.fontSize.center === 'sm'
+                ? 0.7 : 1;
+        return Math.max(12, Math.round(this.radius * 0.24 * factor));
+    },
+    get bottomFontSize() {
+        if (typeof this.fontSize.bottom === 'number') return this.fontSize.bottom;
+
+        const factor = this.fontSize.bottom === 'lg'
+            ? 1.3 : this.fontSize.bottom === 'sm'
+                ? 0.7 : 1;
+        return Math.max(10, Math.round(this.radius * 0.20 * factor));
+    },
     // available space for center icon
     get iconRect() {
-        const size = this.radius;
+        const margin = this.topFontSize > this.bottomFontSize ? this.topFontSize : this.bottomFontSize;
+        const iconSize = config.iconSize || (this.radius - margin) * 1.4;
         return {
-            width: size,
-            height: size,
-            x: this.center - size / 2,
-            y: this.center - size / 2
+            width: iconSize,
+            height: iconSize,
+            x: this.center - iconSize / 2,
+            y: this.center - iconSize / 2
         }
+    },
+
+    get iconTranslate () {
+        return '0 ' + ((this.topFontSize - this.bottomFontSize) / 2);
     },
 
     get transform() {
@@ -78,7 +155,7 @@ export default (config = {}) => ({
     get topTextPath() {
       const cx = this.center;
       const cy = this.center;
-      const r = this.textRadius;
+      const r = this.topTextRadius;
       return `M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`;
     },
 
@@ -87,7 +164,7 @@ export default (config = {}) => ({
     get bottomTextPath() {
         const cx = this.center;
         const cy = this.center;
-        const r = this.textRadius;
+        const r = this.bottomTextRadius;
         return `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
     },
 

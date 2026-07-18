@@ -1,15 +1,7 @@
-@props ([
-        'color' => '',
-        /* 'ridetype' => $attributes->has('ridetype') ? $attributes->get('ridetype') : '', */
-        'ridetype' => 'default'
-    ])
-@php
-        dump($color);
-    @endphp
+@props ([ 'color' => '' ])
 
 <div
-    {{ $attributes }}
-    class="text-{{ $ridetype }}-500"
+    {{ $attributes->merge(['class' => 'stamp-blueprint']) }}
     {{-- style="
     /* display: inline-block;
     mix-blend-mode: multiply;
@@ -18,18 +10,16 @@
     color: #4b1fa3; */
     font-family: 'Courier New', Courier, monospace;
   " --}}
-    {{-- x-bind:style="`color: {{ $color }}; font-weight: bold; translate: ${transform.tx}px ${transform.ty}px; rotate: ${transform.rot}deg; width: size + 'px'; height: size + 'px';`" --}}
-    {{-- x-bind:style="`
+    x-bind:style="`
         /* font-family: 'Courier New', Courier, monospace; */
         font-weight: bold;
         /* opacity: 0.5; */
         translate: ${transform.tx}px ${transform.ty}px;
-        /* color: hsl({{ $color }}); */
+        color: hsl({{ $color }});
         rotate: ${transform.rot}deg;
         width: size + 'px';
         height: size + 'px';
-        `" --}}
-    style="color: {{ $color }}"
+        `"
     {{-- x-bind:style="{
         width: size + 'px',
         height: size + 'px',
@@ -38,14 +28,18 @@
         color: `hsl({{ $color }})`,
         fill: `hsl({{ $color }})`
         stroke: `hsl({{ $color }})`
-    }" --}}>
-    <svg
-        xmlns="http://w3.org"
-        stroke="currentColor"
-        fill="none"
-        style="color: inherit"
-        class="h-full w-full"
-        x-bind:viewBox="viewBox">
+    }" --}}
+>
+    <svg x-bind:style="`
+        /* font-family: 'Courier New', Courier, monospace; */
+        font-weight: bold;
+        /* opacity: 0.5; */
+        translate: ${transform.tx}px ${transform.ty}px;
+        color: hsl({{ $color }});
+        rotate: ${transform.rot}deg;
+        width: size + 'px';
+        height: size + 'px';
+        `" {{ $attributes->merge(["class" => "stamp-blueprint h-full w-full"]) }} xmlns="http://w3.org" class="h-full w-full" x-bind:viewBox="viewBox" fill="none" stroke="currentColor">
         {{-- <filter id="noise">
             <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" result="turbulence" />
             <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="3" xChannelSelector="R"
@@ -65,13 +59,12 @@
 
             <!-- Upper Arched Text (Dynamic Font Scaling) -->
             <text
-                fill="currentColor"
-                stroke="none"
                 x-bind:font-size="borderFontSize"
                 font-weight="normal"
-                {{-- fill="currentColor"
-                stroke="currentColor" --}}
-                letter-spacing="1">
+                fill="currentColor"
+                stroke="currentColor"
+                letter-spacing="1"
+            >
                 <textPath x-bind:href="'#' + id + '-top'" startOffset="50%" text-anchor="middle">
                     <tspan x-text="upperText"></tspan>
                 </textPath>
@@ -79,13 +72,12 @@
 
             <!-- Fixed Lower Arched Text (Right-side up & Scaled) -->
             <text
-                fill="currentColor"
-                stroke="none"
                 x-bind:font-size="borderFontSize"
                 font-weight="bold"
-                {{-- fill="currentColor"
-                stroke="none" --}}
-                letter-spacing="1">
+                fill="currentColor"
+                stroke="none"
+                letter-spacing="1"
+            >
                 <!-- dy="0.8em" pushes the right-side up text comfortably down into the bottom margin -->
                 <textPath x-bind:href="'#' + id + '-bottom'" startOffset="50%" text-anchor="middle" dy="0.8em">
                     <tspan dy="5%" x-text="bottomText"></tspan>
@@ -95,16 +87,15 @@
             @if (!$slot->hasActualContent())
                 <!-- Center Variable Text Line (Dynamic Font Scaling) -->
                 <text
-                    fill="currentColor"
-                    stroke="none"
                     x-bind:x="center"
                     x-bind:y="center"
                     x-bind:font-size="centerFontSize"
                     font-weight="bold"
-                    {{-- fill="currentColor"
-                    stroke="none" --}}
+                    fill="currentColor"
+                    stroke="none"
                     text-anchor="middle"
-                    dominant-baseline="central">
+                    dominant-baseline="central"
+                >
                     <tspan x-text="middleText"></tspan>
                 </text>
             @endif
