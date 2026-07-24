@@ -4,8 +4,8 @@
     @include ('partials.head')
 </head>
 
-<body init="$flux.dark = false" class="min-h-screen bg-white font-mono dark:bg-zinc-800">
-    <flux:sidebar sticky collapsible class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+<body init="$flux.dark = false" class="victor-mono min-h-screen bg-white dark:bg-zinc-800">
+    {{-- <flux:sidebar sticky collapsible class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
             <flux:sidebar.collapse class="" />
@@ -48,7 +48,7 @@
         </flux:sidebar.nav>
 
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()?->name" />
-    </flux:sidebar>
+    </flux:sidebar> --}}
 
     <!-- Mobile User Menu -->
     <flux:header class="lg:hidden">

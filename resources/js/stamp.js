@@ -10,7 +10,8 @@ export default (config = {}) => ({
     centerText: config.centerText || null,
     bottomText: config.bottomText || null,
     iconFilter: config.iconFilter || false,
-
+    gradientStopRanges: [],
+    stops: [],
     fontSize: {
         top: config.font?.top?.size || 0,
         center: config.font?.center?.size || 0,
@@ -41,7 +42,6 @@ export default (config = {}) => ({
             return this.iconRect.height
         }
     },
-
 
     get iconFilterUrl() {
         if(config.iconFilter === 'soft') {
@@ -122,6 +122,75 @@ export default (config = {}) => ({
             rot: Math.floor((Math.random() * 2 - 1) * this.maxTransform.rot)
         };
     },
+
+    generateStopAttrValues (stopsAttrRanges = []) {
+        let stops = [];
+
+        stopsAttrRanges.forEach((stop, index) => {
+
+            /*
+                [
+                    [0, 1], // [max-offset, min-opacity]
+                    [70, 0.8],
+                    [90, 0.5],
+                    [97, 0.1],
+                    [100, 0]
+                ];
+
+            */
+            // if (!typeof stop === 'Array') return;
+            const minOff = index === 0 ? 0 : (index === stopsAttrRanges.length - 1 ? 100 : stops[index - 1].offset);
+            const maxOff = index === stopsAttrRanges.length - 1 ? 100 : stop[0];
+            const off = minOff + (Math.random() * (maxOff - minOff));
+            // stopEl.setAttribute('offset', off);
+
+            const maxOpac = index === 0 ? stop[1] :  stops[index - 1].opacity;
+            const minOpac = stop[1];
+            const opacity = maxOpac - (Math.random() * (maxOpac - minOpac));
+            // stopEl.setAttribute('stop-opacity', opacity);
+            // stopEl.setAttribute('stop-color', 'currentColor');
+
+            // gradientEl.appendChild(stopEl);
+            stops.push({
+                opacity: opacity,
+                offset: off
+            })
+        })
+        const rotate = Math.random() * 360;
+
+
+        // <stop :stop-opacity="stop.opacity" :stop-offset="stop.offset" ... />
+        return stops;
+     },
+     appendGradientStops(stops) {
+        const linearGradientEl = document.querySelector('#uneven-stamp-pressure-' + this.id);
+        console.log('linearGradientEl', linearGradientEl);
+        stops.forEach((stop) => {
+            let stopEl = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'stop-opacity', stop.opacity);
+            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'offset', stop.offset);
+            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'stop-color', 'currentColor');
+            linearGradientEl.appendChild(stopEl);
+        })
+     },
+    /*
+        gradientStopRanges = [
+            [
+                [0, 0],
+                [0.8, 1]
+            ],
+            [
+                [30, 50], // stop-offset-range
+                [0.5, 0.8] // stop-opacity-range
+            ],
+            ...
+            [
+                [100, 100],
+                [0, 0.1]
+            ]
+        ]
+    */
+
 
     generateJitteredCircle(r) {
       const k = 0.55228474983;

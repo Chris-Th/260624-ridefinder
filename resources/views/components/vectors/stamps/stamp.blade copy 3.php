@@ -16,23 +16,14 @@
         height: ${size}px;
         text-align: center;
         `">
-    {{--  <template x-for="(stop, index) in stops">
-        <template x-bind="gradientSelector">
-            <stop stop-color="currentColor" stop-opacity="1" offset="40%" />
+        <template x-for="(stop, index) in stops">
+            <template x-teleport="gradientSelector"></template>
         </template>
-    </template> --}}
     <svg
         x-data="{
             init() {
                 console.log('viewBox', viewBox);
                 $el.setAttribute('viewBox', viewBox);
-                gradientStopRanges = [
-                    [0, 1],
-                    [40, 0.6],
-                    [80, 0.2],
-                    [100, 0]
-                ];
-                stops = generateStopAttrValues(gradientStopRanges);
             }
         }"
         xmlns="http://w3.org"
@@ -51,26 +42,27 @@
             <path x-bind:id="id + '-bottom'" x-bind:d="bottomTextPath" />
 
             <linearGradient
-                x-init="$el.setAttribute('gradientTransform', `rotate(${Math.random() * 360})`)"
                 x-bind:id="'uneven-stamp-pressure-' + id"
                 x1="0%"
                 y1="0%"
                 x2="100%"
                 y2="0%"
                 gradientUnits="userSpaceOnUse">
-                <stop stop-color="currentColor" :stop-opacity="`${stops[0].opacity}`" :offset="`${stops[0].offset}%`" />
-                <stop stop-color="currentColor" :stop-opacity="`${stops[1].opacity}`" :offset="`${stops[1].offset}%`" />
-                {{--  <stop stop-color="currentColor" :stop-opacity="`${stops[2].opacity}`" :offset="`${stops[2].offset}%`" /> --}}
-                <stop stop-color="currentColor" :stop-opacity="`${stops[2].opacity}`" :offset="`${stops[2].offset}%`" />
-                <stop stop-color="currentColor" :stop-opacity="`${stops[3].opacity}`" :offset="`${stops[3].offset}%`" />
+                {{--  <stop stop-color="currentColor" stop-opacity="1" offset="0%" />
+                <stop stop-color="currentColor" stop-opacity="1" offset="40%" />
+                <stop stop-color="currentColor" stop-opacity="0.3" offset="70%" />
+                <stop stop-color="currentColor" stop-opacity="0.0" offset="100%" /> --}}
             </linearGradient>
+        </defs>
 
-            <g x-bind:id="'stamp-text-and-borders-' + id">
+        <g x-bind:stroke="'url(#uneven-stamp-pressure-' + id + ')'">
+            <g filter="url(#ink-grit-filter)">
                 <!-- Outer Thick Stamp Border -->
                 <path
                     x-show="outerBorder !== 'none'"
                     x-bind:d="generateJitteredCircle(outerRadius)"
-                    x-bind:stroke-width="outerBorder" />
+                    x-bind:stroke-width="outerBorder"
+                    filter="url(#noise)" />
 
                 <!-- Inner Thin Stamp Border -->
                 <path
@@ -88,7 +80,7 @@
                     x-bind:font-size="topFontSize"
                     font-weight="normal"
                     {{-- fill="currentColor"
-                        stroke="currentColor" --}}
+                stroke="currentColor" --}}
                     letter-spacing="1">
                     <textPath x-bind:href="'#' + id + '-top'" startOffset="50%" text-anchor="middle">
                         <tspan x-text="topText"></tspan>
@@ -103,7 +95,7 @@
                     x-bind:font-size="bottomFontSize"
                     font-weight="normal"
                     {{-- fill="currentColor"
-                        stroke="none" --}}
+                stroke="none" --}}
                     letter-spacing="1">
                     <!-- dy="0.8em" pushes the right-side up text comfortably down into the bottom margin -->
                     <textPath x-bind:href="'#' + id + '-bottom'" startOffset="50%" text-anchor="middle">
@@ -131,53 +123,15 @@
 
             @if ($slot->hasActualContent())
                 <g
-                    x-bind:id="'stamp-motive-' + id"
                     x-bind:fill="'url(#uneven-stamp-pressure-' + id + ')'"
                     x-bind:stroke="'url(#uneven-stamp-pressure-' + id + ')'"
-                    x-bind:transform="`translate(${iconTranslate})`">
+                    x-bind:transform="`translate(${iconTranslate})`"
+                    x-bind:filter="iconFilterUrl">
                     {{ $slot }}
                 </g>
                 {{--  <g filter="url(#soft-ink-grit-filter)"> {{ $slot }} </g> --}}
 
             @endif
-        </defs>
-
-        <g
-            x-data="{
-                factorX: Math.random(),
-                factorY: Math.random(),
-                factorOpac: Math.random()
-            }"
-            x-bind:stroke="'url(#uneven-stamp-pressure-' + id + ')'"
-            x-bind:id="'stamp-' + id">
-            <g filter="url(#ink-grit-filter)">
-                <use
-                    x-bind:opacity="factorOpac * 0.15"
-                    x-bind:transform="`translate(${4 * factorX}, ${4 * factorY})`"
-                    x-bind:href="'#stamp-text-and-borders-' + id" />
-                <use
-                    x-bind:opacity="factorOpac * 0.3"
-                    x-bind:transform="`translate(${3 * factorX}, ${3 * factorY})`"
-                    x-bind:href="'#stamp-text-and-borders-' + id" />
-                <use
-                    x-bind:opacity="factorOpac * 0.6"
-                    x-bind:transform="`translate(${2 * factorX}, ${2 * factorY})`"
-                    x-bind:href="'#stamp-text-and-borders-' + id" />
-            </g>
-
-            <use opacity="0.6" filter="url(#softer-ink-grit-filter)" x-bind:href="'#stamp-text-and-borders-' + id" />
-
-            <g filter="url(#ink-grit-filter)">
-                <use
-                    x-bind:opacity="factorOpac * 0.2"
-                    x-bind:transform="`translate(${2.5 * factorX}, ${2.5 * factorY})`"
-                    x-bind:href="'#stamp-motive-' + id" />
-                <use
-                    x-bind:opacity="factorOpac * 0.4"
-                    x-bind:transform="`translate(${1.5 * factorX}, ${1.5 * factorY})`"
-                    x-bind:href="'#stamp-motive-' + id" />
-            </g>
-            <use opacity="0.7" x-bind:filter="iconFilterUrl" x-bind:href="'#stamp-motive-' + id" />
         </g>
     </svg>
 </div>

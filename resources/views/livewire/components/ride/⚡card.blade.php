@@ -25,7 +25,7 @@ new class extends Component
     }
 
     #[Computed]
-    public function listItems()
+    public function rideStats()
     {
         return collect([
             'HOST' => $this->ride->host?->name,
@@ -77,7 +77,7 @@ new class extends Component
 
     }
 
-    public function getBGColor($rideType, $opacity = '30')
+    /* public function getBGColor($rideType, $opacity = '30')
     {
         return match ($rideType) {
             'adventure' => 'bg-adventure-300/'.$opacity,
@@ -90,6 +90,22 @@ new class extends Component
             'paceline' => 'bg-paceline-300/'.$opacity,
             'family' => 'bg-family-300/'.$opacity,
             default => 'bg-neutral-300/'.$opacity,
+        };
+    } */
+
+    public function getBGColor($rideType)
+    {
+        return match ($rideType) {
+            'adventure' => 'bg-adventure-300',
+            'coffee' => 'bg-coffee-300',
+            'trails' => 'bg-trails-300',
+            'climbing' => 'bg-climbing-300',
+            'social' => 'bg-social-300',
+            'endurance' => 'bg-endurance-300',
+            'bikepacking' => 'bg-bikepacking-300',
+            'paceline' => 'bg-paceline-300',
+            'family' => 'bg-family-300',
+            default => 'bg-neutral-300',
         };
     }
 
@@ -203,47 +219,9 @@ new class extends Component
     class="grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-start! text-start! uppercase">
     <div
         class="col-span-4 row-span-6 grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-between place-items-center justify-items-start">
-        {{-- <div
-            class=&quot;col-span-4 row-span-2 grid h-full grid-flow-col grid-cols-subgrid grid-rows-subgrid items-start justify-between bg-white/10&quot;>
-            <div
-                class=&quot;shadow-firm-sm-inner border-2-white/80 aspect-1 flex size-fit items-center border border-dotted bg-white/5 shadow-white/20&quot;>
-                <x-vectors.nodrop
-                    @class([
-                'rounded-full size-6  fill-blue-300 aspect-1',
-                'opacity-0' => $ride->no_drop == '0',
-            ])
-                    class=&quot;&quot;></x-vectors.nodrop>
-            </div>
-            <div
-                class=&quot;shadow-firm-sm-inner border-2-white/80 aspect-1 flex size-fit items-center rounded-full border border-dotted bg-white/5 shadow-white/20&quot;>
-                <x-vectors.2persons
-                    @class([
-                'rounded-full size-6  fill-green-300 aspect-1',
-                'opacity-0' => $ride->regroup_at_climbs == '0',
-            ])
-                    class=&quot;&quot;></x-vectors.2persons>
-            </div>
-            <div
-                class=&quot;shadow-firm-sm-inner border-2-white/80 aspect-1 flex size-6 items-center rounded-full border border-dotted bg-white/5 shadow-white/20&quot;>
-                <x-vectors.tricycle
-                    @class([
-                'rounded-full size-5  fill-pink-200 border-2-pink-200 aspect-1',
-                'opacity-0' => $ride->beginner_friendly == '0',
-            ])
-                    class=&quot;&quot;></x-vectors.tricycle>
-            </div>
-            <div
-                class=&quot;shadow-firm-sm-inner border-2-white/80 aspect-1 flex h-6 w-7 items-center rounded-full border border-dotted bg-white/5 shadow-white/20&quot;>
-                <x-vectors.coffeecup
-                    @class([
-                'rounded-full w-8 h-6  fill-yellow-400 border-2-yellow-400 scale-x-150',
-                'opacity-0' => $ride->coffee_stop == '0',
-            ])
-                    class=&quot;&quot;></x-vectors.coffeecup>
-            </div>
-        </div>
-        <div class=&quot;col-span-1 row-span-2 bg-white/5&quot;></div> --}}
-
+        {{-- <div class="col-span-4"></div>
+        <div class="col-span-4 row-span-5 grid-cols-2 grid-rows-3"></div> --}}
+        {{-- Nodrop --}}
         <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-blue-300">
             @if ($ride->no_drop == '1')
                 <x-vectors.stamps.stamp
@@ -267,6 +245,7 @@ new class extends Component
             @endif
         </div>
 
+        {{-- Regroup at climbs --}}
         <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-lime-300">
             @if ($ride->regroup_at_climbs == '1')
                 <x-vectors.stamps.stamp
@@ -290,6 +269,7 @@ new class extends Component
             @endif
         </div>
 
+        {{-- Beginner Friendly --}}
         <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-pink-200">
             @if ($ride->beginner_friendly == '1')
                 <x-vectors.stamps.stamp
@@ -313,6 +293,7 @@ new class extends Component
             @endif
         </div>
 
+        {{-- Coffee Stops --}}
         <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-yellow-300">
             @if ($ride->coffee_stop == '1')
                 <x-vectors.stamps.stamp
@@ -335,6 +316,8 @@ new class extends Component
                 </x-vectors.stamps.stamp>
             @endif
         </div>
+
+        {{-- E-Bikes Welcome or No-Ebikes  --}}
         <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start">
             @if ($ride->ebike_friendly === 1)
                 <div class="text-green-300">
@@ -373,19 +356,15 @@ new class extends Component
                         <x-vectors.no-ebikes x-bind="icon" class="aspect-1 scale-95" />
                     </x-vectors.stamps.stamp>
                 </div>
-
-            @else
-                <div></div>
             @endif
         </div>
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-lime-300"></div>
-
-        <div
-            class="col-span-2 row-span-2 flex origin-center scale-95 items-center justify-center rounded-full bg-white/5"></div>
+        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-lime-300">
+            fdfd
+        </div>
     </div>
 
     <div
-        class="bg-base-100/80 relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
+        class="relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
         {{-- <img class="object-fill object-left h-26 align-middle flex items-center justify-center size-full" src="{{ $this->rideImgSrc }}"  alt="Illustration of {{ $ride->rideType?->name }}">  --}}
 
         <x-vectors.stamps.stamp
@@ -400,12 +379,12 @@ new class extends Component
             outerBorder: 6,
             padding: 6,
             maxJitter: 1.2,
-            topText: '{{ $this->listItems['TYPE'] }}',
-            centerText: '{{ $this->listItems['DISC'] }}',
-            bottomText: '* {{ $this->meetsAtPlace() }}, {{ $this->listItems['DATE'] }} *',
+            topText: '{{ $this->rideStats['TYPE'] }}',
+            centerText: '{{ $this->rideStats['DISC'] }}',
+            bottomText: '* {{ $this->meetsAtPlace() }}, {{ $this->rideStats['DATE'] }} *',
             font: {top: {size: 'md', weight: 'normal'}, center: {size: 'lg', weight: 'normal'}, bottom:{size: 'sm', weight: 'normal'}},
-            maxTransform: { tx: 20, ty: 30, rot: 30 },
-            iconFilter: 'softer'
+            maxTransform: { tx: 15, ty: 20, rot: 30 },
+            iconFilter: 'soft',
         })">
             <x-dynamic-component
                 uniqueid="{{ $ride->id }}"
@@ -423,25 +402,25 @@ new class extends Component
     {{-- src="{{ Storage::url('public/ridetypeimages/paceline-drawn-white-transparent.png') }}" --}}
 
     <div class="col-span-10 row-span-1"></div>
-    @php
-
-    @endphp
-    <h3
-        @class ([
-            'col-span-10 row-span-1 flex items-end truncate text-lg font-bold ' . $this->getBGColor($rideType),
-
-        ])>
+    <h3 class="col-span-10 row-span-1 flex items-end truncate text-lg font-bold ride-title {{ $rideType }}">
         {{ $ride->title }}
     </h3>
     <div class="col-span-10 row-span-1"></div>
 
-    @foreach ($this->listItems as $key => $value)
-        <span class="col-span-4 flex items-end">{{ $key }}</span>
-        <span
-            @class ([ "col-span-6 flex items-end truncate capitalize " . $this->getBGColor($rideType, '10')])
-            >{{ $value }}</span
-        >
-    @endforeach
+    <ul class="col-span-10 row-span-10 grid grid-cols-subgrid grid-rows-subgrid">
+        @foreach ($this->rideStats as $key => $value)
+            <li wire:key="ride-{{ $ride->id }}-{{ $key }}" class="col-span-10 grid grid-cols-subgrid grid-rows-subgrid">
+                <span class="col-span-4 flex items-end">{{ $key }}</span>
+                <span
+                    {{-- https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Colors/Using_relative_colors#color_functions_that_support_relative_colors --}}
+                    {{-- style="background-color: oklch(from var(--color-{{ $rideType }}-300) l c h / 0.2)" --}}
+                    class="col-span-6 flex items-end truncate capitalize ride-stats-value {{ $rideType }}">
+                    {{ $value }}
+                </span>
+            </li>
+        @endforeach
+    </ul>
+
     {{--
     <div class="col-span-4 flex items-end">HOST</div>
     <div class="col-span-6 italic">Hans-Ruedi</div>
