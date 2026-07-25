@@ -13,18 +13,12 @@ new class extends Component
 
     public string $rideType = '';
 
-    public string $rideTypeHsl = '';
-
-    public string $rideTypeHslTw = '';
-
     public $index;
 
     public function mount($loop)
     {
         $this->index = sprintf('%03d', $loop->index);
         $this->rideType = $this->ride->rideType?->name;
-        $this->rideTypeHsl = $this->getRideTypeHSL($this->rideType, 'dark', false);
-        $this->rideTypeHslTw = $this->getRideTypeHSL($this->rideType, 'dark', true);
     }
 
     #[Computed]
@@ -218,13 +212,15 @@ new class extends Component
 ?>
 
 <x-ride.card.skeletton
-    rootclass="place-content-center flacky-texture-bg"
+    rootclass="place-content-center flacky-texture-bg-2"
     class="grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-start! text-start! text-neutral-300 uppercase">
     <div
         class="col-span-4 row-span-6 grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-between place-items-center items-stretch justify-items-stretch border-dashed border-gray-600">
         <div class="col-span-4 flex items-center divide-x text-sm">
             <div class="border-y border-l border-{{ $rideType }}-800 px-1 text-{{ $rideType }}-300">{{ $index }}</div>
-            <div class="border-y border-r border-{{ $rideType }}-800 bg-{{ $rideType }}-300/40 px-1">upcoming</div>
+            <div class="border-y border-r border-{{ $rideType }}-800 bg-{{ $rideType }}-400/70 px-1 font-bold">
+                upcoming
+            </div>
         </div>
         <div
             class="col-span-5 row-span-5 grid grid-cols-2 grid-rows-3 justify-stretch divide-x divide-y divide-dashed divide-gray-600 border-y border-l border-dashed border-gray-600">
@@ -303,10 +299,7 @@ new class extends Component
         @foreach ($this->rideStats as $key => $value)
             <li wire:key="ride-{{ $ride->id }}-{{ $key }}" class="col-span-10 grid grid-cols-subgrid grid-rows-subgrid">
                 <span class="col-span-4 flex items-end">{{ $key }}</span>
-                <span
-                    {{-- https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Colors/Using_relative_colors#color_functions_that_support_relative_colors --}}
-                    {{-- style="background-color: oklch(from var(--color-{{ $rideType }}-300) l c h / 0.2)" --}}
-                    class="col-span-6 flex items-end truncate capitalize ride-stats-value {{ $rideType }}">
+                <span class="col-span-6 flex items-end truncate capitalize ride-stats-value {{ $rideType }}">
                     {{ $value }}
                 </span>
             </li>
@@ -317,17 +310,3 @@ new class extends Component
 
     <x-ride.card.tw-utils-dummy />
 </x-ride.card.skeletton>
-
-{{--
-bg-endurance-300/40
-bg-paceline-300/40
-bg-coffee-300/40
-bg-bikepacking-300/40
-bg-gravel-300/40
-bg-family-300/40
-bg-adventure-300/40
-bg-climbing-300/40
-bg-social-300/40
-bg-trails-300/40
-
---}}
