@@ -17,8 +17,11 @@ new class extends Component
 
     public string $rideTypeHslTw = '';
 
-    public function mount()
+    public $index;
+
+    public function mount($loop)
     {
+        $this->index = sprintf('%03d', $loop->index);
         $this->rideType = $this->ride->rideType?->name;
         $this->rideTypeHsl = $this->getRideTypeHSL($this->rideType, 'dark', false);
         $this->rideTypeHslTw = $this->getRideTypeHSL($this->rideType, 'dark', true);
@@ -215,165 +218,57 @@ new class extends Component
 ?>
 
 <x-ride.card.skeletton
-    rootclass="place-content-center"
-    class="grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-start! text-start! uppercase">
+    rootclass="place-content-center flacky-texture-bg"
+    class="grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-start! text-start! text-neutral-300 uppercase">
     <div
-        class="col-span-4 row-span-6 grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-between place-items-center justify-items-start">
-        {{-- <div class="col-span-4"></div>
-        <div class="col-span-4 row-span-5 grid-cols-2 grid-rows-3"></div> --}}
-        {{-- Nodrop --}}
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-blue-300">
-            @if ($ride->no_drop == '1')
-                <x-vectors.stamps.stamp
-                    @class([
-                'absolute text-blue-300 fill-blue-300 aspect-1 ',
-                'opacity-0' => $ride->no_drop == '0',
-            ])
-                    x-data="
-                        stamp({
-                            opacity: 1,
-                            radius: 20,
-                            outerBorder: 2,
-                            padding: 0,
-                            maxJitter: 0.2,
-                            maxTransform: { tx: 2, ty: 3, rot: 30 },
-                            iconFilter: 'softer'
-                        })
-                    ">
-                    <x-vectors.nodrop x-bind="icon" class="aspect-1 origin-center scale-110" />
-                </x-vectors.stamps.stamp>
-            @endif
+        class="col-span-4 row-span-6 grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-between place-items-center items-stretch justify-items-stretch border-dashed border-gray-600">
+        <div class="col-span-4 flex items-center divide-x text-sm">
+            <div class="border-y border-l border-{{ $rideType }}-800 px-1 text-{{ $rideType }}-300">{{ $index }}</div>
+            <div class="border-y border-r border-{{ $rideType }}-800 bg-{{ $rideType }}-300/40 px-1">upcoming</div>
         </div>
+        <div
+            class="col-span-5 row-span-5 grid grid-cols-2 grid-rows-3 justify-stretch divide-x divide-y divide-dashed divide-gray-600 border-y border-l border-dashed border-gray-600">
+            <x-ride.card.ride-property-stamp color="blue-300" :show="$ride->no_drop == '0'">
+                <x-vectors.nodrop x-bind="icon" class="aspect-1 origin-center scale-110" />
+            </x-ride.card.ride-property-stamp>
 
-        {{-- Regroup at climbs --}}
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-lime-300">
-            @if ($ride->regroup_at_climbs == '1')
-                <x-vectors.stamps.stamp
-                    @class([
-                'absolute text-lime-300 fill-lime-300 aspect-1',
-                'opacity-0' => $ride->regroup_at_climbs == '0',
-            ])
-                    x-data="
-                        stamp({
-                            // opacity: 0.8,
-                            radius: 20,
-                            outerBorder: 2,
-                            padding: 0,
-                            maxJitter: 0.2,
-                            maxTransform: { tx: 2, ty: 3, rot: 30 },
-                            iconFilter: 'softer'
-                        })
-                    ">
-                    <x-vectors.2persons x-bind="icon" class="aspect-1 origin-center scale-110" />
-                </x-vectors.stamps.stamp>
-            @endif
-        </div>
+            <x-ride.card.ride-property-stamp color="lime-300" :show="$ride->regroup_at_climbs == '1'">
+                <x-vectors.2persons x-bind="icon" class="aspect-1 origin-center scale-110" />
+            </x-ride.card.ride-property-stamp>
 
-        {{-- Beginner Friendly --}}
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-pink-200">
-            @if ($ride->beginner_friendly == '1')
-                <x-vectors.stamps.stamp
-                    @class([
-                'absolute text-pink-200 fill-pink-200 aspect-1 opacity-80',
-                'opacity-0' => $ride->beginner_friendly == '0',
-            ])
-                    x-data="
-                        stamp({
-                            // opacity: 0.8,
-                            radius: 20,
-                            outerBorder: 2,
-                            padding: 2,
-                            maxJitter: 0.6,
-                            maxTransform: { tx: 5, ty: 5, rot: 30 },
-                            iconFilter: 'softer'
-                        })
-                    ">
-                    <x-vectors.tricycle x-bind="icon" class="aspect-1 scale-95" />
-                </x-vectors.stamps.stamp>
-            @endif
-        </div>
+            <x-ride.card.ride-property-stamp color="pink-200" :show="$ride->beginner_friendly == '1'">
+                <x-vectors.tricycle x-bind="icon" class="aspect-1 scale-95" />
+            </x-ride.card.ride-property-stamp>
 
-        {{-- Coffee Stops --}}
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-yellow-300">
-            @if ($ride->coffee_stop == '1')
-                <x-vectors.stamps.stamp
-                    @class([
-                'absolute text-yellow-300 fill-yellow-300 aspect-1 opacity-80',
-                'opacity-0' => $ride->coffee_stop == '0',
-            ])
-                    x-data="
-                        stamp({
-                            // opacity: 0.8,
-                            radius: 20,
-                            outerBorder: 2,
-                            padding: 2,
-                            maxJitter: 0.6,
-                            maxTransform: { tx: 5, ty: 5, rot: 30 },
-                            iconFilter: 'softer'
-                        })
-                    ">
-                    <x-vectors.coffeecup x-bind="icon" class="aspect-1 scale-95" />
-                </x-vectors.stamps.stamp>
-            @endif
-        </div>
+            <x-ride.card.ride-property-stamp color="yellow-300" :show="$ride->coffee_stop == '1'">
+                <x-vectors.coffeecup x-bind="icon" class="aspect-1 scale-95" />
+            </x-ride.card.ride-property-stamp>
 
-        {{-- E-Bikes Welcome or No-Ebikes  --}}
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start">
             @if ($ride->ebike_friendly === 1)
-                <div class="text-green-300">
-                    <x-vectors.stamps.stamp
-                        class="aspect-1 size-9 scale-95 fill-green-300 text-green-300 opacity-80"
-                        x-data="
-                            stamp({
-                                // opacity: 0.8,
-                                radius: 20,
-                                outerBorder: 2,
-                                padding: 2,
-                                maxJitter: 0.6,
-                                maxTransform: { tx: 5, ty: 5, rot: 30 },
-                                iconFilter: 'softer'
-                            })
-                        ">
-                        <x-vectors.ebikes-welcome x-bind="icon" class="aspect-1 scale-95" />
-                    </x-vectors.stamps.stamp>
-                </div>
-
+                <x-ride.card.ride-property-stamp color="green-300" :show="true">
+                    <x-vectors.ebikes-welcome x-bind="icon" class="aspect-1 scale-95" />
+                </x-ride.card.ride-property-stamp>
             @elseif ($ride->ebike_friendly === 0)
-                <div class="text-red-400">
-                    <x-vectors.stamps.stamp
-                        class="aspect-1 size-9 scale-95 fill-red-400 text-red-400 opacity-80"
-                        x-data="
-                            stamp({
-                                // opacity: 0.8,
-                                radius: 20,
-                                outerBorder: 2,
-                                padding: 2,
-                                maxJitter: 0.6,
-                                maxTransform: { tx: 2, ty: 3, rot: 30 },
-                                iconFilter: 'softer'
-                            })
-                        ">
-                        <x-vectors.no-ebikes x-bind="icon" class="aspect-1 scale-95" />
-                    </x-vectors.stamps.stamp>
-                </div>
+                <x-ride.card.ride-property-stamp color="red-400" :show="$ride->no_drop == '0'">
+                    <x-vectors.no-ebikes x-bind="icon" class="aspect-1 scale-95" />
+                </x-ride.card.ride-property-stamp>
+            @else
+                <div class=""></div>
             @endif
+
+            <div class="flex size-full origin-center items-center justify-start text-lime-300"></div>
         </div>
-        <div class="col-span-2 row-span-2 flex size-full origin-center items-center justify-start text-lime-300">
-            fdfd
-        </div>
+        {{-- Nodrop --}}
     </div>
 
     <div
         class="relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
-        {{-- <img class="object-fill object-left h-26 align-middle flex items-center justify-center size-full" src="{{ $this->rideImgSrc }}"  alt="Illustration of {{ $ride->rideType?->name }}">  --}}
-
         <x-vectors.stamps.stamp
             :color="$this->getRideTypeColorVar('400')"
             :ridetype="$rideType"
             class="absolute"
-            {{-- style="color: var({{ $this->getRideTypeColorVar('300') }})" --}}
             x-data="stamp({
-            opacity: 0.8,
+            opacity: 0.6,
             radius: 80,
             innerBorder: 1.5,
             outerBorder: 6,
@@ -398,9 +293,6 @@ new class extends Component
         </x-vectors.stamps.stamp>
     </div>
 
-    {{-- <div class="row-span-1 col-span-4"></div> --}}
-    {{-- src="{{ Storage::url('public/ridetypeimages/paceline-drawn-white-transparent.png') }}" --}}
-
     <div class="col-span-10 row-span-1"></div>
     <h3 class="col-span-10 row-span-1 flex items-end truncate text-lg font-bold ride-title {{ $rideType }}">
         {{ $ride->title }}
@@ -421,27 +313,21 @@ new class extends Component
         @endforeach
     </ul>
 
-    {{--
-    <div class="col-span-4 flex items-end">HOST</div>
-    <div class="col-span-6 italic">Hans-Ruedi</div>
-    <div class="col-span-4">TYPE</div>
-    <div class="col-span-6 italic">{{ $ride->rideType?->name }}</div>
-    <div class="col-span-4">DISC</div>
-    <div class="cap col-span-6 italic">{{ $ride->discipline?->name }}</div>
-    <div class="col-span-4">PACE</div>
-    <div class="col-span-6 italic">{{ $ride->pace->name }}</div>
-    <div class="col-span-4">DIST</div>
-    <div class="col-span-6 italic">{{ $ride->distance_km }}</div>
-    <div class="col-span-4">ELEV</div>
-    <div class="col-span-6 italic">{{ $ride->elevation_m }}</div>
-    <div class="col-span-4">SIZE</div>
-    <div class="col-span-6 italic">{{ $ride->max_riders }}</div>
-    <div class="col-span-4">DATE</div>
-    <div class="col-span-6 italic">{{ $this->meetsOnDate }}</div>
-    <div class="col-span-4">TIME</div>
-    <div class="col-span-6 italic">{{ $this->meetsAtTime }}</div>
-    <div class="col-span-4">MEET</div>
-    <div class="col-span-6 italic">{{ $this->meetsAtPlace }}</div> --}}
-
     <div class="col-span-10"></div>
+
+    <x-ride.card.tw-utils-dummy />
 </x-ride.card.skeletton>
+
+{{--
+bg-endurance-300/40
+bg-paceline-300/40
+bg-coffee-300/40
+bg-bikepacking-300/40
+bg-gravel-300/40
+bg-family-300/40
+bg-adventure-300/40
+bg-climbing-300/40
+bg-social-300/40
+bg-trails-300/40
+
+--}}

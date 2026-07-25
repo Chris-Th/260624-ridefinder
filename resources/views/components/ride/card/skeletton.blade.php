@@ -9,7 +9,7 @@
         this.cols = Number({{ $cols }})
     },
 }">
-    <div class="ridecard {{ $rootclass }} relative py-1">
+    <div class="ridecard {{ $rootclass }} relative border-mist-700">
         {{--
         Whenever inserting new rows to subgrid passed to {{ $slot }}:
             - add a grid item (brick) to each l + R brickwall grid Track
@@ -18,7 +18,7 @@
         --}}
         {{-- Top Thin Full Width Ceiling Grid item --}}
         <div
-            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-t-2  grid grid-cols-subgrid gap-x-1 items-start">
+            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-t-2 border-mist-700  grid grid-cols-subgrid gap-x-1 items-start">
             {{-- <template x-for="i in cols">
                 <div class="place-self-stretch border-t-2"></div>
             </template> --}}
@@ -26,12 +26,13 @@
 
         {{-- Left Grid Track 'Wall of Bricks' --}}
         <template x-for="i in rows">
-            <div class="border-l-2"></div>
+            <div class="border-l-2 border-mist-700"></div>
         </template>
 
         {{-- Bottom Full Width Floor Grid Item --}}
 
-        <div class="col-span-{{ $cols}} grid-flow-col border-x-2 border-b-2 grid grid-cols-subgrid gap-x-1 items-start">
+        <div
+            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-b-2 border-mist-700 grid grid-cols-subgrid gap-x-1 items-start">
             {{-- <template x-for="i in cols">
                 <div class="row-span-full place-self-stretch border-b-2"></div>
             </template> --}}
@@ -42,7 +43,7 @@
 
         {{-- Far Right Grid Track --}}
         <template x-for="i in rows">
-            <div class="border-r-2"></div>
+            <div class="border-r-2 border-mist-700"></div>
         </template>
     </div>
 
