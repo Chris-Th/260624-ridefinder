@@ -6,6 +6,7 @@ Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::livewire('/users/{user}', 'pages::profile.show')->name('profile');
 });
 
 Route::livewire('/rides', 'pages::ride.discover')->name('discover');

@@ -1,6 +1,7 @@
 export default (config = {}) => ({
     // Generate a unique ID instance suffix so multiple stamps don't collide
     id: 'stamp-' + Math.random().toString(36).substring(2, 9),
+    config: config,
     opacity: config.opacity || 1,
     radius: config.radius || 60,
     outerBorder: config.outerBorder ?? 4.5,
@@ -10,7 +11,7 @@ export default (config = {}) => ({
     centerText: config.centerText || null,
     bottomText: config.bottomText || null,
     iconFilter: config.iconFilter || false,
-    gradientStopRanges: [],
+    gradientStopRanges: config.gradientStopRanges || [],
     stops: [],
     fontSize: {
         top: config.font?.top?.size || 0,

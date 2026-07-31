@@ -60,16 +60,16 @@ new class extends Component
         }; */
 
         return match ($rideType) {
-            'adventure' => 'var(--color-adventure-300)',
-            'bikepacking' => 'var(--color-bikepacking-300)',
-            'climbing' => 'var(--color-climbing-300)',
-            'endurance' => 'var(--color-endurance-300)',
-            'coffee' => 'var(--color-coffee-300)',
-            'family' => 'var(--color-family-300)',
-            'paceline' => 'var(--color-paceline-300)',
-            'social' => 'var(--color-social-300)',
-            'trails' => 'var(--color-trails-300)',
-            default => 'var(--color-neutral-300)',
+            'adventure' => "var(--color-adventure-$lightness)",
+            'bikepacking' => "var(--color-bikepacking-$lightness)",
+            'climbing' => "var(--color-climbing-$lightness)",
+            'endurance' => "var(--color-endurance-$lightness)",
+            'coffee' => "var(--color-coffee-$lightness)",
+            'family' => "var(--color-family-$lightness)",
+            'paceline' => "var(--color-paceline-$lightness)",
+            'social' => "var(--color-social-$lightness)",
+            'trails' => "var(--color-trails-$lightness)",
+            default => "var(--color-neutral-$lightness)",
         };
 
     }
@@ -211,59 +211,62 @@ new class extends Component
 };
 ?>
 
-<x-ride.card.skeletton
-    rootclass="place-content-center flacky-texture-bg-2"
-    class="grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-start! text-start! text-neutral-300 uppercase">
-    <div
-        class="col-span-4 row-span-6 grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-between place-items-center items-stretch justify-items-stretch border-dashed border-gray-600">
-        <div class="col-span-4 flex items-center divide-x text-sm">
-            <div class="border-y border-l border-{{ $rideType }}-800 px-1 text-{{ $rideType }}-300">{{ $index }}</div>
-            <div class="border-y border-r border-{{ $rideType }}-800 bg-{{ $rideType }}-400/70 px-1 font-bold">
-                upcoming
+<div class="relative">
+    <x-vectors.filters.pergament-texture class="absolute size-full rounded-xl" />
+    <x-ride.card.skeletton
+        rootclass="place-content-center {{-- flacky-texture-bg-2 --}}  rounded-xl card-bg {{ $rideType }}"
+        class="grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-start! text-start! text-neutral-300 uppercase">
+        <div
+            class="col-span-4 row-span-6 grid grid-flow-row grid-cols-subgrid grid-rows-subgrid place-content-between place-items-center items-stretch justify-items-stretch border-dashed border-gray-600">
+            <div class="col-span-4 flex items-center divide-x text-sm">
+                <div class="border-y border-l border-{{ $rideType }}-800 px-1 text-{{ $rideType }}-300">
+                    {{ $index }}
+                </div>
+                <div class="border-y border-r border-{{ $rideType }}-800 bg-{{ $rideType }}-400/70 px-1 font-bold">
+                    upcoming
+                </div>
+            </div>
+            <div
+                class="col-span-5 row-span-5 grid grid-cols-2 grid-rows-3 justify-stretch divide-x divide-y divide-dashed divide-gray-600 border-y border-l border-dashed border-gray-600">
+                <x-ride.card.ride-property-stamp color="blue-300" :show="$ride->no_drop == '0'">
+                    <x-vectors.nodrop x-bind="icon" class="aspect-1 origin-center scale-110" />
+                </x-ride.card.ride-property-stamp>
+
+                <x-ride.card.ride-property-stamp color="lime-300" :show="$ride->regroup_at_climbs == '1'">
+                    <x-vectors.2persons x-bind="icon" class="aspect-1 origin-center scale-110" />
+                </x-ride.card.ride-property-stamp>
+
+                <x-ride.card.ride-property-stamp color="pink-200" :show="$ride->beginner_friendly == '1'">
+                    <x-vectors.tricycle x-bind="icon" class="aspect-1 scale-95" />
+                </x-ride.card.ride-property-stamp>
+
+                <x-ride.card.ride-property-stamp color="yellow-300" :show="$ride->coffee_stop == '1'">
+                    <x-vectors.coffeecup x-bind="icon" class="aspect-1 scale-95" />
+                </x-ride.card.ride-property-stamp>
+
+                @if ($ride->ebike_friendly === 1)
+                    <x-ride.card.ride-property-stamp color="green-300" :show="true">
+                        <x-vectors.ebikes-welcome x-bind="icon" class="aspect-1 scale-95" />
+                    </x-ride.card.ride-property-stamp>
+                @elseif ($ride->ebike_friendly === 0)
+                    <x-ride.card.ride-property-stamp color="red-400" :show="$ride->no_drop == '0'">
+                        <x-vectors.no-ebikes x-bind="icon" class="aspect-1 scale-95" />
+                    </x-ride.card.ride-property-stamp>
+                @else
+                    <div class=""></div>
+                @endif
+
+                <div class="flex size-full origin-center items-center justify-start text-lime-300"></div>
             </div>
         </div>
+
         <div
-            class="col-span-5 row-span-5 grid grid-cols-2 grid-rows-3 justify-stretch divide-x divide-y divide-dashed divide-gray-600 border-y border-l border-dashed border-gray-600">
-            <x-ride.card.ride-property-stamp color="blue-300" :show="$ride->no_drop == '0'">
-                <x-vectors.nodrop x-bind="icon" class="aspect-1 origin-center scale-110" />
-            </x-ride.card.ride-property-stamp>
-
-            <x-ride.card.ride-property-stamp color="lime-300" :show="$ride->regroup_at_climbs == '1'">
-                <x-vectors.2persons x-bind="icon" class="aspect-1 origin-center scale-110" />
-            </x-ride.card.ride-property-stamp>
-
-            <x-ride.card.ride-property-stamp color="pink-200" :show="$ride->beginner_friendly == '1'">
-                <x-vectors.tricycle x-bind="icon" class="aspect-1 scale-95" />
-            </x-ride.card.ride-property-stamp>
-
-            <x-ride.card.ride-property-stamp color="yellow-300" :show="$ride->coffee_stop == '1'">
-                <x-vectors.coffeecup x-bind="icon" class="aspect-1 scale-95" />
-            </x-ride.card.ride-property-stamp>
-
-            @if ($ride->ebike_friendly === 1)
-                <x-ride.card.ride-property-stamp color="green-300" :show="true">
-                    <x-vectors.ebikes-welcome x-bind="icon" class="aspect-1 scale-95" />
-                </x-ride.card.ride-property-stamp>
-            @elseif ($ride->ebike_friendly === 0)
-                <x-ride.card.ride-property-stamp color="red-400" :show="$ride->no_drop == '0'">
-                    <x-vectors.no-ebikes x-bind="icon" class="aspect-1 scale-95" />
-                </x-ride.card.ride-property-stamp>
-            @else
-                <div class=""></div>
-            @endif
-
-            <div class="flex size-full origin-center items-center justify-start text-lime-300"></div>
-        </div>
-        {{-- Nodrop --}}
-    </div>
-
-    <div
-        class="relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
-        <x-vectors.stamps.stamp
-            :color="$this->getRideTypeColorVar('400')"
-            :ridetype="$rideType"
-            class="absolute"
-            x-data="stamp({
+            class="relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
+            <x-vectors.stamps.stamp
+                :color="$this->getRideTypeColorVar('400')"
+                :ridetype="$rideType"
+                class="absolute"
+                x-data="stamp({
             opacity: 0.6,
             radius: 80,
             innerBorder: 1.5,
@@ -273,40 +276,61 @@ new class extends Component
             topText: '{{ $this->rideStats['TYPE'] }}',
             centerText: '{{ $this->rideStats['DISC'] }}',
             bottomText: '* {{ $this->meetsAtPlace() }}, {{ $this->rideStats['DATE'] }} *',
-            font: {top: {size: 'md', weight: 'normal'}, center: {size: 'lg', weight: 'normal'}, bottom:{size: 'sm', weight: 'normal'}},
+            font: {top: {size: 'md', weight: 'bold'}, center: {size: 'lg', weight: 'normal'}, bottom:{size: 'sm', weight: 'thin'}},
             maxTransform: { tx: 15, ty: 20, rot: 30 },
             iconFilter: 'soft',
         })">
-            <x-dynamic-component
-                uniqueid="{{ $ride->id }}"
-                :component="$this->rideTypeMotive"
-                x-bind:class="`w-[${iconRect.width}px] h-[${iconRect.height}px]`"
-                x-bind:x="iconRect.x"
-                x-bind:y="iconRect.y"
-                x-bind:width="iconRect.width"
-                x-bind:height="iconRect.height"
-                class="mt-4" />
-        </x-vectors.stamps.stamp>
-    </div>
+                <x-dynamic-component
+                    uniqueid="{{ $ride->id }}"
+                    :component="$this->rideTypeMotive"
+                    x-bind:class="`w-[${iconRect.width}px] h-[${iconRect.height}px]`"
+                    x-bind:x="iconRect.x"
+                    x-bind:y="iconRect.y"
+                    x-bind:width="iconRect.width"
+                    x-bind:height="iconRect.height"
+                    class="mt-4" />
+            </x-vectors.stamps.stamp>
+        </div>
 
-    <div class="col-span-10 row-span-1"></div>
-    <h3 class="col-span-10 row-span-1 flex items-end truncate text-lg font-bold ride-title {{ $rideType }}">
-        {{ $ride->title }}
-    </h3>
-    <div class="col-span-10 row-span-1"></div>
+        <div class="col-span-10 row-span-1"></div>
+        <h3
+            class="col-span-10 row-span-1 items-end truncate text-lg font-bold ride-title inline-flex relative {{ $rideType }}">
+            <x-vectors.filters.rough-edges id="rough-edges-title" />
+            <span
+                style="filter: url(#rough-edges-title)"
+                class="absolute size-full border-2 border-{{ $rideType }}-700/50"></span>
+            <span class="size-full">{{ $ride->title }}</span>
+        </h3>
+        <div class="col-span-10 row-span-1"></div>
 
-    <ul class="col-span-10 row-span-10 grid grid-cols-subgrid grid-rows-subgrid">
-        @foreach ($this->rideStats as $key => $value)
-            <li wire:key="ride-{{ $ride->id }}-{{ $key }}" class="col-span-10 grid grid-cols-subgrid grid-rows-subgrid">
-                <span class="col-span-4 flex items-end">{{ $key }}</span>
-                <span class="col-span-6 flex items-end truncate capitalize ride-stats-value {{ $rideType }}">
-                    {{ $value }}
-                </span>
-            </li>
-        @endforeach
-    </ul>
+        <ul class="col-span-10 row-span-10 grid grid-cols-subgrid grid-rows-subgrid">
+            @foreach ($this->rideStats as $key => $value)
+                <li
+                    x-data="{
+                        id: 0,
+                        seed: 0,
+                        init() {
+                            this.id = Math.random().toString(36).substring(2, 9);
+                            this.seed = Math.floor(Math.random() * 1000);
+                        }
+                    }"
+                    wire:key="ride-{{ $ride->id }}-{{ $key }}"
+                    class="col-span-10 grid grid-cols-subgrid grid-rows-subgrid">
+                    <span class="col-span-4 flex items-end">{{ $key }}</span>
+                    <span
+                        class="relative col-span-6 flex items-end justify-stretch truncate capitalize ride-stats-value {{ $rideType }} ">
+                        <x-vectors.filters.rough-edges x-bind:id="`rough-edges-${id}`" />
+                        <span
+                            x-bind:style="`filter: url(#rough-edges-${id})`"
+                            class="absolute size-full border-2 border-{{ $rideType }}-700/50"></span>
+                        <span class="z-10 size-full">{{ $value }}</span>
+                    </span>
+                </li>
+            @endforeach
+        </ul>
 
-    <div class="col-span-10"></div>
+        <div class="col-span-10"></div>
 
-    <x-ride.card.tw-utils-dummy />
-</x-ride.card.skeletton>
+        <x-ride.card.tw-utils-dummy />
+    </x-ride.card.skeletton>
+</div>

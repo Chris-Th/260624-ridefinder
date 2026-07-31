@@ -16,11 +16,6 @@
         height: ${size}px;
         text-align: center;
         `">
-    {{--  <template x-for="(stop, index) in stops">
-        <template x-bind="gradientSelector">
-            <stop stop-color="currentColor" stop-opacity="1" offset="40%" />
-        </template>
-    </template> --}}
     <svg
         x-data="{
             init() {
@@ -38,14 +33,7 @@
         xmlns="http://w3.org"
         stroke="currentColor"
         style="color: inherit"
-        fill="none"
-        {{-- x-bind:viewBox="viewBox" --}}
-        {{--  viewBox="0 0 170 170" --}}>
-        {{-- <filter id="noise">
-            <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" result="turbulence" />
-            <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="3" xChannelSelector="R"
-                yChannelSelector="G" />
-        </filter> --}}
+        fill="none">
         <defs>
             <path x-bind:id="id + '-top'" x-bind:d="topTextPath" />
             <path x-bind:id="id + '-bottom'" x-bind:d="bottomTextPath" />
@@ -60,12 +48,11 @@
                 gradientUnits="userSpaceOnUse">
                 <stop stop-color="currentColor" :stop-opacity="`${stops[0].opacity}`" :offset="`${stops[0].offset}%`" />
                 <stop stop-color="currentColor" :stop-opacity="`${stops[1].opacity}`" :offset="`${stops[1].offset}%`" />
-                {{--  <stop stop-color="currentColor" :stop-opacity="`${stops[2].opacity}`" :offset="`${stops[2].offset}%`" /> --}}
                 <stop stop-color="currentColor" :stop-opacity="`${stops[2].opacity}`" :offset="`${stops[2].offset}%`" />
                 <stop stop-color="currentColor" :stop-opacity="`${stops[3].opacity}`" :offset="`${stops[3].offset}%`" />
             </linearGradient>
 
-            <g x-bind:id="'stamp-text-and-borders-' + id">
+            <g x-bind:id="'stamp-text-and-borders-' + id" x-bind:stroke="'url(#uneven-stamp-pressure-' + id + ')'">
                 <!-- Outer Thick Stamp Border -->
                 <path
                     x-show="outerBorder !== 'none'"
@@ -86,7 +73,7 @@
                     {{-- fill="currentColor" --}}
                     stroke="none"
                     x-bind:font-size="topFontSize"
-                    font-weight="normal"
+                    x-bind:font-weight="fontWeight.top"
                     {{-- fill="currentColor"
                         stroke="currentColor" --}}
                     letter-spacing="1">
@@ -101,7 +88,7 @@
                     x-bind:fill="'url(#uneven-stamp-pressure-' + id + ')'"
                     x-bind:stroke="'url(#uneven-stamp-pressure-' + id + ')'"
                     x-bind:font-size="bottomFontSize"
-                    font-weight="normal"
+                    x-bind:font-weight="fontWeight.bottom"
                     {{-- fill="currentColor"
                         stroke="none" --}}
                     letter-spacing="1">
@@ -121,7 +108,7 @@
                         x-bind:x="center"
                         x-bind:y="center"
                         x-bind:font-size="centerFontSize"
-                        font-weight="bold"
+                        x-bind:font-weight="fontWeight.center"
                         text-anchor="middle"
                         dominant-baseline="central">
                         <tspan x-text="centerText"></tspan>

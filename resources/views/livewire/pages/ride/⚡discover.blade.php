@@ -15,6 +15,7 @@ new class extends Component
 ?>
 
 <div
+    x-cloak
     x-data
     class="container mx-auto grid h-full w-fit grid-cols-[repeat(auto-fill,minmax(320px,1fr))] items-center justify-center gap-6 text-base/6">
     @foreach ($this->rides as $ride)

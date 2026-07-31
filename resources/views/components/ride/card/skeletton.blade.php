@@ -18,7 +18,7 @@
         --}}
         {{-- Top Thin Full Width Ceiling Grid item --}}
         <div
-            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-t-2 border-mist-700  grid grid-cols-subgrid gap-x-1 items-start">
+            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-t-2 border-mist-700  grid grid-cols-subgrid gap-x-1 items-start rounded-t-xl">
             {{-- <template x-for="i in cols">
                 <div class="place-self-stretch border-t-2"></div>
             </template> --}}
@@ -32,7 +32,7 @@
         {{-- Bottom Full Width Floor Grid Item --}}
 
         <div
-            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-b-2 border-mist-700 grid grid-cols-subgrid gap-x-1 items-start">
+            class="col-span-{{ $cols}} grid-flow-col border-x-2 border-b-2 border-mist-700 grid grid-cols-subgrid gap-x-1 items-start rounded-b-xl">
             {{-- <template x-for="i in cols">
                 <div class="row-span-full place-self-stretch border-b-2"></div>
             </template> --}}
