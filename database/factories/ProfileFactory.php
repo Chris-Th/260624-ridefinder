@@ -22,9 +22,8 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
 
-
         $locations = collect(ZurichCantonCity::cases());
-        $range = $this->getDistanceRange();
+        $range = $this->getRideDistance();
 
         return [
             'user_id' => User::all()->pluck('id')->random(),
@@ -32,17 +31,16 @@ class ProfileFactory extends Factory
             'pace_id' => Pace::all()->pluck('id')->random(),
             'location' => $locations->random(),
             'bio' => fake()->paragraph(2),
-            'distance_min_km' => $range[0],
-            'distance_max_km' => $range[1],
         ];
     }
 
-    protected function getDistanceRange () {
+    protected function getRideDistance()
+    {
         $dists = collect([0, 25, 50, 75, 100]);
         $maxIndex = $dists->count() - 1;
         $maxDs = $dists->splice(rand(1, $maxIndex));
 
-        $range = $maxIndex === 4 ? [ 100, null ] : [ $dists->random(), $maxDs->random()];
+        $range = $maxIndex === 4 ? [100, null] : [$dists->random(), $maxDs->random()];
 
         return $range;
     }

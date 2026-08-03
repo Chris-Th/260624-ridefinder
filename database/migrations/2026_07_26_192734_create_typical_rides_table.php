@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\DistanceRange;
 use App\Models\Discipline;
 use App\Models\Pace;
 use App\Models\Profile;
@@ -23,8 +22,8 @@ return new class extends Migration
             $table->foreignIdFor(RideType::class)->nullable();
             $table->foreignIdFor(Discipline::class)->nullable();
             $table->foreignIdFor(Pace::class)->nullable();
-            $table->enum('min_distance', DistanceRange::cases())->nullable();
-            $table->enum('max_distance', DistanceRange::cases())->nullable();
+            $table->unsignedSmallInteger('min_distance')->nullable();
+            $table->unsignedSmallInteger('max_distance')->nullable();
 
             $table->timestamps();
         });

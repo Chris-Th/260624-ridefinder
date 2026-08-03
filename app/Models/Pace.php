@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
+use Database\Factories\PaceFactory;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Unguarded()]
 class Pace extends Model
 {
-    /** @use HasFactory<\Database\Factories\PaceFactory> */
+    /** @use HasFactory<PaceFactory> */
     use HasFactory;
 
-    public function profiles(): HasMany
+    public function typicalRides(): HasMany
     {
-        return $this->hasMany(Profile::class);
+        return $this->hasMany(TypicalRide::class);
     }
 
     public function rides(): HasMany

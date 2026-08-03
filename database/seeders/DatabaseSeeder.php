@@ -19,14 +19,17 @@ class DatabaseSeeder extends Seeder
 
         $userSeeder = new UserSeeder(200);
         $userSeeder->run();
-
         $users = $userSeeder->users;
 
         $profileSeeder = new ProfileSeeder($users);
         $profileSeeder->run();
+        $profiles = $profileSeeder->profiles;
 
         $rideSeeder = new RideSeeder($users, $users->random(60));
         $rideSeeder->run();
+
+        $typicalRideSeeder = new TypicalRideSeeder($profiles);
+        $typicalRideSeeder->run();
 
         $this->call([
             RideFeedbackSeeder::class,

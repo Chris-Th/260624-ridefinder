@@ -23,8 +23,6 @@ return new class extends Migration
             $table->enum('location', ZurichCantonCity::cases());
             $table->string('bio');
             $table->string('profile_photo_path')->nullable();
-            $table->smallInteger('distance_min_km');
-            $table->smallInteger('distance_max_km')->nullable();
             $table->timestamps();
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\DistanceRange;
+use App\Enums\RideDistance;
 use App\Models\Profile;
 use App\Models\TypicalRide;
 use App\Models\User;
@@ -11,11 +11,49 @@ it('renders successfully', function () {
         ->assertStatus(200);
 });
 
-test('guests cannot view a profile');
+it('renders the profile.show component', function () {
+    $user = User::factory()->create();
+    $profile = Profile::factory()->for($user)->create();
 
-it('shows the requested profile');
+    $this->actingAs($user)->get('/profiles/1')
+        ->assertSeeLivewire('pages::profile.show');
+});
 
-it('shows the riders name');
+test('guest navigating to a user profile is redirected to login', function () {
+    $user = User::factory()->create();
+    $profile = Profile::factory()->for($user)->create();
+
+    Livewire::actingAsGuest()->test('pages::profile.show', ['user' => $user])
+        ->assertRedirect('/login');
+});
+
+test('logged in user can see their own profile bio', function () {
+    $user = User::factory()->create();
+    $profile = Profile::factory()->for($user)->create();
+
+    Livewire::actingAs($user)
+        ->test('pages::profile.show', ['user' => $user])
+        ->assertSee($profile->bio);
+});
+
+test('logged in user can see other users profile bio', function () {
+    $user = User::factory()->create();
+    $profile = Profile::factory()->for($user)->create();
+    $otherUser = User::factory()->create();
+
+    Livewire::actingAs($otherUser)
+        ->test('pages::profile.show', ['user' => $user])
+        ->assertSee($profile->bio);
+});
+
+it('shows the riders name', function () {
+    User::factory()->create([
+        'name' => 'FooBarBob',
+    ]);
+
+    Livewire::test('pages::profile.show')
+        ->assertSee('FooBarBob');
+});
 
 it('shows the riders location');
 
@@ -29,7 +67,27 @@ it('shows all disciplines associated with the profile');
 
 // Typical rides
 
-it('shows all typical rides');
+it('shows all typical rides', function () {
+    $user = User::factory()->create();
+    $profile = Profile::factory()->for($user)->create();
+    $typicalRide1 = TypicalRide::factory()->for($profile)->create([
+        'name' => 'Typical Ride 1',
+        'min_distance' => RideDistance::Km25,
+        'max_distance' => RideDistance::Km75,
+    ]);
+    $typicalRide2 = TypicalRide::factory()->for($profile)->create([
+        'name' => 'Typical Ride 2',
+        'min_distance' => RideDistance::Km100,
+        'max_distance' => RideDistance::Any,
+    ]);
+
+    visit('/profiles/1')
+        ->assertSee('Typical Ride 1')
+        ->assertSee('25')
+        ->assertSee('75')
+        ->assertSee('100')
+        ->assertSee('or more');
+});
 
 it('shows the name of each typical ride');
 
@@ -79,24 +137,4 @@ it('displays profile info', function () {
     $profile = Profile::factory()->for($user)->create();
 });
 
-it('displays typical rides', function () {
-    $user = User::factory()->create();
-    $profile = Profile::factory()->for($user)->create();
-    $typicalRide1 = TypicalRide::factory()->for($profile)->create([
-        'name' => 'Typical Ride 1',
-        'min_distance' => DistanceRange::Km25,
-        'max_distance' => DistanceRange::Km75,
-    ]);
-    $typicalRide2 = TypicalRide::factory()->for($profile)->create([
-        'name' => 'Typical Ride 2',
-        'min_distance' => DistanceRange::Km100,
-        'max_distance' => DistanceRange::Any,
-    ]);
-
-    visit('/profiles/1')
-        ->assertSee('Typical Ride 1')
-        ->assertSee('25')
-        ->assertSee('75')
-        ->assertSee('100')
-        ->assertSee('or more');
-});
+it('displays typical rides', function () {});

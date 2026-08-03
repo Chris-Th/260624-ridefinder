@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\DisciplineFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,12 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Discipline extends Model
 {
-    /** @use HasFactory<\Database\Factories\DisciplineFactory> */
+    /** @use HasFactory<DisciplineFactory> */
     use HasFactory;
 
-    public function typicalProfiles():HasMany // 'Profiles that selected this as their typical discipline'
+    public function typicalRides(): HasMany // 'Profiles that selected this as their typical discipline'
     {
-        return $this->hasMany(Profile::class);
+        return $this->hasMany(TypicalRide::class);
     }
 
     public function rides(): HasMany
@@ -29,5 +30,4 @@ class Discipline extends Model
     {
         return $this->belongsToMany(Profile::class);
     }
-
 }
