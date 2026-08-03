@@ -6,37 +6,32 @@ use Database\Factories\ProfileFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Profile extends Model
 {
     /** @use HasFactory<ProfileFactory> */
     use HasFactory;
 
-    public function disciplines(): BelongsToMany
-    {
-        return $this->belongsToMany(Discipline::class);
-    }
-
-    public function typicalDiscipline(): BelongsTo
-    {
-        return $this->belongsTo(Discipline::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function paces(): BelongsToMany
+    public function disciplines(): HasManyThrough
     {
-        return $this->belongsToMany(Pace::class);
+        return $this->hasManyThrough(Discipline::class, TypicalRide::class);
     }
 
-    public function rideTypes(): BelongsToMany
+    public function paces(): HasManyThrough
     {
-        return $this->belongsToMany(RideType::class);
+        return $this->hasManyThrough(Pace::class, TypicalRide::class);
+    }
+
+    public function rideTypes(): HasManyThrough
+    {
+        return $this->hasManyThrough(RideType::class, TypicalRide::class);
     }
 
     public function typicalRides(): HasMany

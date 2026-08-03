@@ -298,7 +298,7 @@ new class extends Component
             <x-vectors.filters.rough-edges id="rough-edges-title" />
             <span
                 style="filter: url(#rough-edges-title)"
-                class="absolute size-full border-2 border-{{ $rideType }}-700/50"></span>
+                class="absolute size-full border-3 border-{{ $rideType }}-700/50"></span>
             <span class="size-full">{{ $ride->title }}</span>
         </h3>
         <div class="col-span-10 row-span-1"></div>
@@ -322,7 +322,7 @@ new class extends Component
                         <x-vectors.filters.rough-edges x-bind:id="`rough-edges-${id}`" />
                         <span
                             x-bind:style="`filter: url(#rough-edges-${id})`"
-                            class="absolute size-full border-2 border-{{ $rideType }}-700/50"></span>
+                            class="absolute size-full border-3 border-{{ $rideType }}-700/50"></span>
                         <span class="z-10 size-full">{{ $value }}</span>
                     </span>
                 </li>

@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\ZurichCantonCity;
-use App\Models\Discipline;
-use App\Models\Pace;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,8 +25,6 @@ class ProfileFactory extends Factory
 
         return [
             'user_id' => User::all()->pluck('id')->random(),
-            'discipline_id' => Discipline::all()->pluck('id')->random(),
-            'pace_id' => Pace::all()->pluck('id')->random(),
             'location' => $locations->random(),
             'bio' => fake()->paragraph(2),
         ];

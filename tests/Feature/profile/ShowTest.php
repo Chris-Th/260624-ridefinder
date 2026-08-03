@@ -11,19 +11,19 @@ it('renders successfully', function () {
         ->assertStatus(200);
 });
 
-it('renders the profile.show component', function () {
+it('profile.show shows correct user name', function () {
     $user = User::factory()->create();
-    $profile = Profile::factory()->for($user)->create();
+    $profile = Profile::factory()->count(1)->for($user)->create();
 
-    $this->actingAs($user)->get('/profiles/1')
-        ->assertSeeLivewire('pages::profile.show');
+    Livewire::actingAs($user)->test('pages::profile.show', ['user' => $user])
+        ->assertSee($user->name);
 });
 
 test('guest navigating to a user profile is redirected to login', function () {
     $user = User::factory()->create();
-    $profile = Profile::factory()->for($user)->create();
 
-    Livewire::actingAsGuest()->test('pages::profile.show', ['user' => $user])
+    $this->actingAsGuest()
+        ->get('users/'.$user->id)
         ->assertRedirect('/login');
 });
 
