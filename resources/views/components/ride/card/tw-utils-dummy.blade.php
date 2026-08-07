@@ -78,6 +78,17 @@ border-climbing-700/50
 border-social-700/50
 border-trails-700/50
 
+border-endurance-800/60
+border-paceline-800/60
+border-coffee-800/60
+border-bikepacking-800/60
+border-gravel-800/60
+border-family-800/60
+border-adventure-800/60
+border-climbing-800/60
+border-social-800/60
+border-trails-800/60
+
 text-endurance-300
 text-paceline-300
 text-coffee-300

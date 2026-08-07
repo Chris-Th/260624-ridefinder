@@ -8,6 +8,7 @@ use App\Models\Pace;
 use App\Models\Profile;
 use App\Models\RideType;
 use App\Models\TypicalRide;
+use Database\Factories\Concerns\HasRideTagStates;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TypicalRideFactory extends Factory
 {
+    use HasRideTagStates;
+
     /**
      * Define the model's default state.
      *

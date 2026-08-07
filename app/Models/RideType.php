@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RideType as RideTypeEnum;
 use Database\Factories\RideTypeFactory;
 use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,5 +32,14 @@ class RideType extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('ride-types');
+    }
+
+    public static function findByName(string|RideTypeEnum $name): self
+    {
+        $name = $name instanceof RideTypeEnum
+            ? $name->value
+            : $name;
+
+        return static::where('name', $name)->firstOrFail();
     }
 }

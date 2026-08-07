@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Discipline;
+use App\Models\RideTag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Discipline>
+ * @extends Factory<RideTag>
  */
-class DisciplineFactory extends Factory
+class RideTagFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,6 @@ class DisciplineFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
             //
         ];

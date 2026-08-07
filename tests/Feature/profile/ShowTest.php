@@ -1,9 +1,15 @@
 <?php
 
 use App\Enums\RideDistance;
+use App\Enums\ZurichCantonCity;
 use App\Models\Profile;
 use App\Models\TypicalRide;
 use App\Models\User;
+use Database\Seeders\DisciplineSeeder;
+use Database\Seeders\PaceSeeder;
+use Database\Seeders\RideTagSeeder;
+use Database\Seeders\RideTypeSeeder;
+use Illuminate\Http\UploadedFile;
 use Livewire\Livewire;
 
 it('renders successfully', function () {
@@ -12,10 +18,9 @@ it('renders successfully', function () {
 });
 
 it('profile.show shows correct user name', function () {
-    $user = User::factory()->create();
-    $profile = Profile::factory()->count(1)->for($user)->create();
+    [$user, $profile] = createUserProfile();
 
-    Livewire::actingAs($user)->test('pages::profile.show', ['user' => $user])
+    Livewire::actingAs($user)->test('pages::profile.show', ['profile' => $profile])
         ->assertSee($user->name);
 });
 
@@ -28,42 +33,66 @@ test('guest navigating to a user profile is redirected to login', function () {
 });
 
 test('logged in user can see their own profile bio', function () {
-    $user = User::factory()->create();
-    $profile = Profile::factory()->for($user)->create();
+    [$user, $profile] = createUserProfile();
 
     Livewire::actingAs($user)
-        ->test('pages::profile.show', ['user' => $user])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->assertSee($profile->bio);
 });
 
 test('logged in user can see other users profile bio', function () {
-    $user = User::factory()->create();
-    $profile = Profile::factory()->for($user)->create();
+    [$user, $profile] = createUserProfile();
     $otherUser = User::factory()->create();
 
     Livewire::actingAs($otherUser)
-        ->test('pages::profile.show', ['user' => $user])
+        ->test('pages::profile.show', ['profile' => $profile])
         ->assertSee($profile->bio);
 });
 
 it('shows the riders name', function () {
-    User::factory()->create([
-        'name' => 'FooBarBob',
-    ]);
+    [$user, $profile] = createUserProfile(userAttrs: ['name' => 'FooBarBob']);
 
-    Livewire::test('pages::profile.show')
+    Livewire::test('pages::profile.show', ['profile' => $profile])
         ->assertSee('FooBarBob');
 });
 
-it('shows the riders location');
+it('shows the riders location', function () {
+    [$user, $profile] = createUserProfile(profileAttrs: [
+        'location' => ZurichCantonCity::Horgen->value,
+    ]);
 
-it('shows the riders biography');
+    Livewire::test('pages::profile.show', ['profile' => $profile])
+        ->assertSee('Horgen');
+});
 
-it('shows the riders profile photo');
+it('shows the riders profile photo', function () {
+    [$user, $profile] = createUserProfile();
+    $file = UploadedFile::fake()->image('avatar.jpg');
+    $profile->addMedia($file)->preservingOriginal()->toMediaCollection('profile-photo');
+
+    Livewire::actingAs($user)->test('pages::profile.show', ['profile' => $profile])
+        ->assertSee('avatar.jpg');
+
+});
 
 // Disciplines
 
-it('shows all disciplines associated with the profile');
+it('shows all disciplines associated with the profile', function () {
+    $this->seed([
+        RideTypeSeeder::class,
+        DisciplineSeeder::class,
+        PaceSeeder::class,
+        RideTagSeeder::class,
+    ]);
+    [$user, $profile] = createUserProfile();
+    $typicalRide1 = TypicalRide::factory()->for($profile)->create();
+    $typicalRide2 = TypicalRide::factory()->for($profile)->create();
+
+    Livewire::actingAs($user)
+        ->test('pages::profile.show', ['profile' => $profile])
+        ->assertSee($typicalRide1->discipline->name)
+        ->assertSee($typicalRide2->discipline->name);
+});
 
 // Typical rides
 
@@ -78,7 +107,7 @@ it('shows all typical rides', function () {
     $typicalRide2 = TypicalRide::factory()->for($profile)->create([
         'name' => 'Typical Ride 2',
         'min_distance' => RideDistance::Km100,
-        'max_distance' => RideDistance::Any,
+        'max_distance' => null,
     ]);
 
     visit('/profiles/1')
@@ -99,9 +128,9 @@ it('shows the pace when present');
 
 it('shows a distance range when both minimum and maximum are present');
 
-it('shows only a minimum distance when no maximum exists');
+it('shows correct phrase when only minimum distance exists');
 
-it('shows only a maximum distance when no minimum exists');
+it('shows correct phrase when only maximum distance exists');
 
 it('handles a typical ride with no optional attributes');
 

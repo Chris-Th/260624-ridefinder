@@ -2,8 +2,8 @@
 
 use App\Models\Discipline;
 use App\Models\Pace;
+use App\Models\Profile;
 use App\Models\RideType;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('rides', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class); // host
+            $table->foreignIdFor(Profile::class); // host
             $table->string('title');
             $table->string('description')->nullable();
             $table->foreignIdFor(Discipline::class);

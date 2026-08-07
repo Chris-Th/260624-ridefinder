@@ -112,30 +112,30 @@
     --color-coffee-950: oklch(0.22 0.02 30);
 
     /* Family Friendly — Fresh Green */
-    --color-family-50: oklch(0.98 0.02 140);
-    --color-family-100: oklch(0.95 0.04 140);
-    --color-family-200: oklch(0.9 0.08 140);
-    --color-family-300: oklch(0.84 0.12 140);
-    --color-family-400: oklch(0.77 0.15 140);
-    --color-family-500: oklch(0.69 0.17 140);
-    --color-family-600: oklch(0.6 0.16 140);
-    --color-family-700: oklch(0.51 0.13 140);
-    --color-family-800: oklch(0.43 0.1 140);
-    --color-family-900: oklch(0.35 0.07 140);
-    --color-family-950: oklch(0.24 0.04 140);
+    --color-family-50: oklch(0.98 0.02 155);
+    --color-family-100: oklch(0.95 0.04 155);
+    --color-family-200: oklch(0.9 0.08 155);
+    --color-family-300: oklch(0.84 0.12 155);
+    --color-family-400: oklch(0.77 0.15 155);
+    --color-family-500: oklch(0.69 0.17 155);
+    --color-family-600: oklch(0.6 0.16 155);
+    --color-family-700: oklch(0.51 0.13 155);
+    --color-family-800: oklch(0.43 0.1 155);
+    --color-family-900: oklch(0.35 0.07 155);
+    --color-family-950: oklch(0.24 0.04 155);
 
     /* Paceline — Hi-Vis Lime */
-    --color-paceline-50: oklch(0.99 0.03 115);
-    --color-paceline-100: oklch(0.97 0.06 115);
-    --color-paceline-200: oklch(0.93 0.12 115);
-    --color-paceline-300: oklch(0.88 0.18 115);
-    --color-paceline-400: oklch(0.82 0.22 115);
-    --color-paceline-500: oklch(0.75 0.24 115);
-    --color-paceline-600: oklch(0.67 0.22 115);
-    --color-paceline-700: oklch(0.58 0.18 115);
-    --color-paceline-800: oklch(0.48 0.14 115);
-    --color-paceline-900: oklch(0.39 0.1 115);
-    --color-paceline-950: oklch(0.27 0.05 115);
+    --color-paceline-50: oklch(0.99 0.03 135);
+    --color-paceline-100: oklch(0.97 0.06 135);
+    --color-paceline-200: oklch(0.93 0.12 135);
+    --color-paceline-300: oklch(0.88 0.18 135);
+    --color-paceline-400: oklch(0.82 0.22 135);
+    --color-paceline-500: oklch(0.75 0.24 135);
+    --color-paceline-600: oklch(0.67 0.22 135);
+    --color-paceline-700: oklch(0.58 0.18 135);
+    --color-paceline-800: oklch(0.48 0.14 135);
+    --color-paceline-900: oklch(0.39 0.1 135);
+    --color-paceline-950: oklch(0.27 0.05 135);
 
     /* Social — Purple */
     --color-social-50: oklch(0.98 0.02 310);
@@ -290,18 +290,37 @@ li:nth-child(even) > .ride-stats-value.adventure {
 } */
 
 li:nth-child(odd) > .ride-stats-value {
-    --alpha-multiplier: 0.2;
+    --alpha-multiplier: 0.15;
+    --chroma-multiplier: 0.5;
+    --lum-multiplier: 0.7;
 }
 li:nth-child(even) > .ride-stats-value {
-    --alpha-multiplier: 0.1;
+    --alpha-multiplier: 0.08;
+    --chroma-multiplier: 0.6;
+    --lum-multiplier: 0.4;
 }
 
 li > .ride-stats-value {
-    background-color: oklch(from var(--base-color) l calc(c * 1.2) h / calc(alpha * var(--alpha-multiplier)));
+    background-color: oklch(
+        from var(--base-color) calc(l * var(--lum-multiplier)) calc(c * var(--chroma-multiplier)) h /
+            calc(alpha * var(--alpha-multiplier))
+    );
+
+    /* position: relative;
+
+    &:after {
+        border-width: 16px;
+        border-color: oklch(from var(--base-color) calc(l * 0.7) calc(c * 1.2) h / calc(alpha * var(--alpha * 0.5)));
+        border-style: solid;
+        content: '';
+        filter: url(#ink-grit-filter);
+        inset: 0;
+        position: absolute;
+    } */
 }
 
 .card-bg {
-    background-color: oklch(from var(--base-color) calc(l * 0.15) calc(c / 4) h / calc(alpha * 0.2));
+    background-color: oklch(from var(--base-color) calc(l * 0.2) calc(c * 0.5) h / calc(alpha * 0.15));
 }
 
 .rough-edges {

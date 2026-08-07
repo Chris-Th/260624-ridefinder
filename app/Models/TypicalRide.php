@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 #[Unguarded]
 class TypicalRide extends Model
@@ -39,6 +40,11 @@ class TypicalRide extends Model
     public function pace(): BelongsTo
     {
         return $this->belongsTo(Pace::class);
+    }
+
+    public function rideTags(): MorphToMany
+    {
+        return $this->morphToMany(RideTag::class, 'ride_taggable');
     }
 
     protected function casts(): array

@@ -237,7 +237,7 @@ new class extends Component
                 </x-ride.card.ride-property-stamp>
 
                 <x-ride.card.ride-property-stamp color="pink-200" :show="$ride->beginner_friendly == '1'">
-                    <x-vectors.tricycle x-bind="icon" class="aspect-1 scale-95" />
+                    <x-vectors.tricycle-crossed x-bind="icon" class="aspect-1 scale-95" />
                 </x-ride.card.ride-property-stamp>
 
                 <x-ride.card.ride-property-stamp color="yellow-300" :show="$ride->coffee_stop == '1'">
@@ -319,10 +319,10 @@ new class extends Component
                     <span class="col-span-4 flex items-end">{{ $key }}</span>
                     <span
                         class="relative col-span-6 flex items-end justify-stretch truncate capitalize ride-stats-value {{ $rideType }} ">
-                        <x-vectors.filters.rough-edges x-bind:id="`rough-edges-${id}`" />
+                        <x-vectors.filters.rough-border x-bind:id="`rough-border-${id}`" />
                         <span
-                            x-bind:style="`filter: url(#rough-edges-${id})`"
-                            class="absolute size-full border-3 border-{{ $rideType }}-700/50"></span>
+                            x-bind:style="`filter: url(#rough-border-${id})`"
+                            class="absolute size-full border-3 border-{{ $rideType }}-800/60"></span>
                         <span class="z-10 size-full">{{ $value }}</span>
                     </span>
                 </li>

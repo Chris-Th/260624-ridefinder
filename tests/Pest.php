@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +46,12 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function createUserProfile(array $userAttrs = [], array $profileAttrs = [])
 {
-    // ..
+    $user = User::factory()->create($userAttrs);
+
+    return [
+        $user,
+        Profile::factory()->for($user)->create($profileAttrs),
+    ];
 }

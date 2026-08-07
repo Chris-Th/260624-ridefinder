@@ -9,6 +9,7 @@ use App\Models\Ride;
 use App\Models\RideType;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Factories\Concerns\HasRideTagStates;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class RideFactory extends Factory
 {
+    use HasRideTagStates;
+
     /**
      * Define the model's default state.
      *

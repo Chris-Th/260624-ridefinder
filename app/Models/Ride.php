@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 #[Unguarded]
 class Ride extends Model
@@ -19,7 +20,7 @@ class Ride extends Model
 
     public function host(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Profile::class, 'profile_id');
     }
 
     public function discipline(): BelongsTo
@@ -39,12 +40,17 @@ class Ride extends Model
 
     public function riders(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(Profile::class);
     }
 
     public function rideFeedbacks(): HasMany
     {
         return $this->hasMany(RideFeedback::class);
+    }
+
+    public function rideTags(): MorphToMany
+    {
+        return $this->morphToMany(RideTag::class, 'ride_taggable');
     }
 
     protected function distanceKm(): Attribute

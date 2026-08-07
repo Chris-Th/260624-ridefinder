@@ -35,7 +35,7 @@
                 <!-- <filter id="flacky-texture-4"> -->
                 <feTurbulence
                     type="turbulence"
-                    baseFrequency="0.01"
+                    baseFrequency="0.005"
                     numOctaves="3"
                     x-bind:seed="`${seed}`"
                     stitchTiles="noStitch" />
@@ -52,6 +52,6 @@
                 </feDiffuseLighting>
             </filter>
         </defs>
-        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.1" />
+        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.3" />
     </svg>
 </div>
