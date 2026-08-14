@@ -4,7 +4,7 @@
     @include ('partials.head')
 </head>
 
-<body init="$flux.dark = false" class="victor-mono min-h-screen bg-white dark:bg-zinc-800">
+<body init="$flux.dark = true" class="victor-mono dark:bg-base-300 bg-base-100 min-h-screen">
     {{-- <flux:sidebar sticky collapsible class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
@@ -109,5 +109,6 @@
     @fluxScripts
 
     @livewireScriptConfig
+    <x-tw-utils-dummy />
 </body>
 </html>

@@ -19,12 +19,12 @@ class RideTag extends Model
 
     public function rides(): MorphToMany
     {
-        return $this->morphToMany(Ride::class, 'ride_taggable');
+        return $this->morphedByMany(Ride::class, 'ride_taggable');
     }
 
     public function typicalRides(): MorphToMany
     {
-        return $this->morphToMany(Ride::class, 'ride_taggable');
+        return $this->morphedByMany(TypicalRide::class, 'ride_taggable');
     }
 
     /**

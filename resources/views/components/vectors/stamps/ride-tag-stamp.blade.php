@@ -1,6 +1,10 @@
 @props ([
     'color' => $attributes->has('color') ? $attributes->get('color') : 'neutral-400',
-    'show' => false
+    'show' => false,
+    'radius' => 20,
+    'maxTransformX' => 4,
+    'maxTransformY' => 3,
+    'maxRotation' => 30
 ])
 
 <div {{ $attributes->merge([ 'class' => "flex size-full origin-center items-center justify-center text-$color" ]) }}>
@@ -10,11 +14,11 @@
             x-data="
                 stamp({
                     opacity: 1,
-                    radius: 20,
+                    radius: {{ $radius }},
                     outerBorder: 2,
                     padding: 0,
                     maxJitter: 0.2,
-                    maxTransform: { tx: 4, ty: 3, rot: 30 },
+                    maxTransform: { tx: {{ $maxTransformX }}, ty: {{ $maxTransformY }}, rot: {{ $maxRotation }} },
                     iconFilter: 'softer'
                 })
             ">

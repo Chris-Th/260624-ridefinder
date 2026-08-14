@@ -323,3 +323,40 @@ RideTagSeeder
        ▼                 ▼
      Ride            TypicalRide
 ```
+
+#
+
+### Ride / TypicalRide Features
+
+| feature    | type        | Ride  | TypicalRide |
+| ---------- | ----------- | ----- | ----------- |
+| title      | attr        | Y     | N           |
+| name       | attr        | N     | Y           |
+| descr      | attr        | Y     | N           |
+| host       | belongsTo   | Y     | N           |
+| Discipline | belongsTo   | Y     | Y           |
+| Pace       | belongsTo   | Y     | Y           |
+| RideType   | belongsTo   | Y     | Y           |
+| distance   | attr        | Y     | N           |
+| min dist   | attr        | N     | Y           |
+| max dist   | attr        | N     | Y           |
+| elevation  | attr        | Y     | maybe       |
+| place/time | attrs       | Y     | N           |
+| max riders | attr        | Y     | maybe       |
+| min riders | attr        | maybe | maybe       |
+| ride tags  | morphToMany | Y     | Y           |
+
+#
+
+#### Ride Tags
+
+| name              | group      |
+| ----------------- | ---------- |
+| experienced only  | experience |
+| beginners only    | experience |
+| ebike only        | ebike      |
+| no ebike          | ebike      |
+| no drop           | -          |
+| regroup           | -          |
+| coffee stop       | -          |
+| beginner friendly | -          |

@@ -9,7 +9,7 @@ new class extends Component
     #[Computed]
     public function rides()
     {
-        return Ride::limit(30)->get();
+        return Ride::with('rideTags')->limit(30)->get();
     }
 };
 ?>

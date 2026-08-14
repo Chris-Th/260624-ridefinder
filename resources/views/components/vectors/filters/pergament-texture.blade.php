@@ -52,6 +52,6 @@
                 </feDiffuseLighting>
             </filter>
         </defs>
-        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.3" />
+        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.35" />
     </svg>
 </div>

@@ -23,6 +23,11 @@ class Ride extends Model
         return $this->belongsTo(Profile::class, 'profile_id');
     }
 
+    public function profile(): BelongsTo
+    {
+        return $this->host();
+    }
+
     public function discipline(): BelongsTo
     {
         return $this->belongsTo(Discipline::class);
@@ -40,7 +45,7 @@ class Ride extends Model
 
     public function riders(): BelongsToMany
     {
-        return $this->belongsToMany(Profile::class);
+        return $this->belongsToMany(Profile::class)->withTimestamps();
     }
 
     public function rideFeedbacks(): HasMany

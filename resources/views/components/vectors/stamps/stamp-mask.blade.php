@@ -7,15 +7,14 @@
     x-bind:style="`
         font-family: 'Courier New', Courier, monospace;
         font-weight: bold;
-        opacity: ${opacity};
+        // opacity: ${opacity};
         translate: ${transform.tx}px ${transform.ty}px;
         color: {{ $color }};
-       /*  opacity: {{ $opacity }}; */
+
         rotate: ${transform.rot}deg;
         width: ${size}px;
         height: ${size}px;
         text-align: center;
-        mix-blend-mode: multiply;
         `">
     <svg
         x-data="{
@@ -35,6 +34,7 @@
         xmlns="http://w3.org"
         stroke="currentColor"
         style="color: inherit; mix-blend-mode: multiply"
+        class="z-10"
         fill="none">
         <defs>
             <path x-bind:id="id + '-top'" x-bind:d="topTextPath" />

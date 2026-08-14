@@ -9,7 +9,13 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@plugin 'daisyui';
+@plugin 'daisyui' {
+    themes:
+        lofi,
+        black --prefersdark --default;
+}
+
+@custom-variant dark (&:where([data-theme=black], [data-theme=black] *));
 
 /* .jetbrains-mono {
   font-family: "JetBrains Mono", monospace;

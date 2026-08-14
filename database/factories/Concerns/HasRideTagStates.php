@@ -4,15 +4,14 @@ namespace Database\Factories\Concerns;
 
 use App\Enums\EbikePreference;
 use App\Enums\ExperiencePreference;
-use App\Models\Ride;
 use App\Models\RideTag;
 
 trait HasRideTagStates
 {
     public function ebikesOnly(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
                 RideTag::findByName(EbikePreference::Only)
             );
         });
@@ -20,8 +19,8 @@ trait HasRideTagStates
 
     public function noEbikes(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
                 RideTag::findByName(EbikePreference::None)
             );
         });
@@ -29,8 +28,8 @@ trait HasRideTagStates
 
     public function beginnersOnly(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
                 RideTag::findByName(ExperiencePreference::BeginnerOnly)
             );
         });
@@ -38,8 +37,8 @@ trait HasRideTagStates
 
     public function experiencedOnly(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
                 RideTag::findByName(ExperiencePreference::ExperiencedOnly)
             );
         });
@@ -47,36 +46,36 @@ trait HasRideTagStates
 
     public function noDrop(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
-                RideTag::findByName('no_drop')
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
+                RideTag::findByName('no-drop')
             );
         });
     }
 
     public function regroupAtClimbs(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
-                RideTag::findByName('regroup_at_climbs')
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
+                RideTag::findByName('regroup-at-climbs')
             );
         });
     }
 
     public function coffeeStop(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
-                RideTag::findByName('coffee_stop')
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
+                RideTag::findByName('coffee-stop')
             );
         });
     }
 
     public function beginnerFriendly(): static
     {
-        return $this->afterCreating(function (Ride $ride) {
-            $ride->tags()->attach(
-                RideTag::findByName('beginner_friendly')
+        return $this->afterCreating(function ($model) {
+            $model->rideTags()->attach(
+                RideTag::findByName('beginner-friendly')
             );
         });
     }

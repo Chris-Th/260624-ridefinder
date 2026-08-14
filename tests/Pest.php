@@ -3,6 +3,7 @@
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 /*
@@ -54,4 +55,14 @@ function createUserProfile(array $userAttrs = [], array $profileAttrs = [])
         $user,
         Profile::factory()->for($user)->create($profileAttrs),
     ];
+}
+
+function visitUserProfilePage($user = null, $profile = null)
+{
+    $user ??= User::factory()->create();
+    $profile ??= Profile::factory()->for($user)->create();
+    $page = Livewire::actingAs($user)
+        ->test('pages::profile.show', ['profile' => $profile]);
+
+    return [$user, $profile, $page];
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Profile;
+use App\Models\Ride;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,10 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ride_taggables', function (Blueprint $table) {
+        Schema::create('profile_ride', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ride_tag_id');
-            $table->nullableMorphs('ride_taggable');
+            $table->foreignIdFor(Profile::class);
+            $table->foreignIdFor(Ride::class);
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ride_taggables');
+        Schema::dropIfExists('profile_ride');
     }
 };

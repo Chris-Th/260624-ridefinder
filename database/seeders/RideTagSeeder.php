@@ -35,19 +35,19 @@ class RideTagSeeder extends Seeder
             ],
 
             [
-                'name' => 'no_drop',
+                'name' => 'no-drop',
                 'group' => null,
             ],
             [
-                'name' => 'regroup_at_climbs',
+                'name' => 'regroup-at-climbs',
                 'group' => null,
             ],
             [
-                'name' => 'coffee_stop',
+                'name' => 'coffee-stop',
                 'group' => null,
             ],
             [
-                'name' => 'beginner_friendly',
+                'name' => 'beginner-friendly',
                 'group' => null,
             ],
         ];

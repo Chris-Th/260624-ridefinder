@@ -67,17 +67,7 @@ new class extends Component
 ?>
 
 <div class="@container">
-    <h2>{{ $profile->user->name }}</h2>
-
-    {{ $this->profilePhoto }}
-
-    <h3>Bio:</h3>
-    <p>{{ $profile->bio }}</p>
-
-    <h3>Location:</h3>
-    <p>{{ $profile->location }}</p>
-
-    <div class="h-full columns-sm gap-x-5 gap-y-3 border">
+    <div class="grid h-full gap-x-5 gap-y-3 border sm:grid-cols-2 md:grid-cols-3">
         @foreach ($this->typicalRides() as $typicalRide)
             <div
                 x-data="{
@@ -89,10 +79,10 @@ new class extends Component
                 }
             }"
                 {{-- x-bind:style="`height: ${height}px;`" --}}
-                class="relative h-96 break-inside-avoid"
+                class="relative h-96 break-inside-avoid border"
                 wire:key="typicalRide-{{ $typicalRide->id }}">
                 {{-- <x-vectors.filters.pergament-texture class="absolute z-0 size-full rounded-xl" /> --}}
-                <x-typical-ride.card.skeletton
+                <x-typical-ride.card.skeletton-sandbox
                     :rows="7 + $this->addRowsForTags($typicalRide)"
                     x-bind:row-height="`${rowHeight}px`"
                     cols="12"
@@ -165,7 +155,7 @@ new class extends Component
                             <div class="col-span-4 row-span-2 flex items-center text-xs">{{ $tag->name }}</div>
                         @endforeach
                     </div>
-                </x-typical-ride.card.skeletton>
+                </x-typical-ride.card.skeletton-sandbox>
 
                 <x-vectors.filters.ink-grit-filter />
                 <div

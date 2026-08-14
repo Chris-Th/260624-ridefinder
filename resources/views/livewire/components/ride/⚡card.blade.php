@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\HasRideTypeMotives;
 use App\Models\Ride;
 use App\Models\RideType;
 use Illuminate\Support\Facades\Storage;
@@ -9,16 +10,21 @@ use Livewire\Component;
 
 new class extends Component
 {
+    use HasRideTypeMotives;
+
     public Ride $ride;
 
     public string $rideType = '';
 
     public $index;
 
+    public $rideTags = [];
+
     public function mount($loop)
     {
         $this->index = sprintf('%03d', $loop->index);
         $this->rideType = $this->ride->rideType?->name;
+        $this->rideTags = collect($this->ride->rideTags()->pluck('name')->all());
     }
 
     #[Computed]
@@ -226,32 +232,45 @@ new class extends Component
                     upcoming
                 </div>
             </div>
+
             <div
                 class="col-span-5 row-span-5 grid grid-cols-2 grid-rows-3 justify-stretch divide-x divide-y divide-dashed divide-gray-600 border-y border-l border-dashed border-gray-600">
-                <x-ride.card.ride-property-stamp color="blue-300" :show="$ride->no_drop == '0'">
-                    <x-vectors.nodrop x-bind="icon" class="aspect-1 origin-center scale-110" />
-                </x-ride.card.ride-property-stamp>
+                {{-- @php
+                    dump($rideTags->contains('no_drop'));
+                @endphp --}}
 
-                <x-ride.card.ride-property-stamp color="lime-300" :show="$ride->regroup_at_climbs == '1'">
-                    <x-vectors.2persons x-bind="icon" class="aspect-1 origin-center scale-110" />
-                </x-ride.card.ride-property-stamp>
+                <x-vectors.stamps.ride-tag-stamp color="blue-300" :show="$rideTags->contains('no-drop')">
+                    <x-vectors.no-drop x-bind="icon" class="aspect-1 origin-center scale-110" />
+                </x-vectors.stamps.ride-tag-stamp>
 
-                <x-ride.card.ride-property-stamp color="pink-200" :show="$ride->beginner_friendly == '1'">
-                    <x-vectors.tricycle-crossed x-bind="icon" class="aspect-1 scale-95" />
-                </x-ride.card.ride-property-stamp>
+                <x-vectors.stamps.ride-tag-stamp color="lime-300" :show="$rideTags->contains('regroup-at-climbs')">
+                    <x-vectors.regroup-at-climbs x-bind="icon" class="aspect-1 origin-center scale-110" />
+                </x-vectors.stamps.ride-tag-stamp>
 
-                <x-ride.card.ride-property-stamp color="yellow-300" :show="$ride->coffee_stop == '1'">
-                    <x-vectors.coffeecup x-bind="icon" class="aspect-1 scale-95" />
-                </x-ride.card.ride-property-stamp>
+                @if ($rideTags->contains('experienced-only'))
+                    <x-vectors.stamps.ride-tag-stamp color="amber-400" :show="$rideTags->contains('experienced-only')">
+                        <x-vectors.experienced-only x-bind="icon" class="aspect-1 scale-95" />
+                    </x-vectors.stamps.ride-tag-stamp>
+                @elseif ($rideTags->contains('beginner-only'))
+                    <x-vectors.stamps.ride-tag-stamp color="pink-300" :show="$rideTags->contains('beginner-only')">
+                        <x-vectors.beginner-only x-bind="icon" class="aspect-1 scale-95" />
+                    </x-vectors.stamps.ride-tag-stamp>
+                @else
+                    <div></div>
+                @endif
 
-                @if ($ride->ebike_friendly === 1)
-                    <x-ride.card.ride-property-stamp color="green-300" :show="true">
-                        <x-vectors.ebikes-welcome x-bind="icon" class="aspect-1 scale-95" />
-                    </x-ride.card.ride-property-stamp>
-                @elseif ($ride->ebike_friendly === 0)
-                    <x-ride.card.ride-property-stamp color="red-400" :show="$ride->no_drop == '0'">
+                <x-vectors.stamps.ride-tag-stamp color="yellow-300" :show="$rideTags->contains('coffee-stop')">
+                    <x-vectors.coffee-stop x-bind="icon" class="aspect-1 scale-95" />
+                </x-vectors.stamps.ride-tag-stamp>
+
+                @if ($rideTags->contains('ebikes-only'))
+                    <x-vectors.stamps.ride-tag-stamp color="green-300" :show="$rideTags->contains('ebikes-only')">
+                        <x-vectors.ebikes-only x-bind="icon" class="aspect-1 scale-95" />
+                    </x-vectors.stamps.ride-tag-stamp>
+                @elseif ($rideTags->contains('no-ebikes'))
+                    <x-vectors.stamps.ride-tag-stamp color="red-400" :show="$rideTags->contains('no-ebikes')">
                         <x-vectors.no-ebikes x-bind="icon" class="aspect-1 scale-95" />
-                    </x-ride.card.ride-property-stamp>
+                    </x-vectors.stamps.ride-tag-stamp>
                 @else
                     <div class=""></div>
                 @endif
@@ -262,24 +281,24 @@ new class extends Component
 
         <div
             class="relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
-            <x-vectors.stamps.stamp
-                :color="$this->getRideTypeColorVar('400')"
+            <x-vectors.stamps.stamp-mask
+                :color="$this->getRideTypeColorVar('400', $rideType)"
                 :ridetype="$rideType"
                 class="absolute"
                 x-data="stamp({
-            opacity: 0.6,
-            radius: 80,
-            innerBorder: 1.5,
-            outerBorder: 6,
-            padding: 6,
-            maxJitter: 1.2,
-            topText: '{{ $this->rideStats['TYPE'] }}',
-            centerText: '{{ $this->rideStats['DISC'] }}',
-            bottomText: '* {{ $this->meetsAtPlace() }}, {{ $this->rideStats['DATE'] }} *',
-            font: {top: {size: 'md', weight: 'bold'}, center: {size: 'lg', weight: 'normal'}, bottom:{size: 'sm', weight: 'thin'}},
-            maxTransform: { tx: 15, ty: 20, rot: 30 },
-            iconFilter: 'soft',
-        })">
+                opacity: 0.8,
+                radius: 80,
+                innerBorder: 1.5,
+                outerBorder: 6,
+                padding: 6,
+                maxJitter: 1.2,
+                topText: '{{ $this->rideStats['TYPE'] }}',
+                centerText: '{{ $this->rideStats['DISC'] }}',
+                bottomText: '* {{ $this->meetsAtPlace() }}, {{ $this->rideStats['DATE'] }} *',
+                font: {top: {size: 'md', weight: 'bold'}, center: {size: 'lg', weight: 'normal'}, bottom:{size: 'sm', weight: 'thin'}},
+                maxTransform: { tx: 15, ty: 20, rot: 30 },
+                iconFilter: 'soft',
+            })">
                 <x-dynamic-component
                     uniqueid="{{ $ride->id }}"
                     :component="$this->rideTypeMotive"
@@ -289,7 +308,7 @@ new class extends Component
                     x-bind:width="iconRect.width"
                     x-bind:height="iconRect.height"
                     class="mt-4" />
-            </x-vectors.stamps.stamp>
+            </x-vectors.stamps.stamp-mask>
         </div>
 
         <div class="col-span-10 row-span-1"></div>
@@ -322,7 +341,7 @@ new class extends Component
                         <x-vectors.filters.rough-border x-bind:id="`rough-border-${id}`" />
                         <span
                             x-bind:style="`filter: url(#rough-border-${id})`"
-                            class="absolute size-full border-3 border-{{ $rideType }}-800/60"></span>
+                            class="absolute size-full border-3 border-{{ $rideType }}-800/40"></span>
                         <span class="z-10 size-full">{{ $value }}</span>
                     </span>
                 </li>
@@ -330,7 +349,5 @@ new class extends Component
         </ul>
 
         <div class="col-span-10"></div>
-
-        <x-ride.card.tw-utils-dummy />
     </x-ride.card.skeletton>
 </div>

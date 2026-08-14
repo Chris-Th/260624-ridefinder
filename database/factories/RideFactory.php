@@ -34,7 +34,7 @@ class RideFactory extends Factory
         $ebike = $r > 7 ? false : ($r > 3 ? true : null);
 
         return [
-            'user_id' => User::all()->pluck('id')->random(),
+            'profile_id' => User::all()->pluck('id')->random(),
             'title' => fake()->sentence(3),
             'description' => fake()->sentences(3, true),
             'discipline_id' => Discipline::all()->pluck('id')->random(),
@@ -47,11 +47,6 @@ class RideFactory extends Factory
             'meets_at' => $meetsAt,
             'leaves_at' => $leavesAt,
             'max_riders' => rand(2, 15),
-            'no_drop' => rand(1, 10) > 3 ? true : false,
-            'regroup_at_climbs' => rand(1, 10) > 3 ? true : false,
-            'coffee_stop' => rand(1, 10) > 3 ? true : false,
-            'beginner_friendly' => rand(1, 10) > 3 ? true : false,
-            'ebike_friendly' => $ebike,
         ];
     }
 }
