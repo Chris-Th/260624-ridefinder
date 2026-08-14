@@ -35,7 +35,7 @@
                 <!-- <filter id="flacky-texture-4"> -->
                 <feTurbulence
                     type="turbulence"
-                    baseFrequency="0.005"
+                    baseFrequency="0.004"
                     numOctaves="3"
                     x-bind:seed="`${seed}`"
                     stitchTiles="noStitch" />
@@ -47,11 +47,17 @@
             0 0 2.55 0 -0.275
             0 0 0 1 0" />
                 {{-- <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.34 0 0" /> --}}
-                <feDiffuseLighting lighting-color="white" surfaceScale="2" result="diffLight">
-                    <feDistantLight azimuth="0" elevation="10" />
+                <feDiffuseLighting
+                    lighting-color="silver"
+                    surfaceScale="4"
+                    result="diffLight"
+                    diffuseConstant="2"
+                    kernelUnitLength="3">
+                    <feDistantLight azimuth="135" elevation="4" />
+                    {{-- <fePointLight x="100" y="100" z="50" /> --}}
                 </feDiffuseLighting>
             </filter>
         </defs>
-        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.35" />
+        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.1" />
     </svg>
 </div>
