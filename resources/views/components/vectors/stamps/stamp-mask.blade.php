@@ -1,5 +1,6 @@
 @props ([
-        'color' => 'inherit', 'opacity' => 1
+        'color' => 'inherit',
+        'opacity' => 1
     ])
 
 <div
@@ -7,7 +8,7 @@
     x-bind:style="`
         font-family: 'Courier New', Courier, monospace;
         font-weight: bold;
-        // opacity: ${opacity};
+        opacity: ${opacity};
         translate: ${transform.tx}px ${transform.ty}px;
         color: {{ $color }};
 

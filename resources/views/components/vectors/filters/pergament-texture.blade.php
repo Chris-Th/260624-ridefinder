@@ -5,6 +5,7 @@
         id: Math.random().toString(36).substring(2, 9),
         seed: 1,
         viewBox: '',
+        azimuth: Math.round(Math.random() * 360),
         init() {
             this.randomizeSeed();
             /*
@@ -36,7 +37,7 @@
                 <feTurbulence
                     type="turbulence"
                     baseFrequency="0.004"
-                    numOctaves="3"
+                    numOctaves="4"
                     x-bind:seed="`${seed}`"
                     stitchTiles="noStitch" />
                 <feColorMatrix
@@ -48,16 +49,16 @@
             0 0 0 1 0" />
                 {{-- <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.34 0 0" /> --}}
                 <feDiffuseLighting
-                    lighting-color="silver"
-                    surfaceScale="4"
+                    lighting-color="white"
+                    surfaceScale="3"
                     result="diffLight"
-                    diffuseConstant="2"
-                    kernelUnitLength="3">
-                    <feDistantLight azimuth="135" elevation="4" />
+                    diffuseConstant="6"
+                    kernelUnitLength="0.5">
+                    <feDistantLight :azimuth="azimuth" elevation="2" />
                     {{-- <fePointLight x="100" y="100" z="50" /> --}}
                 </feDiffuseLighting>
             </filter>
         </defs>
-        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.1" />
+        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.09" />
     </svg>
 </div>

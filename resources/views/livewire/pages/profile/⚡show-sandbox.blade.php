@@ -68,31 +68,61 @@ new class extends Component
 
 <div class="@container text-sm text-base-content">
     {{-- <div class="grid h-full items-center gap-x-5 gap-y-3 md:grid-cols-2 xl:grid-cols-3"> --}}
-    <div class="h-full columns-3xs items-center gap-8">
+    <div
+        x-data="{
+            getRideTagColor($tag) {
+                return $wire.getRideTagColor($tag);
+            }
+        }"
+        class="h-full columns-3xs items-center gap-8">
         @foreach ($this->typicalRides() as $typicalRide)
-            <div class="relative">
-                <x-vectors.filters.pergament-texture class="absolute z-0 size-full rounded-xl" />
+            <div class="relative break-inside-avoid">
+                <x-vectors.filters.pergament-texture class="absolute size-full rounded-xl" />
                 <x-typical-ride.card.skeletton-sandbox
-                    class="mb-5 break-inside-avoid"
-                    :rows="7 + $this->addRowsForTags($typicalRide)">
-                    <x-typical-ride.card.content :index="$loop->index + 1" :$typicalRide></x-typical-ride.card.content>
+                    class="mb-5 inset-shadow-sm inset-shadow-mist-500"
+                    :ride-tags-count="$typicalRide->loadCount('rideTags')->ride_tags_count">
+                    <x-typical-ride.card.content :iteration="$loop->iteration" :$typicalRide>
+                        <x-typical-ride.card.ride-tags :ride-tags="$typicalRide->rideTags" />
+                        <x-vectors.filters.ink-grit-filter />
+                        <div
+                            class="{{-- col-span-12 row-span-5 --}} absolute flex size-fit right-18 top-25 items-center justify-center border-2 border-mist-700/40 z-10">
+                            <x-vectors.stamps.stamp-mask
+                                :color="$this->getRideTypeColorVar('400', $typicalRide?->rideType?->name)"
+                                :ridetype="$typicalRide?->rideType?->name"
+                                opacity="0.8"
+                                class="absolute"
+                                x-data="stamp({
+                            opacity: 0.5,
+                            radius: 45,
+                            innerBorder: 1.5,
+                            outerBorder: 5,
+                            padding: 6,
+                            maxJitter: 0.8,
+                            // topText: '{{ $typicalRide->name }}',
+                            centerText: '{{ $typicalRide?->discipline?->name }}',
+                            // bottomText: '*{{ $typicalRide?->rideType?->name }}*',
+                            font: {top: {size: 'sm', weight: 'bold'}, center: {size: 'md', weight: 'normal'}, bottom:{size: 'lg', weight: 'thin'}},
+                            maxTransform: { tx: 15, ty: 20, rot: 30 },
+                            iconFilter: 'soft',
+                        })">
+                                <x-dynamic-component
+                                    uniqueid="typical-ride-{{ $typicalRide->id }}"
+                                    :component="$this->getRideTypeMotivePath($typicalRide?->rideType?->name)"
+                                    x-bind:class="
+                                        `w-[${iconRect.width}px] h-[${iconRect.height}px]  scale-140 origin-center`
+                                    "
+                                    x-bind:x="iconRect.x"
+                                    x-bind:y="iconRect.y"
+                                    x-bind:width="iconRect.width"
+                                    x-bind:height="iconRect.height"
+                                    class="mt-4" />
+                            </x-vectors.stamps.stamp-mask>
+                        </div>
+                    </x-typical-ride.card.content>
                 </x-typical-ride.card.skeletton-sandbox>
             </div>
 
         @endforeach
-
-        <x-typical-ride.card.skeletton-sandbox
-            class="mb-5 break-inside-avoid"
-            :rows="10"></x-typical-ride.card.skeletton-sandbox>
-        <x-typical-ride.card.skeletton-sandbox
-            class="mb-5 break-inside-avoid"
-            :rows="6"></x-typical-ride.card.skeletton-sandbox>
-        <x-typical-ride.card.skeletton-sandbox
-            class="mb-5 break-inside-avoid"
-            :rows="12"></x-typical-ride.card.skeletton-sandbox>
-        <x-typical-ride.card.skeletton-sandbox class="mb-5 break-inside-avoid"></x-typical-ride.card.skeletton-sandbox>
-        <x-typical-ride.card.skeletton-sandbox class="mb-5 break-inside-avoid"></x-typical-ride.card.skeletton-sandbox>
-        <x-typical-ride.card.skeletton-sandbox class="mb-5 break-inside-avoid"></x-typical-ride.card.skeletton-sandbox>
     </div>
 </div>
 <style>
@@ -139,7 +169,8 @@ new class extends Component
             grid-row: -2 / -1;
         }
         .screw-head {
-            box-shadow: 0 0 6px 1px var(--color-base-content);
+            /* box-shadow: 0 0 5px 1px --alpha(var(--color-blue-100) / 100%); */
+            box-shadow: 0 0 2px 2px var(--color-mist-800);
         }
     }
 
@@ -157,10 +188,10 @@ new class extends Component
             grid-template-columns: subgrid;
             grid-template-rows: subgrid;
 
-            .index {
+            .iteration {
                 grid-column: 1 / 3;
             }
-            .ride-type {
+            .ride-name {
                 grid-column: 3 / -1;
             }
         }
@@ -190,6 +221,25 @@ new class extends Component
             }
             .val {
                 grid-column: 3 / -1;
+            }
+        }
+
+        .ride-tag {
+            display: grid;
+            grid-column: 1 / -1;
+            grid-template-columns: subgrid;
+            grid-template-rows: subgrid;
+
+            .stamp {
+                grid-column: 1 / 3;
+            }
+
+            .spacer {
+                grid-column: 3;
+            }
+
+            .tag {
+                grid-column: 4 / -1;
             }
         }
     }

@@ -9,7 +9,7 @@
 
 <div {{ $attributes->merge([ 'class' => "flex size-full origin-center items-center justify-center text-$color" ]) }}>
     @if ($show)
-        <x-vectors.stamps.stamp
+        <x-vectors.stamps.stamp-mask
             class="absolute text-{{ $color }} fill-{{ $color }} aspect-1 p-1"
             x-data="
                 stamp({
@@ -23,6 +23,6 @@
                 })
             ">
             {{ $slot }}
-        </x-vectors.stamps.stamp>
+        </x-vectors.stamps.stamp-mask>
     @endif
 </div>

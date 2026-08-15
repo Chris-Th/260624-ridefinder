@@ -1,6 +1,6 @@
 @props ([
     'typicalRide' => null,
-    'index' => 1
+    'iteration' => 0
 ])
 
 @aware ([
@@ -8,16 +8,16 @@
     'cols' => 12,
 ])
 
-<div class="typicalride-content">
-    <div class="header border">
+<div {{ $attributes->merge([ 'class' => 'typicalride-content' ]) }}>
+    <div class="header border border-{{ $typicalRide?->rideType?->name }}-800 inset-shadow-xs inset-shadow-mist-500">
         <div
-            class="index border-y flex justify-center items-center w-full border-l border-{{ $typicalRide?->rideType?->name }}-800 px-1 text-{{ $typicalRide?->rideType?->name }}-300">
-            {{ sprintf('%03d', $index) }}
+            class="iteration flex justify-center items-center w-full px-1 text-{{ $typicalRide?->rideType?->name }}-300">
+            {{ sprintf('%03d', $iteration) }}
         </div>
         {{-- <div
             class="col-span-2 border-y border-{{ $typicalRide?->rideType?->name }}-800 bg-{{ $typicalRide?->rideType?->name }}-400/70"></div> --}}
         <div
-            class="ride-type truncate text-nowrap uppercase flex justify-start items-center w-full border-y border-r border-{{ $typicalRide?->rideType?->name }}-800 bg-{{ $typicalRide?->rideType?->name }}-400/70 px-1 font-bold">
+            class="ride-name truncate text-nowrap uppercase flex justify-start items-center w-full bg-{{ $typicalRide?->rideType?->name }}-400/70 px-1 font-bold">
             {{ $typicalRide->name }}
         </div>
     </div>
@@ -62,4 +62,64 @@
             @endif
         </div>
     @endif
+
+    {{ $slot }}
 </div>
+
+{{-- Add To Styles: --}}
+
+{{--
+<style>
+    .typicalride-content {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-template-rows: subgrid;
+        grid-column: 1 / -1;
+        grid-row: 1 / -1;
+
+        .header {
+            grid-column: 1 / -1;
+            grid-row: 1 / 2;
+            display: grid;
+            grid-template-columns: subgrid;
+            grid-template-rows: subgrid;
+
+            .index {
+                grid-column: 1 / 3;
+            }
+            .ride-type {
+                grid-column: 3 / -1;
+            }
+        }
+
+        .full-row {
+            display: grid;
+            grid-column: 1 / -1;
+            grid-template-columns: subgrid;
+            grid-template-rows: subgrid;
+
+            .key {
+                grid-column: 1 / 4;
+            }
+            .val {
+                grid-column: 4 / -1;
+            }
+        }
+
+        .half-row {
+            display: grid;
+            grid-column: span calc(var(--rows) / 2);
+            grid-template-columns: subgrid;
+            grid-template-rows: subgrid;
+
+            .key {
+                grid-column: 1 / 3;
+            }
+            .val {
+                grid-column: 3 / -1;
+            }
+        }
+    }
+</style>
+
+--}}
