@@ -1,4 +1,9 @@
-{{-- include every possible dynamically generated tw-utility in here so tailwind will generate those styles --}}
+{{-- include every possible dynamically generated tw-utility in here so tailwind will include those styles --}}
+{{--
+Expl: Tailwind scans entire app for its classes and only includes those in the stylesheet it can find .
+So, if you have bg-green-{{ $lightness }}/80, ensure to include all possibly generated classes here like bg-green-100/80, bg-green-200/80 etc. This file can be placed anywhere in the app as <x-tw-utils-dummy />
+Also, blade comments are not included in the final html.
+--}}
 
 {{-- top-left "counter" badge:
 bg-endurance-300/40
