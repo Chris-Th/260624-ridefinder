@@ -22,59 +22,12 @@
         </div>
     </div>
     <div class="full-row"></div>
-
-    <x-dropdown method="rideTypesJson()" class="full-row relative cursor-pointer">
-        @isset ($typicalRide?->rideType?->name)
-            <div class="full-row">
-                <div class="key">TYPE</div>
-                <div class="val relative">
-                    <x-dropdown.value>{{ $typicalRide->rideType->name }}</x-dropdown.value>
-                    <x-dropdown.options>
-                        @foreach ($this->rideTypes() as $rideType)
-                            <li
-                                wire:key="ridetype-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $rideType->id }}"
-                                class="odd:bg-base-300 even:bg-base-200 flex h-10 w-full gap-3">
-                                <span class="w-20">
-                                    <x-vectors.stamps.stamp-mask
-                                        :color="$this->getRideTypeColorVar('400', $rideType?->name)"
-                                        :ridetype="$rideType?->name"
-                                        opacity="0.8"
-                                        class="absolute"
-                                        x-data="
-                                            stamp({
-                                                opacity: 1,
-                                                radius: 15,
-                                                innerBorder: 0,
-                                                outerBorder: 1,
-                                                padding: 2,
-                                                maxJitter: 0.5,
-                                                smearFactor: 0.7,
-                                                centerText: '',
-                                                maxTransform: { tx: 0, ty: 0, rot: 0 },
-                                                iconFilter: 'soft'
-                                            })
-                                        ">
-                                        <x-dynamic-component
-                                            uniqueid="ridetype-dropdown-option-stamp-{{ $typicalRide?->id }}-{{ $rideType->id }}"
-                                            :component="$rideType->icon_view_component"
-                                            x-bind:class="
-                                                `w-[${iconRect.width}px] h-[${iconRect.height}px]  origin-center`
-                                            "
-                                            x-bind:x="iconRect.x"
-                                            x-bind:y="iconRect.y"
-                                            x-bind:width="iconRect.width"
-                                            x-bind:height="iconRect.height"
-                                            class="" />
-                                    </x-vectors.stamps.stamp-mask>
-                                </span>
-                                <span class="w-full self-center">{{ $rideType->name }}</span>
-                        @endforeach
-                        </li>
-                    </x-dropdown.options>
-                </div>
-            </div>
-        @endisset
-    </x-dropdown>
+    @isset ($typicalRide?->rideType?->name)
+        <div class="full-row">
+            <div class="key">TYPE</div>
+            <div class="val">{{ $typicalRide?->rideType?->name }}</div>
+        </div>
+    @endisset
 
     @isset ($typicalRide?->pace?->name)
         <div class="full-row">

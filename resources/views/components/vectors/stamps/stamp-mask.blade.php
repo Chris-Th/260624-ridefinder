@@ -134,8 +134,8 @@
 
         <g
             x-data="{
-                factorX: Math.random(),
-                factorY: Math.random(),
+                factorX: Math.random() * smearFactor,
+                factorY: Math.random() * smearFactor,
                 factorOpac: Math.random()
             }"
             x-bind:stroke="'url(#uneven-stamp-pressure-' + id + ')'"

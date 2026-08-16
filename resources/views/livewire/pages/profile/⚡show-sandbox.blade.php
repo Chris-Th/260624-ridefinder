@@ -3,7 +3,9 @@
 use App\Concerns\HasRideTagMotives;
 use App\Concerns\HasRideTypeMotives;
 use App\Models\Profile;
+use App\Models\RideType;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Json;
 use Livewire\Component;
 
 new class extends Component
@@ -30,6 +32,18 @@ new class extends Component
     public function typicalRides()
     {
         return $this->profile->typicalRides;
+    }
+
+    #[Json]
+    public function rideTypesJson()
+    {
+        return RideType::all(['id', 'name', 'icon_view_component']);
+    }
+
+    #[Computed]
+    public function rideTypes()
+    {
+        return RideType::all(['id', 'name', 'icon_view_component']);
     }
 
     public function getStampPath($rideTag)
@@ -78,14 +92,17 @@ new class extends Component
                 <h4 class="mb-4 text-lg font-bold italic">Bio:</h4>
                 <p>{{ $profile->bio }}</p>
             </div>
-            <div class="mx-4">
-                <h4 class="mb-4 text-lg font-bold italic">Typical Rides:</h4>
-                <div class="mx-auto h-full w-full columns-3xs items-center gap-8">
+            <div class="">
+                <h4 class="ms-4 mb-4 text-lg font-bold italic">Typical Rides:</h4>
+                <div class="mx-auto h-full w-full columns-[12rem] items-center gap-8">
                     @foreach ($this->typicalRides() as $typicalRide)
                         <div class="relative min-w-fit break-inside-avoid">
                             <x-vectors.filters.pergament-texture class="absolute size-full rounded-xl" />
                             <x-typical-ride.card.skeletton-sandbox
                                 class="mb-5 w-full inset-shadow-sm inset-shadow-mist-500"
+                                :row-gap="8"
+                                :row-height="16"
+                                :min-col-width="16"
                                 :ride-tags-count="$typicalRide->loadCount('rideTags')->ride_tags_count">
                                 <x-typical-ride.card.content :iteration="$loop->iteration" :$typicalRide>
                                     <x-typical-ride.card.ride-tags :ride-tags="$typicalRide->rideTags" />
@@ -98,19 +115,19 @@ new class extends Component
                                             opacity="0.8"
                                             class="absolute"
                                             x-data="stamp({
-                            opacity: 0.7,
-                            radius: 45,
-                            innerBorder: 1.5,
-                            outerBorder: 5,
-                            padding: 6,
-                            maxJitter: 0.8,
-                            // topText: '{{ $typicalRide->name }}',
-                            centerText: '{{ $typicalRide?->discipline?->name }}',
-                            // bottomText: '*{{ $typicalRide?->rideType?->name }}*',
-                            font: {top: {size: 'sm', weight: 'bold'}, center: {size: 'md', weight: 'normal'}, bottom:{size: 'lg', weight: 'thin'}},
-                            maxTransform: { tx: 15, ty: 20, rot: 30 },
-                            iconFilter: 'soft',
-                        })">
+                                                opacity: 0.7,
+                                                radius: 45,
+                                                innerBorder: 1.5,
+                                                outerBorder: 5,
+                                                padding: 6,
+                                                maxJitter: 0.8,
+                                                // topText: '{{ $typicalRide->name }}',
+                                                centerText: '{{ $typicalRide?->discipline?->name }}',
+                                                // bottomText: '*{{ $typicalRide?->rideType?->name }}*',
+                                                font: {top: {size: 'sm', weight: 'bold'}, center: {size: 'md', weight: 'normal'}, bottom:{size: 'lg', weight: 'thin'}},
+                                                maxTransform: { tx: 15, ty: 20, rot: 90 },
+                                                iconFilter: 'soft',
+                                            })">
                                             <x-dynamic-component
                                                 uniqueid="typical-ride-{{ $typicalRide->id }}"
                                                 :component="$this->getRideTypeMotivePath($typicalRide?->rideType?->name)"
@@ -218,6 +235,9 @@ new class extends Component
             }
             .val {
                 grid-column: 4 / -1;
+            }
+            .whole-row {
+                grid-column: 1 / -1;
             }
         }
 

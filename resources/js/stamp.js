@@ -24,6 +24,7 @@ export default (config = {}) => ({
         bottom: config.font?.bottom?.weight || 'normal'
     },
     maxJitter: config.maxJitter !== undefined ? config.maxJitter : 0.6,
+    smearFactor: config.smearFactor !== undefined ? config.smearFactor : 1,
     maxTransform: {
         tx: config.maxTransform?.tx || 0,
         ty: config.maxTransform?.ty || 0,
