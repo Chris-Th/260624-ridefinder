@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "chat gpt planning thread.md",
+                "file": "profile/show.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "chat gpt planning thread"
+              "title": "show"
             }
           },
           {
@@ -216,6 +216,7 @@
   },
   "active": "7c11d5e0647ed8ca",
   "lastOpenFiles": [
+    "chat gpt planning thread.md",
     "visual-design/notes.md",
     "visual-design/notes",
     "visual-design/ui-ux.md",
@@ -237,7 +238,6 @@
     "profile-values.md",
     "profile-screen.md",
     "Ideas.md",
-    "chat gpt planning thread.md",
     "Welcome.md"
   ]
 }

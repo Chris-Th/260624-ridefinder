@@ -7,9 +7,11 @@
     'maxRotation' => 30
 ])
 
-<div {{ $attributes->merge([ 'class' => "flex size-full origin-center items-center justify-center text-$color" ]) }}>
+<div
+    style="color: {{ $color }};"
+    {{ $attributes->merge([ 'class' => "flex size-full origin-center items-center justify-center text-$color" ]) }}>
     @if ($show)
-        <x-vectors.stamps.stamp-mask
+        <x-vectors.stamps.round-stamp
             class="absolute text-{{ $color }} fill-{{ $color }} aspect-1 p-1"
             x-data="
                 stamp({
@@ -23,6 +25,6 @@
                 })
             ">
             {{ $slot }}
-        </x-vectors.stamps.stamp-mask>
+        </x-vectors.stamps.round-stamp>
     @endif
 </div>

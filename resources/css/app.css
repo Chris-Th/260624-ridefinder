@@ -9,6 +9,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@plugin '@tailwindcss/forms';
 @plugin 'daisyui' {
     themes:
         lofi,
@@ -208,6 +209,10 @@ input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
     @apply ring-accent ring-offset-accent-foreground ring-2 ring-offset-2 outline-hidden;
+}
+
+[x-cloak] {
+    display: none !important;
 }
 
 .victor-mono-thin {

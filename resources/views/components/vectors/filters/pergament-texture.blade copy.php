@@ -4,11 +4,10 @@
     x-data="{
         id: Math.random().toString(36).substring(2, 9),
         seed: 1,
-        // viewBox: '',
+        viewBox: '',
         azimuth: Math.round(Math.random() * 360),
         init() {
             this.randomizeSeed();
-            console.log('viewBox', viewBox);
             /*
             this.$watch('boundingBox', (v) => {
                 this.randomizeViewBoxOrigin();
@@ -33,20 +32,14 @@
         xmlns="http://www.w3.org/2000/svg"
         x-bind:id="`pergament-texture-${id}`">
         <defs>
-            <filter
-                x-bind:id="`pergament-filter-${id}`"
-                filterUnits="objectBoundingBox"
-                x="0"
-                y="0"
-                width="1"
-                height="1"
-                color-interpolation-filters="sRGB">
+            <filter x-bind:id="`pergament-filter-${id}`">
+                <!-- <filter id="flacky-texture-4"> -->
                 <feTurbulence
                     type="turbulence"
                     baseFrequency="0.004"
-                    numOctaves="2"
+                    numOctaves="4"
                     x-bind:seed="`${seed}`"
-                    stitchTiles="stitch" />
+                    stitchTiles="noStitch" />
                 <feColorMatrix
                     type="matrix"
                     values="
@@ -54,18 +47,18 @@
             0 2.55 0 0 -0.275
             0 0 2.55 0 -0.275
             0 0 0 1 0" />
-
+                {{-- <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.34 0 0" /> --}}
                 <feDiffuseLighting
                     lighting-color="white"
-                    surfaceScale="2"
+                    surfaceScale="3"
                     result="diffLight"
-                    diffuseConstant="4"
+                    diffuseConstant="6"
                     kernelUnitLength="0.5">
                     <feDistantLight :azimuth="azimuth" elevation="2" />
                     {{-- <fePointLight x="100" y="100" z="50" /> --}}
                 </feDiffuseLighting>
             </filter>
         </defs>
-        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.35" />
+        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.09" />
     </svg>
 </div>

@@ -1,37 +1,59 @@
 <!-- Select Menu -->
+
 <!-- An Alpine.js and Tailwind CSS component by https://pinemix.com -->
+
 <!-- Alpine.js focus plugin is required, for more info http://pinemix.com/docs/getting-started -->
+
 <div
     class="flex flex-col items-center justify-center gap-5 rounded-lg border-2 border-dashed border-zinc-200/75 bg-zinc-50 px-4 pt-8 pb-72 dark:border-zinc-700 dark:bg-zinc-950/25">
     <div
         x-data="{
             // Customize Select Menu
+
             open: false,
+
             selectedId: 0,
+
             label: 'Customer',
+
             placeholderText: 'Please select..',
+
             closeOnSelection: true,
+
             size: 'md', // 'xs', 'sm', 'md', 'lg', 'full'
 
             // Available Select Menu Options
+
             options: [
                 { id: 1, label: 'John Doe', value: 'john-doe' },
+
                 { id: 2, label: 'Jane Smith', value: 'jane-smith' },
+
                 { id: 3, label: 'Mike Johnson', value: 'mike-johnson' },
+
                 { id: 4, label: 'Emily Davis', value: 'emily-davis' },
+
                 { id: 5, label: 'Chris Brown', value: 'chris-brown' },
+
                 { id: 6, label: 'Sarah Wilson', value: 'sarah-wilson' },
+
                 { id: 7, label: 'David Jones', value: 'david-jones' },
+
                 { id: 8, label: 'Laura Garcia', value: 'laura-garcia' },
+
                 { id: 9, label: 'Tom Martinez', value: 'tom-martinez' },
+
                 { id: 10, label: 'Linda Hernandez', value: 'linda-hernandez' }
             ],
 
             // Helper variables
+
             selectedOption: null,
+
             keyboardTimeout: false,
 
             // Initialization
+
             init() {
                 this.setSelected(this.selectedId, false);
 
@@ -41,6 +63,7 @@
             },
 
             // Open Select Menu
+
             openMenu() {
                 this.open = true;
 
@@ -56,6 +79,7 @@
             },
 
             // Close Select Menu
+
             closeMenu() {
                 this.open = false;
 
@@ -65,8 +89,10 @@
             },
 
             // Setter
+
             setSelected(id, closeMenu = this.closeOnSelection) {
                 this.selectedId = id;
+
                 this.selectedOption = this.getSelected();
 
                 if (closeMenu) {
@@ -75,6 +101,7 @@
             },
 
             // Getter
+
             getSelected() {
                 return this.selectedId !== 0
                     ? this.options.find((options) => options.id === this.selectedId) || null
@@ -82,11 +109,13 @@
             },
 
             // Check if the given id is the selected one
+
             isSelected(id) {
                 return id === this.selectedOption?.id || false;
             },
 
             // Keyboard letter navigation
+
             keyboardNavigation(e) {
                 clearTimeout(this.keyboardTimeout);
 
@@ -95,17 +124,21 @@
                         let elements = document.querySelectorAll(
                             '#pm-select-menu-list li[data-label^=' + e.key.toUpperCase() + ']'
                         );
+
                         let focusedEl, focusedIndex;
 
                         // Find if there is already a focused item
+
                         elements.forEach((el, index) => {
                             if (document.activeElement === el) {
                                 focusedEl = el;
+
                                 focusedIndex = index;
                             }
                         });
 
                         // Focus the correct element
+
                         if (focusedEl) {
                             if (elements.length - 1 === focusedIndex) {
                                 $focus.focus(elements[0]);
@@ -122,13 +155,19 @@
         class="relative"
         x-bind:class="{
             'w-48': size === 'xs',
+
             'w-56': size === 'sm',
+
             'w-64': size === 'md',
+
             'w-72': size === 'lg',
+
             'w-full': size === 'full'
         }">
         <!-- Invisible native select -->
+
         <!-- Kept in synced with the custom select menu for backwards form submission compatibility, feel free to remove it if you won't use it -->
+
         <select
             id="pm-select-menu"
             name="pm-select-menu"
@@ -136,6 +175,7 @@
             tabindex="-1"
             aria-hidden="true">
             <option x-bind:selected="selectedOption === null ? 'selected' : null"></option>
+
             <template x-for="option in options" :key="option.id">
                 <option
                     x-text="option.label"
@@ -143,14 +183,17 @@
                     :value="option.value"></option>
             </template>
         </select>
+
         <!-- END Invisible native select -->
 
         <!-- Select Menu Toggle -->
+
         <div class="space-y-1">
             <label
                 x-on:click="$focus.focus($refs.selectMenuButton)"
                 x-text="label"
                 class="inline-block text-sm font-medium"></label>
+
             <button
                 x-on:click="openMenu()"
                 x-on:keydown.down.prevent.stop="openMenu()"
@@ -168,6 +211,7 @@
                         'text-zinc-500 dark:text-zinc-400': !selectedOption
                     }"
                     class="grow truncate"></span>
+
                 <svg
                     class="hi-mini hi-chevron-up-down inline-block size-5 flex-none opacity-40 transition group-hover:opacity-60 group-active:scale-90"
                     xmlns="http://www.w3.org/2000/svg"
@@ -181,9 +225,11 @@
                 </svg>
             </button>
         </div>
+
         <!-- END Select Menu Toggle -->
 
         <!-- Select Menu Container -->
+
         <ul
             x-cloak
             x-ref="selectMenu"
@@ -218,6 +264,7 @@
                     x-bind:class="{
                         'font-semibold text-zinc-950 hover:bg-zinc-50 focus:bg-zinc-50 dark:font-medium dark:text-white dark:hover:bg-zinc-700/75 dark:focus:bg-zinc-700/75':
                             isSelected(option.id),
+
                         'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50 focus:text-zinc-950 focus:bg-zinc-50 active:bg-zinc-100 dark:text-zinc-300 dark:hover:text-white dark:hover:bg-zinc-700/50 dark:focus:text-white dark:focus:bg-zinc-700/50 dark:active:bg-zinc-700':
                             option.id !== selectedId
                     }"
@@ -230,6 +277,7 @@
                     role="option"
                     tabindex="-1">
                     <div x-text="option.label" class="grow truncate py-2"></div>
+
                     <div
                         class="pointer-events-none size-5 flex-none text-zinc-600 dark:text-zinc-400"
                         x-bind:class="{
@@ -253,7 +301,7 @@
                 </li>
             </template>
         </ul>
+
         <!-- END Select Menu Container -->
     </div>
 </div>
-<!-- END Select Menu -->

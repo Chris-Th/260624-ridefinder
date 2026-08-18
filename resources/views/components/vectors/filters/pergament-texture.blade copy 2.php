@@ -8,7 +8,6 @@
         azimuth: Math.round(Math.random() * 360),
         init() {
             this.randomizeSeed();
-            console.log('viewBox', viewBox);
             /*
             this.$watch('boundingBox', (v) => {
                 this.randomizeViewBoxOrigin();
@@ -29,22 +28,15 @@
         'focusable' => 'false',
         'preserveAspectRatio' => 'xMidYMid slice',
     ]) }}
-        :viewBox="viewBox"
+        viewBox="0 0 10 10"
         xmlns="http://www.w3.org/2000/svg"
         x-bind:id="`pergament-texture-${id}`">
         <defs>
-            <filter
-                x-bind:id="`pergament-filter-${id}`"
-                filterUnits="objectBoundingBox"
-                x="0"
-                y="0"
-                width="1"
-                height="1"
-                color-interpolation-filters="sRGB">
+            <filter x-bind:id="`pergament-filter-${id}`">
                 <feTurbulence
                     type="turbulence"
                     baseFrequency="0.004"
-                    numOctaves="2"
+                    numOctaves="3"
                     x-bind:seed="`${seed}`"
                     stitchTiles="stitch" />
                 <feColorMatrix
@@ -57,15 +49,15 @@
 
                 <feDiffuseLighting
                     lighting-color="white"
-                    surfaceScale="2"
+                    surfaceScale="3"
                     result="diffLight"
-                    diffuseConstant="4"
+                    diffuseConstant="6"
                     kernelUnitLength="0.5">
                     <feDistantLight :azimuth="azimuth" elevation="2" />
                     {{-- <fePointLight x="100" y="100" z="50" /> --}}
                 </feDiffuseLighting>
             </filter>
         </defs>
-        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.35" />
+        <rect width="100%" height="100%" x-bind:filter="`url(#pergament-filter-${id})`" opacity="0.11" />
     </svg>
 </div>

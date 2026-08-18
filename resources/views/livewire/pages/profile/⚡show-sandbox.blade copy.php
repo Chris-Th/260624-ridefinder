@@ -160,7 +160,7 @@ new class extends Component
                 <x-vectors.filters.ink-grit-filter />
                 <div
                     class="{{-- col-span-12 row-span-5 --}} absolute flex size-fit right-18 top-25 items-center justify-center border-2 border-mist-700/40 z-10">
-                    <x-vectors.stamps.stamp-mask
+                    <x-vectors.stamps.round-stamp
                         :color="$this->getRideTypeColorVar('400', $typicalRide?->rideType?->name)"
                         :ridetype="$typicalRide?->rideType?->name"
                         opacity="0.8"
@@ -188,7 +188,7 @@ new class extends Component
                             x-bind:width="iconRect.width"
                             x-bind:height="iconRect.height"
                             class="mt-4" />
-                    </x-vectors.stamps.stamp-mask>
+                    </x-vectors.stamps.round-stamp>
                 </div>
             </div>
 

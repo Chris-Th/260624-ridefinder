@@ -4,6 +4,7 @@ use App\Concerns\HasRideTagMotives;
 use App\Concerns\HasRideTypeMotives;
 use App\Models\Profile;
 use App\Models\RideType;
+use App\Models\TypicalRide;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Json;
 use Livewire\Component;
@@ -13,11 +14,16 @@ new class extends Component
     use HasRideTagMotives, HasRideTypeMotives;
 
     public Profile $profile;
+
+    public $typicalRides = [];
+
+    public $selectedRideType = []; // ['typical_ride_id' => 1, 'ride_type_id' => 1]
     // public $profilePhoto;
 
     public function mount(Profile $profile)
     {
         $this->profile = $profile;
+        $this->typicalRides = $this->profile->typicalRides;
         // $this->rideTags = collect($this->profile->typicalRides()->rideTags()->pluck('name')->all());
         // $this->profilePhoto = $this->profile->getMedia('profile-photo');
     }
@@ -29,9 +35,32 @@ new class extends Component
     }
 
     #[Computed]
-    public function typicalRides()
+    public function getTypicalRides()
     {
         return $this->profile->typicalRides;
+    }
+
+    public function getRandomAngle()
+    {
+        return rand(0, 359);
+    }
+
+    public function getRandomTurbulenceSeed()
+    {
+        return rand(1, 1000);
+    }
+
+    public function updateTypicalRideRelation(string $relation, $typicalRideId, $relationId)
+    {
+        // in blade: updateTypicalRideRelation('{{ \App\Models\RideType::class }}', $typicalRideId, $relationId)
+        // if (!is_subclass_of($modelClass, \Illuminate\Database\Eloquent\Model::class)) {
+        //     throw new \InvalidArgumentException('Invalid model class');
+        // }
+        $typicalRide = TypicalRide::find($typicalRideId);
+
+        $column = $relation.'_id';
+
+        $typicalRide->update([$column => $relationId]);
     }
 
     #[Json]
@@ -80,10 +109,19 @@ new class extends Component
 };
 ?>
 
-<div class="text-base-content mx-auto max-w-4xl text-sm">
-    <div class="mx-auto flex h-fit w-full flex-col justify-start gap-8">
+<div class="text-base-content mx-auto h-dvh max-w-4xl text-sm">
+    <x-vectors.filters.textures.factory>
+        @foreach ($typicalRides as $typicalRide)
+            <x-vectors.filters.textures.primitives.metal-plate-1 :id="'texture-1-'.$typicalRide->id" />
+        @endforeach
+    </x-vectors.filters.textures.factory>
+    {{-- <x-vectors.filters.textures.primitives.ink-grit-2 id="ink-grit-filter" />
+    <x-vectors.filters.textures.primitives.ink-grit-2 id="softer-ink-grit-filter" /> --}}
+    <x-vectors.filters.ink-grit-filter />
+
+    <div class="mx-auto flex h-full w-full flex-col justify-start gap-8">
         {{ $this->profilePhoto()->img()->attributes([ 'class' => 'max-w-64 rounded-full border border-mist-800 mx-auto' ]) }}
-        <div class="flex h-fit flex-col gap-6">
+        <div class="flex h-full flex-col gap-6">
             <div class="mx-4">
                 <h4 class="mb-4 text-lg font-bold italic">Name:</h4>
                 <p>{{ $profile->user->name }}</p>
@@ -92,33 +130,50 @@ new class extends Component
                 <h4 class="mb-4 text-lg font-bold italic">Bio:</h4>
                 <p>{{ $profile->bio }}</p>
             </div>
-            <div class="">
-                <h4 class="ms-4 mb-4 text-lg font-bold italic">Typical Rides:</h4>
-                <div class="mx-auto h-full w-full columns-[12rem] items-center gap-8">
-                    @foreach ($this->typicalRides() as $typicalRide)
-                        <div class="relative min-w-fit break-inside-avoid">
-                            <x-vectors.filters.pergament-texture class="absolute size-full rounded-xl" />
-                            <x-typical-ride.card.skeletton-sandbox
-                                class="mb-5 w-full inset-shadow-sm inset-shadow-mist-500"
-                                :row-gap="8"
-                                :row-height="16"
-                                :min-col-width="16"
-                                :ride-tags-count="$typicalRide->loadCount('rideTags')->ride_tags_count">
-                                <x-typical-ride.card.content :iteration="$loop->iteration" :$typicalRide>
-                                    <x-typical-ride.card.ride-tags :ride-tags="$typicalRide->rideTags" />
-                                    <x-vectors.filters.ink-grit-filter />
-                                    <div
-                                        class="{{-- col-span-12 row-span-5 --}} absolute flex size-fit right-18 top-25 items-center justify-center border-2 border-mist-700/40 z-10">
-                                        <x-vectors.stamps.stamp-mask
-                                            :color="$this->getRideTypeColorVar('400', $typicalRide?->rideType?->name)"
-                                            :ridetype="$typicalRide?->rideType?->name"
-                                            opacity="0.8"
-                                            class="absolute"
-                                            x-data="stamp({
+
+            <h4 class="ms-4 mb-4 text-lg font-bold italic">Typical Rides:</h4>
+            <div class="mx-auto h-full! w-full columns-[12rem] items-center gap-8">
+                @foreach ($typicalRides as $typicalRide)
+                    <div
+                        x-data="{
+                            viewBox: '',
+                            rect: null,
+                            init() {
+                                this.$watch('rect', (r) => {
+                                    this.viewBox = `${r.x} ${r.y} ${r.width} ${r.height}`;
+                                });
+                            }
+                        }"
+                        class="relative min-w-fit break-inside-avoid data-loading:h-48!">
+                        {{--  <x-vectors.filters.pergament-texture class="absolute size-full rounded-xl data-loading:h-50!" /> --}}
+                        <x-vectors.filters.textures.el
+                            class="absolute size-full rounded-xl data-loading:h-50!"
+                            :opacity="0.35"
+                            :id="'texture-1-'.$typicalRide->id" />
+                        <x-typical-ride.card.skeletton-sandbox
+                            class="typicalride-card mb-5 w-full inset-shadow-sm inset-shadow-mist-500 data-loading:h-50!"
+                            x-init="rect = $el.getBoundingClientRect()"
+                            :row-gap="8"
+                            :row-height="16"
+                            :min-col-width="16"
+                            :ride-tags-count="$typicalRide->loadCount('rideTags')->ride_tags_count">
+                            <x-typical-ride.card.content :iteration="$loop->iteration" :$typicalRide>
+                                <x-typical-ride.card.ride-tags :ride-tags="$typicalRide->rideTags" />
+                                {{--  <x-vectors.filters.ink-grit-filter /> --}}
+                                <div
+                                    class="{{-- col-span-12 row-span-5 --}} absolute flex size-fit right-18 top-25 items-center justify-center border-2 border-mist-700/40 z-10">
+                                    <x-vectors.stamps.round-stamp
+                                        :color="$this->getRideTypeColorVar('400', $typicalRide?->rideType?->name)"
+                                        :ridetype="$typicalRide?->rideType?->name"
+                                        opacity="0.8"
+                                        class="absolute"
+                                        x-data="stamp({
                                                 opacity: 0.7,
                                                 radius: 45,
-                                                innerBorder: 1.5,
-                                                outerBorder: 5,
+                                                innerBorder: 1,
+                                                outerBorder: 3,
+                                                borderGap: 1.5,
+                                                smearFactor: 1.5,
                                                 padding: 6,
                                                 maxJitter: 0.8,
                                                 // topText: '{{ $typicalRide->name }}',
@@ -128,25 +183,24 @@ new class extends Component
                                                 maxTransform: { tx: 15, ty: 20, rot: 90 },
                                                 iconFilter: 'soft',
                                             })">
-                                            <x-dynamic-component
-                                                uniqueid="typical-ride-{{ $typicalRide->id }}"
-                                                :component="$this->getRideTypeMotivePath($typicalRide?->rideType?->name)"
-                                                x-bind:class="
-                                                    `w-[${iconRect.width}px] h-[${iconRect.height}px]  scale-140 origin-center`
-                                                "
-                                                x-bind:x="iconRect.x"
-                                                x-bind:y="iconRect.y"
-                                                x-bind:width="iconRect.width"
-                                                x-bind:height="iconRect.height"
-                                                class="mt-4" />
+                                        <x-dynamic-component
+                                            uniqueid="typical-ride-{{ $typicalRide->id }}"
+                                            :component="$this->getRideTypeMotivePath($typicalRide?->rideType?->name)"
+                                            x-bind:class="
+                                                `w-[${iconRect.width}px] h-[${iconRect.height}px]  scale-140 origin-center`
+                                            "
+                                            x-bind:x="iconRect.x"
+                                            x-bind:y="iconRect.y"
+                                            x-bind:width="iconRect.width"
+                                            x-bind:height="iconRect.height"
+                                            class="mt-4" />
                                         </x-vectors.stamps.stamp-mask>
-                                    </div>
-                                </x-typical-ride.card.content>
-                            </x-typical-ride.card.skeletton-sandbox>
-                        </div>
+                                </div>
+                            </x-typical-ride.card.content>
+                        </x-typical-ride.card.skeletton-sandbox>
+                    </div>
 
-                    @endforeach
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

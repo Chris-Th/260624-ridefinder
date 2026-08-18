@@ -281,7 +281,7 @@ new class extends Component
 
         <div
             class="relative col-span-6 row-span-6 flex size-full items-center justify-center overflow-visible border border-dashed border-gray-600 text-xs">
-            <x-vectors.stamps.stamp-mask
+            <x-vectors.stamps.round-stamp
                 :color="$this->getRideTypeColorVar('400', $rideType)"
                 :ridetype="$rideType"
                 class="absolute"
@@ -308,7 +308,7 @@ new class extends Component
                     x-bind:width="iconRect.width"
                     x-bind:height="iconRect.height"
                     class="mt-4" />
-            </x-vectors.stamps.stamp-mask>
+            </x-vectors.stamps.round-stamp>
         </div>
 
         <div class="col-span-10 row-span-1"></div>

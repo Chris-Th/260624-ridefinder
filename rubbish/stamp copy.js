@@ -4,8 +4,8 @@ export default (config = {}) => ({
     config: config,
     opacity: config.opacity || 1,
     radius: config.radius || 60,
-    outerBorder: config.outerBorder ?? 4.5,
-    innerBorder: config.innerBorder || 0,
+    outerBorder: config.outerBorder ?? 4.5, // use 'none' for no border, not 0
+    innerBorder: config.innerBorder ?? 0, // use 'none' for no border, not 0
     borderGap: config.borderGap ?? (config.outerBorder && config.innerBorder ? 1.5 : 0),
     padding: config.padding -2  || -2,
     topText: config.topText || null,
@@ -167,11 +167,16 @@ export default (config = {}) => ({
      },
      appendGradientStops(stops) {
         const linearGradientEl = document.querySelector('#uneven-stamp-pressure-' + this.id);
-        console.log('linearGradientEl', linearGradientEl);
+
+        if (!linearGradientEl) return;
+
+        while (linearGradientEl.firstChild) {
+            linearGradientEl.removeChild(linearGradientEl.firstChild);
+        }
         stops.forEach((stop) => {
             let stopEl = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'stop-opacity', stop.opacity);
-            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'offset', stop.offset);
+            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'stop-opacity', String(stop.opacity));
+            stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'offset', `${stop.offset}%`);
             stopEl.setAttributeNS('http://www.w3.org/2000/svg', 'stop-color', 'currentColor');
             linearGradientEl.appendChild(stopEl);
         })

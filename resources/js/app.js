@@ -30,7 +30,7 @@ function recreateTemplateInSvg(node) {
   });
 } */
 
-
+/*
 (function(){
         var templates = document.querySelectorAll('svg template');
         var el, template, attribs, attrib, count, child, content;
@@ -52,3 +52,4 @@ function recreateTemplateInSvg(node) {
           }
         }
       })();
+ */
