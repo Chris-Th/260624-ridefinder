@@ -25,7 +25,7 @@
                 $el.setAttribute('viewBox', viewBox);
                 gradientStopRanges = [
                     [0, 1],
-                    [40, 0.6],
+                    [40, 0.6], // [max-offset, min-opacity].
                     [80, 0.2],
                     [100, 0]
                 ];

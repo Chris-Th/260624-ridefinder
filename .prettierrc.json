@@ -7,7 +7,8 @@
     "trailingComma": "none",
     "bracketSpacing": true,
     "arrowParens": "always",
-    "singleAttributePerLine": false,
+    "singleAttributePerLine": true,
+    "bracketSameLine": true,
     "plugins": ["prettier-plugin-blade", "prettier-plugin-tailwindcss"],
     "overrides": [
         {

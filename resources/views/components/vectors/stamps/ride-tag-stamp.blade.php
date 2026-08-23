@@ -17,9 +17,10 @@
                 stamp({
                     opacity: 1,
                     radius: {{ $radius }},
-                    outerBorder: 2,
+                    outerBorder: 1,
                     padding: 0,
                     maxJitter: 0.2,
+                    pressureFaint: 1.3,
                     maxTransform: { tx: {{ $maxTransformX }}, ty: {{ $maxTransformY }}, rot: {{ $maxRotation }} },
                     iconFilter: 'softer'
                 })

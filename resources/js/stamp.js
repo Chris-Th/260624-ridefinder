@@ -4,6 +4,7 @@ export default (config = {}) => ({
     config: config,
     opacity: config.opacity || 1,
     radius: config.radius || 60,
+    iconSize: config.iconSize || null,
     outerBorder: config.outerBorder ?? 4.5,
     innerBorder: config.innerBorder || 0,
     borderGap: config.borderGap ?? (config.outerBorder && config.innerBorder ? 1.5 : 0),
@@ -12,6 +13,7 @@ export default (config = {}) => ({
     centerText: config.centerText || null,
     bottomText: config.bottomText || null,
     iconFilter: config.iconFilter || false,
+    pressureFaint: config.pressureFaint ?? 1, // 'none' : no faint | 0 < number < 1 : increase faint | 1 < number : decreased faint effect
     gradientStopRanges: config.gradientStopRanges || [],
     stops: [],
     fontSize: {
@@ -105,7 +107,7 @@ export default (config = {}) => ({
     // available space for center icon
     get iconRect() {
         const margin = this.topFontSize > this.bottomFontSize ? this.topFontSize : this.bottomFontSize;
-        const iconSize = config.iconSize || (this.radius - margin) * 1.4;
+        const iconSize = this.iconSize || (this.radius - margin) * 1.4;
         return {
             width: iconSize,
             height: iconSize,
@@ -149,7 +151,10 @@ export default (config = {}) => ({
 
             const maxOpac = index === 0 ? stop[1] :  stops[index - 1].opacity;
             const minOpac = stop[1];
-            const opacity = maxOpac - (Math.random() * (maxOpac - minOpac));
+            // const opacity = maxOpac - (Math.random() * (maxOpac - minOpac));
+
+            const opacity = this.pressureFaint === 'none' ? 1 : maxOpac - (Math.random() * (maxOpac - minOpac)) / this.pressureFaint;
+
             // stopEl.setAttribute('stop-opacity', opacity);
             // stopEl.setAttribute('stop-color', 'currentColor');
 

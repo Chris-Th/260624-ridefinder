@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum RideDistance: int
 {
+    case Km0 = 0;
     case Km10 = 10;
     case Km25 = 25;
     case Km50 = 50;
@@ -61,5 +62,28 @@ enum RideDistance: int
         $max = $min->randomGreaterOrEqual();
 
         return [$min, $max];
+    }
+
+    public static function getDistanceRangeString(
+        ?self $minDistance = null,
+        ?self $maxDistance = null,
+    ): ?string {
+        if ($minDistance === null && $maxDistance === null) {
+            return null;
+        }
+
+        if ($minDistance === $maxDistance) {
+            return "{$maxDistance->value} Km";
+        }
+
+        if ($minDistance !== null && $maxDistance !== null) {
+            return "{$minDistance->value} - {$maxDistance->value} Km";
+        }
+
+        if ($minDistance !== null) {
+            return "{$minDistance->value} Km or more";
+        }
+
+        return "Up to {$maxDistance->value} Km";
     }
 }

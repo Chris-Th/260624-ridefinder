@@ -14,11 +14,9 @@ use App\Enums\RideDistance;
     'savedRideTypeColor',
     'savedPace',
     'savedDiscipline',
-    'savedMinDistance',
-    'savedMaxDistance',
     'rideTypeCount',
     'paceCount',
-    'disciplineCount',
+    'disciplineCount'
 ])
 
 <div
@@ -44,13 +42,6 @@ use App\Enums\RideDistance;
         },
         get selectedPace() {
             return this.paces[this.selectedPaceId];
-        },
-        distanceRangeString(min, max) {
-            if(!min && !max) return null;
-            if(min === max) return `${max} Km`;
-            if(min  && max ) return `${min} - ${max} Km`;
-            if(min) return `${min} Km or more`;
-            return `Up to ${max} Km`;
         },
         init() {
             this.$watch('rect', (r) => {
@@ -171,76 +162,18 @@ use App\Enums\RideDistance;
             @endisset
 
             @if ($typicalRide->max_distance || $typicalRide->min_distance)
-                <div
-                    x-data="{ showOptions: false }"
-                    x-on:click="showOptions = true"
-                    x-on:click.outside="showOptions = false"
-                    class="full-row relative">
-                    <div class="key">DIST</div>
-                    <div
-                        class="val cursor-pointer"
-                        x-bind:class="selectedDistanceRange.min != `{{ $savedMinDistance }}` || selectedDistanceRange.max != `{{ $savedMaxDistance }}` ? 'italic' : ''"
-                        x-text="distanceRangeString(selectedDistanceRange.min, selectedDistanceRange.max)"></div>
-
-                    <div
-                        x-cloak
-                        x-bind:class="
-                            showOptions
-                                ? 'translate-x-0 rotate-x-0 rotate-y-0 scale-100'
-                                : 'translate-y-6 rotate-x-90 rotate-y-90 scale-0'
-                        "
-                        class="border-base-100 absolute z-50 flex h-fit w-full origin-top-left items-stretch border-2 transition-transform transition-normal duration-200">
-                        <select
-                            size="{{ count(RideDistance::cases()) + 1 }}"
-                            class="bg-base-200 border-base-100 relative z-50 h-fit basis-1/2 origin-top-left overflow-y-clip p-0 transition-transform transition-normal duration-200"
-                            wire:model="{{ $distanceRangeWireModel }}.min"
-                            x-model="selectedDistanceRange.min">
-                            <x-typical-ride.card.selectable-property.option
-                                class="pointer-events-none cursor-not-allowed flex-col justify-center px-2 text-neutral-400">
-                                Min:
-                            </x-typical-ride.card.selectable-property.option>
-
-                            @foreach (RideDistance::cases() as $distance)
-                                <x-typical-ride.card.selectable-property.option
-                                    value="{{ $distance->value }}"
-                                    wire:key="min-dist-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $distance->value }}"
-                                    x-bind:class="{
-                                        'border-base-100! border-2!': `{{ $distance->value }}` == `{{ $savedMinDistance }}`,
-                                        'bg-base-100! italic text-neutral-400! pointer-events-none cursor-default': `{{ $distance->value }}` == selectedDistanceRange.min,
-                                    }"
-                                    class="z-30 cursor-pointer items-center px-2">
-                                    {{ $distance->value }}
-                                </x-typical-ride.card.selectable-property.option>
-                            @endforeach
-                        </select>
-
-                        <select
-                            size="{{ count(RideDistance::cases()) + 1 }}"
-                            class="bg-base-200 border-base-100 relative z-50 h-fit basis-1/2 origin-top-left overflow-y-clip p-0 transition-transform transition-normal duration-200"
-                            wire:model="{{ $distanceRangeWireModel }}.max"
-                            x-model="selectedDistanceRange.max">
-                            <x-typical-ride.card.selectable-property.option
-                                class="pointer-events-none cursor-not-allowed flex-col justify-center px-2 text-neutral-400">
-                                Max:
-                            </x-typical-ride.card.selectable-property.option>
-
-                            @foreach (RideDistance::cases() as $distance)
-                                <x-typical-ride.card.selectable-property.option
-                                    value="{{ $distance->value }}"
-                                    wire:key="max-dist-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $distance->value }}"
-                                    x-bind:class="{
-                                        'border-base-100! border-2!': `{{ $distance->value }}` == `{{ $savedMaxDistance }}`,
-                                        'bg-base-100! italic text-neutral-400! pointer-events-none cursor-default': `{{ $distance->value }}` == selectedDistanceRange.max,
-                                    }"
-                                    class="z-30 cursor-pointer items-center px-2">
-                                    {{ $distance->value === 0 ? '150 +' : $distance->value }}
-                                </x-typical-ride.card.selectable-property.option>
-                            @endforeach
-                        </select>
+                <x-typical-ride.card.selectable-property
+                    x-bind:class="showOptions ? 'z-30' : 'z-20'"
+                    :saved-value="$savedDiscipline"
+                    key="DIST"
+                    x-model="selectedDistanceRange"
+                    wire:model="{{ $disciplineWireModel }}"
+                    :size="$disciplineCount">
+                    <div class="val">
+                        {{ RideDistance::getDistanceRangeString($typicalRide->min_distance, $typicalRide->max_distance) }}
                     </div>
-                </div>
+                </x-typical-ride.card.selectable-property>
             @endif
-
             <x-typical-ride.card.ride-tags :ride-tags="$typicalRide->rideTags" />
 
             <div class="absolute top-12 -right-28 flex size-full items-center justify-center border-mist-700/40">

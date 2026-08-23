@@ -23,7 +23,14 @@
         type="matrix"
         values="2.55 0 0 0 -0.275  0 2.55 0 0 -0.275  0 0 2.55 0 -0.275  0 0 0 1 0"
         result="colored" />
-    <feDiffuseLighting in="colored" lighting-color="#BCC6CC" surfaceScale="3" diffuseConstant="3" result="light">
-        <feDistantLight azimuth="{{ rand(-10, 10) }}" elevation="5" />
+    <feDiffuseLighting
+        in="colored"
+        lighting-color="#BCC6CC"
+        surfaceScale="3"
+        diffuseConstant="3"
+        result="light">
+        <feDistantLight
+            azimuth="{{ rand(-10, 10) }}"
+            elevation="5" />
     </feDiffuseLighting>
 </filter>

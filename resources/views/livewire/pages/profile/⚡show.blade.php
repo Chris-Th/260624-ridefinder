@@ -2,6 +2,8 @@
 
 use App\Concerns\HasRideTagMotives;
 use App\Concerns\HasRideTypeMotives;
+use App\Models\Discipline;
+use App\Models\Pace;
 use App\Models\Profile;
 use App\Models\RideType;
 use App\Models\TypicalRide;
@@ -25,7 +27,8 @@ new class extends Component
     public function mount($id)
     {
         $this->profile = Profile::findOrFail($id);
-        $this->typicalRides = $this->profile->typicalRides()->with(['rideType', 'rideTags'])->withCount('rideTags')->get();
+
+        $this->init();
 
         /* $this->draftTypicalRides = $this->typicalRides
         ->mapWithKeys(fn (TypicalRide $ride): array => [
@@ -34,26 +37,46 @@ new class extends Component
             ],
         ])
         ->all(); */
+
+        // $this->rideTags = collect($this->profile->typicalRides()->rideTags()->pluck('name')->all());
+        // $this->profilePhoto = $this->profile->getMedia('profile-photo');
+    }
+
+    protected function init()
+    {
+        $this->typicalRides = $this->profile->typicalRides()->with(['rideType', 'rideTags', 'pace', 'discipline'])->withCount('rideTags')->get();
         $this->draftTypicalRides = $this->typicalRides
             ->mapWithKeys(fn (TypicalRide $ride): array => [
                 $ride->id => [
                     'name' => $ride->name,
+                    'distance_range' => [
+                        'min' => $ride->min_distance,
+                        'max' => $ride->max_distance,
+                    ],
                     'ride_type' => [
                         'id' => $ride->ride_type_id,
                         'name' => $ride->rideType->name,
                         'icon_view_component' => $ride->rideType->icon_view_component,
                     ],
+                    'pace' => [
+                        'id' => $ride->pace_id,
+                        'name' => $ride->pace->name,
+                    ],
+                    'discipline' => [
+                        'id' => $ride->discipline_id,
+                        'name' => $ride->discipline->name,
+                    ],
                 ],
             ])
             ->all();
-        // $this->rideTags = collect($this->profile->typicalRides()->rideTags()->pluck('name')->all());
-        // $this->profilePhoto = $this->profile->getMedia('profile-photo');
     }
 
     public function save(): void
     {
         $this->validate([
             'draftTypicalRides.*.ride_type.id' => ['required', 'integer', 'exists:ride_types,id'],
+            'draftTypicalRides.*.pace.id' => ['integer', 'exists:paces,id'],
+            'draftTypicalRides.*.discipline.id' => ['integer', 'exists:disciplines,id'],
         ]);
 
         foreach ($this->draftTypicalRides as $typicalRideId => $draft) {
@@ -61,23 +84,14 @@ new class extends Component
                 ->whereKey($typicalRideId)
                 ->update([
                     'ride_type_id' => $draft['ride_type']['id'],
+                    'pace_id' => $draft['pace']['id'],
+                    'discipline_id' => $draft['discipline']['id'],
+                    'min_distance' => $draft['distance_range']['min'],
+                    'max_distance' => $draft['distance_range']['max'],
                 ]);
         }
 
-        $this->typicalRides = $this->profile->typicalRides()->with(['rideType', 'rideTags'])->withCount('rideTags')->get();
-
-        $this->draftTypicalRides = $this->typicalRides
-            ->mapWithKeys(fn (TypicalRide $ride): array => [
-                $ride->id => [
-                    'name' => $ride->name,
-                    'ride_type' => [
-                        'id' => $ride->ride_type_id,
-                        'name' => $ride->rideType->name,
-                        'icon_view_component' => $ride->rideType->icon_view_component,
-                    ],
-                ],
-            ])
-            ->all();
+        $this->init();
     }
 
     #[Computed]
@@ -121,17 +135,17 @@ new class extends Component
         return RideType::all(['id', 'name', 'icon_view_component']);
     }
 
-    #[Computed]
-    public function rideTypes()
-    {
-        return RideType::all(['id', 'name', 'icon_view_component']);
-    }
+    // #[Computed]
+    // public function rideTypes()
+    // {
+    //     return RideType::all(['id', 'name', 'icon_view_component']);
+    // }
 
-    #[Computed]
-    public function rideTypeCount()
-    {
-        return $this->rideTypes->count();
-    }
+    // #[Computed]
+    // public function rideTypeCount()
+    // {
+    //     return $this->rideTypes->count();
+    // }
 
     public function getStampPath($rideTag)
     {
@@ -168,13 +182,41 @@ new class extends Component
     #[Computed]
     public function rideTypeOptions()
     {
-        return $this->rideTypes->mapWithKeys(fn (RideType $type): array => [
+        $types = RideType::all(['id', 'name', 'icon_view_component']);
+
+        return $types->mapWithKeys(fn (RideType $type): array => [
             $type->id => [
                 'id' => $type->id,
                 'name' => $type->name,
                 'icon_view_component' => $type->icon_view_component,
                 'color' => $this->getRideTypeColorVar('400', $type->name),
                 'bgcolor' => $this->getRideTypeColorVar('900', $type->name),
+            ],
+        ]);
+    }
+
+    #[Computed]
+    public function paceOptions()
+    {
+        $paces = Pace::all(['id', 'name']);
+
+        return $paces->mapWithKeys(fn (Pace $pace): array => [
+            $pace->id => [
+                'id' => $pace->id,
+                'name' => $pace->name,
+            ],
+        ]);
+    }
+
+    #[Computed]
+    public function disciplineOptions()
+    {
+        $disciplines = Discipline::all(['id', 'name']);
+
+        return $disciplines->mapWithKeys(fn (Discipline $discipline): array => [
+            $discipline->id => [
+                'id' => $discipline->id,
+                'name' => $discipline->name,
             ],
         ]);
     }
@@ -190,14 +232,17 @@ new class extends Component
                 :id="'texture-1-'.$i" />
         @endfor
     </x-vectors.filters.textures.factory>
-    {{-- <x-vectors.filters.textures.primitives.ink-grit-2 id="ink-grit-filter" />
-    <x-vectors.filters.textures.primitives.ink-grit-2 id="softer-ink-grit-filter" /> --}}
     <x-vectors.filters.ink-grit-filter />
 
     <div class="mx-auto flex h-full w-full flex-col justify-start gap-8">
         {{ $this->profilePhoto()->img()->attributes([ 'class' => 'max-w-64 rounded-full border border-mist-800 mx-auto' ]) }}
         <div class="flex h-fit w-full justify-end">
-            <button wire:click="save" wire:dirty class="btn-success">Save</button>
+            <button
+                wire:click="save"
+                wire:dirty
+                class="btn btn-secondary">
+                Save
+            </button>
         </div>
         <div class="flex h-full flex-col gap-6">
             <div class="mx-4">
@@ -217,9 +262,21 @@ new class extends Component
                         :iteration="$loop->iteration"
                         :draft="$draftTypicalRides[$typicalRide->id]"
                         :ride-types="$this->rideTypeOptions"
-                        :ride-type-count="$this->rideTypeCount()"
-                        :wire-model="'draftTypicalRides.'.$typicalRide->id.'.ride_type.id'"
+                        :paces="$this->paceOptions"
+                        :disciplines="$this->disciplineOptions"
+                        :ride-type-count="$this->rideTypeOptions->count()"
+                        :pace-count="$this->paceOptions->count()"
+                        :discipline-count="$this->disciplineOptions->count()"
+                        :ride-type-wire-model="'draftTypicalRides.'.$typicalRide->id.'.ride_type.id'"
+                        :pace-wire-model="'draftTypicalRides.'.$typicalRide->id.'.pace.id'"
+                        :discipline-wire-model="'draftTypicalRides.'.$typicalRide->id.'.discipline.id'"
+                        :distance-range-wire-model="'draftTypicalRides.'.$typicalRide->id.'.distance_range'"
                         :saved-ride-type="$typicalRide->rideType->name"
+                        :saved-pace="$typicalRide->pace->name"
+                        :saved-discipline="$typicalRide->discipline->name"
+                        :saved-min-distance="$typicalRide->min_distance"
+                        :saved-max-distance="$typicalRide->max_distance"
+                        :saved-ride-type-color="$this->getRideTypeColorVar(400, $typicalRide->rideType->name)"
                         wire:key="typical-ride-{{ $typicalRide->id }}" />
 
                 @endforeach

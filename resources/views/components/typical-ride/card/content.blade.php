@@ -8,7 +8,9 @@
     'cols' => 12,
 ])
 
-<div x-cloak {{ $attributes->merge([ 'class' => 'typicalride-content' ]) }}>
+<div
+    x-cloak
+    {{ $attributes->merge([ 'class' => 'typicalride-content' ]) }}>
     <div class="header border border-{{ $typicalRide?->rideType?->name }}-800 inset-shadow-xs inset-shadow-mist-500">
         <div
             class="iteration flex justify-center items-center w-full px-1 text-{{ $typicalRide?->rideType?->name }}-300">
@@ -23,7 +25,10 @@
     </div>
     <div class="full-row"></div>
 
-    <x-typical-ride.card.property x-cloak options="rideTypesJson()" class="full-row relative cursor-pointer">
+    <x-typical-ride.card.property
+        x-cloak
+        options="rideTypesJson()"
+        class="full-row relative cursor-pointer">
         @isset ($typicalRide?->rideType?->name)
             <div class="key">TYPE</div>
             <div class="val">
