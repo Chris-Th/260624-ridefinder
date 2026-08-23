@@ -1,4 +1,4 @@
-@props ([ 'method' => '' ])
+@props ([ 'options' => '' ])
 
 <div
     x-data="{
@@ -8,7 +8,7 @@
             // this.options = [];
             this.$watch('showOptions', (show) => {
                 if (show && (!Array.isArray(this.options) || this.options.length === 0)) {
-                    $wire.{{ $method }}.then(data => this.options = data)
+                    $wire.{{ $options }}.then(data => this.options = data)
                 }
             })
         },

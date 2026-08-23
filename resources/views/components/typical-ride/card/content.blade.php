@@ -23,16 +23,16 @@
     </div>
     <div class="full-row"></div>
 
-    <x-typical-ride.card.property x-cloak method="rideTypesJson()" class="full-row relative cursor-pointer">
+    <x-typical-ride.card.property x-cloak options="rideTypesJson()" class="full-row relative cursor-pointer">
         @isset ($typicalRide?->rideType?->name)
             <div class="key">TYPE</div>
             <div class="val">
-                <x-typical-ride.card.property.value>
-                    {{ $typicalRide->rideType->name }}</x-typical-ride.card.property.value
-                >
+                <x-typical-ride.card.property.value wire:text="typicalRide.rideType.name" />
+
                 <x-typical-ride.card.property.options size="{{ $this->rideTypes()->count() }}">
                     @foreach ($this->rideTypes() as $rideType)
                         <option
+                            x-on:click="$wire.update('ride_type', {{ $typicalRide->id }}, {{ $rideType->id }})"
                             wire:key="ridetype-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $rideType->id }}"
                             class="odd:bg-base-300 even:bg-base-200 flex h-10 w-full gap-3">
                             <x-vectors.stamps.round-stamp
