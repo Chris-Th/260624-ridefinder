@@ -10,7 +10,6 @@ use App\Enums\RideDistance;
     'paces',
     'disciplines',
     'rideTypeWireModel',
-    'savedRideType',
     'savedRideTypeColor',
     'savedPace',
     'savedDiscipline',
@@ -60,7 +59,7 @@ use App\Enums\RideDistance;
         }
     }"
     x-bind:style="`--ride-type-color: ${selectedRideType.color}; --ride-type-bg-color: ${selectedRideType.bgcolor}`"
-    class="relative min-w-fit break-inside-avoid">
+    class="victor-mono-alternates relative min-w-fit break-inside-avoid">
     <x-vectors.filters.textures.el
         class="absolute size-full rounded-xl"
         :opacity="0.4"
@@ -94,21 +93,22 @@ use App\Enums\RideDistance;
             @isset ($draft['ride_type'])
                 <x-typical-ride.card.selectable-property
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
-                    :saved-value="$savedRideType"
-                    x-bind:style="selectedRideType.name !== `{{ $savedRideType }}` ? `color: ${selectedRideType.color}; font-style: italic` : ''"
+                    class="font-thin"
+                    :saved-value="$typicalRide->rideType->name"
+                    x-bind:style="selectedRideType.name !== `{{ $typicalRide->rideType->name }}` ? `color: ${selectedRideType.color}; font-style: italic` : ''"
                     key="TYPE"
                     x-model="selectedRideTypeId"
                     wire:model="{{ $rideTypeWireModel }}"
                     :size="$rideTypeCount">
                     <x-slot:selectedvalue
                         x-text="selectedRideType.name"
-                        x-bind:style="selectedRideType.name !== `{{ $savedRideType }}` ? `color: ${selectedRideType.color}; font-style: italic` : ''"></x-slot:selectedvalue>
+                        x-bind:style="selectedRideType.name !== `{{ $typicalRide->rideType->name }}` ? `color: ${selectedRideType.color}; font-style: italic` : ''"></x-slot:selectedvalue>
                     @foreach ($rideTypes as $type)
                         <x-typical-ride.card.selectable-property.option
                             value="{{ $type['id'] }}"
                             wire:key="ridetype-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $type['id'] }}"
                             x-bind:style="`border-color: {{ $savedRideTypeColor }}`"
-                            x-bind:class="rideTypes[{{ $loop->iteration }}].name === '{{ $savedRideType }}' ? 'border z-30' : 'border-none z-30'">
+                            x-bind:class="rideTypes[{{ $loop->iteration }}].name === '{{ $typicalRide->rideType->name }}' ? 'border z-30' : 'border-none z-30'">
                             <x-typical-ride.card.selectable-property.ride-type-stamp
                                 :color="$this->getRideTypeColorVar('400', $type['name'])"
                                 :ridetype="$type['name']"
@@ -124,12 +124,15 @@ use App\Enums\RideDistance;
             @isset ($typicalRide?->pace?->name)
                 <x-typical-ride.card.selectable-property
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
+                    class="font-bold"
+                    style="font-style: oblique"
                     :saved-value="$savedPace"
                     key="PACE"
                     x-model="selectedPaceId"
                     wire:model="{{ $paceWireModel }}"
                     :size="$paceCount">
                     <x-slot:selectedvalue
+                        class="italic"
                         x-text="selectedPace.name"
                         x-bind:style="selectedPace.name !== `{{ $savedPace }}` ? `font-style: italic` : ''"></x-slot:selectedvalue>
 
@@ -149,7 +152,7 @@ use App\Enums\RideDistance;
             @isset ($typicalRide?->discipline?->name)
                 <x-typical-ride.card.selectable-property
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
-                    :saved-value="$savedDiscipline"
+                    :saved-value="$typicalRide->discipline->name"
                     key="DISC"
                     x-model="selectedDisciplineId"
                     wire:model="{{ $disciplineWireModel }}"
@@ -179,7 +182,7 @@ use App\Enums\RideDistance;
                     <div class="key">DIST</div>
                     <div
                         class="val cursor-pointer"
-                        x-bind:class="selectedDistanceRange.min != `{{ $savedMinDistance }}` || selectedDistanceRange.max != `{{ $savedMaxDistance }}` ? 'italic' : ''"
+                        x-bind:class="selectedDistanceRange.min != `{{ $typicalRide->min_distance }}` || selectedDistanceRange.max != `{{ $typicalRide->max_distance }}` ? 'italic' : ''"
                         x-text="distanceRangeString(selectedDistanceRange.min, selectedDistanceRange.max)"></div>
 
                     <div
@@ -207,6 +210,7 @@ use App\Enums\RideDistance;
                                     x-bind:class="{
                                         'border-base-100! border-2!': `{{ $distance->value }}` == `{{ $savedMinDistance }}`,
                                         'bg-base-100! italic text-neutral-400! pointer-events-none cursor-default': `{{ $distance->value }}` == selectedDistanceRange.min,
+                                        'text-neutral-500! font-thin pointer-events-none cursor-default':  Number({{ $distance->value }}) > Number(selectedDistanceRange.max)
                                     }"
                                     class="z-30 cursor-pointer items-center px-2">
                                     {{ $distance->value }}
@@ -231,6 +235,7 @@ use App\Enums\RideDistance;
                                     x-bind:class="{
                                         'border-base-100! border-2!': `{{ $distance->value }}` == `{{ $savedMaxDistance }}`,
                                         'bg-base-100! italic text-neutral-400! pointer-events-none cursor-default': `{{ $distance->value }}` == selectedDistanceRange.max,
+                                        'text-neutral-500! font-thin pointer-events-none cursor-default':  Number({{ $distance->value }}) < Number(selectedDistanceRange.min)
                                     }"
                                     class="z-30 cursor-pointer items-center px-2">
                                     {{ $distance->value === 0 ? '150 +' : $distance->value }}

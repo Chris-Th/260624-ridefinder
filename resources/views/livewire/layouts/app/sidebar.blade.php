@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="dark">
 <head>
     @include ('partials.head')
 </head>
 
-<body init="$flux.dark = true" class="victor-mono dark:bg-base-300 bg-base-100 min-h-screen">
+<body
+    init="$flux.dark = true"
+    class="dark:bg-base-300 bg-base-100 min-h-screen font-mono">
     {{-- <flux:sidebar sticky collapsible class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
@@ -52,18 +56,27 @@
 
     <!-- Mobile User Menu -->
     <flux:header class="lg:hidden">
-        <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+        <flux:sidebar.toggle
+            class="lg:hidden"
+            icon="bars-2"
+            inset="left" />
 
         <flux:spacer />
 
-        <flux:dropdown position="top" align="end">
-            <flux:profile :initials="auth()->user()->initials()" icon-trailing="chevron-down" />
+        <flux:dropdown
+            position="top"
+            align="end">
+            <flux:profile
+                :initials="auth()->user()->initials()"
+                icon-trailing="chevron-down" />
 
             <flux:menu>
                 <flux:menu.radio.group>
                     <div class="p-0 text-sm font-normal">
                         <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                            <flux:avatar :name="auth()->user()?->name" :initials="auth()->user()->initials()" />
+                            <flux:avatar
+                                :name="auth()->user()?->name"
+                                :initials="auth()->user()->initials()" />
 
                             <div class="grid flex-1 text-start text-sm leading-tight">
                                 <flux:heading class="truncate">{{ auth()->user()?->name }}</flux:heading>
@@ -76,14 +89,20 @@
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
+                    <flux:menu.item
+                        :href="route('profile.edit')"
+                        icon="cog"
+                        wire:navigate>
                         {{ __('Settings') }}
                     </flux:menu.item>
                 </flux:menu.radio.group>
 
                 <flux:menu.separator />
 
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                <form
+                    method="POST"
+                    action="{{ route('logout') }}"
+                    class="w-full">
                     @csrf
                     <flux:menu.item
                         as="button"

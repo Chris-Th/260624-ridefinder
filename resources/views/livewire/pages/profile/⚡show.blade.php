@@ -227,7 +227,7 @@ new class extends Component
     <x-vectors.filters.textures.factory>
         {{-- freq 0.0008: 229, 531, 106 freq 0.0004: 434, 305, 750 (vertical), 298 (horizontal) --}}
         @for ($i = 0; $i < 3; $i++)
-            <x-vectors.filters.textures.primitives.metal-plate-2
+            <x-vectors.filters.textures.primitives.metal-plate-3
                 :seed="$i === 0 ? '434' : ($i === 1 ? '305' : '655')"
                 :id="'texture-1-'.$i" />
         @endfor
@@ -254,7 +254,7 @@ new class extends Component
                 <p>{{ $profile->bio }}</p>
             </div>
 
-            <h4 class="ms-4 mb-4 text-lg font-bold italic">Typical Rides:</h4>
+            <h4 class="victor-mono-italic ms-4 mb-4 text-lg font-bold">Typical Rides:</h4>
             <div class="mx-auto h-full! w-full columns-[12rem] items-center gap-8">
                 @foreach ($typicalRides as $typicalRide)
                     <x-typical-ride.card.index
@@ -271,7 +271,6 @@ new class extends Component
                         :pace-wire-model="'draftTypicalRides.'.$typicalRide->id.'.pace.id'"
                         :discipline-wire-model="'draftTypicalRides.'.$typicalRide->id.'.discipline.id'"
                         :distance-range-wire-model="'draftTypicalRides.'.$typicalRide->id.'.distance_range'"
-                        :saved-ride-type="$typicalRide->rideType->name"
                         :saved-pace="$typicalRide->pace->name"
                         :saved-discipline="$typicalRide->discipline->name"
                         :saved-min-distance="$typicalRide->min_distance"

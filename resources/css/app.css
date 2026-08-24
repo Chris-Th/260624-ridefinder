@@ -36,10 +36,13 @@
 @source inline('{hover:,nth-[4n]:,nth-[4n+2]:}bg-trails-{50,{100..900..100},950}');
 
 @theme {
-    --font-sans:
+    /* --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-mono: 'JetBrains Mono';
+        'Segoe UI Symbol', 'Noto Color Emoji'; */
+    /* --font-mono: 'JetBrains Mono'; */
+    /* --font-mono: 'IBM Plex Mono'; */
+    --font-sans: 'Victor Mono', monospace;
+    --font-mono: 'Victor Mono', monospace;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -215,6 +218,14 @@ select:focus[data-flux-control] {
     display: none !important;
 }
 
+/* https://github.com/rubjo/victor-mono : */
+.victor-mono-alternates {
+    font-feature-settings:
+        'ss03' 1,
+        'ss06' 1,
+        'ss07' 1;
+}
+/*
 .victor-mono-thin {
     font-family: 'Victor Mono', monospace;
     font-optical-sizing: auto;
@@ -285,7 +296,7 @@ select:focus[data-flux-control] {
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 700;
     font-style: italic;
-}
+} */
 
 /* \[:where(&)\]:size-4 {
     @apply size-4;
