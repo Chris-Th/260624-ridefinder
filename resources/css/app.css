@@ -221,7 +221,7 @@ select:focus[data-flux-control] {
 /* https://github.com/rubjo/victor-mono : */
 .victor-mono-alternates {
     font-feature-settings:
-        'ss03' 1,
+        'ss02' 1,
         'ss06' 1,
         'ss07' 1;
 }

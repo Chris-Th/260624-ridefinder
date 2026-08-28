@@ -9,7 +9,7 @@
     x-data="{
         showOptions: false
     }"
-    {{ $attributes->except(['wire:model', 'x-model', 'x-bind:style'])->merge(['class' => 'full-row']) }}
+    {{ $attributes->except(['wire:model', 'x-model', 'x-bind:style'])->merge(['class' => '']) }}
     x-on:click="showOptions = true"
     x-on:click.outside="showOptions = false">
     <div class="key">{{ $key }}</div>

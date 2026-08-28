@@ -19,15 +19,8 @@ use Illuminate\Support\Arr;
     'rideTypeCount',
     'paceCount',
     'disciplineCount',
-    // 'distances' => Arr::from(RideDistance::cases()),
-    'distanceCount'
+    'distances' => Arr::from(RideDistance::cases())
 ])
-@php
-    $distances = array_map(
-        fn (RideDistance $distance) => $distance->value,
-        RideDistance::cases(),
-    );
-@endphp
 
 <div
     x-data="{
@@ -45,7 +38,10 @@ use Illuminate\Support\Arr;
             min: @js($draft['distance_range']['min']?->value),
             max: @js($draft['distance_range']['max']?->value),
         },
-        distanceRangeString: '',
+        minMaxDistanceString: '@js($draft['distance_range']['min']?->value),@js($draft['distance_range']['max']?->value)',
+        minMaxDistanceArr: [],
+        maxDistanceOptionsCount: 0,
+        minDistanceOptionsCount: 0,
         get selectedRideType() {
             return this.rideTypes[this.selectedRideTypeId];
         },
@@ -55,7 +51,7 @@ use Illuminate\Support\Arr;
         get selectedPace() {
             return this.paces[this.selectedPaceId];
         },
-        getDistanceRangeString(min, max) {
+        distanceRangeString(min, max) {
             if(!min && !max) return null;
             if(min === max) return `${max} Km`;
             if(min  && max ) return `${min} - ${max} Km`;
@@ -80,11 +76,27 @@ use Illuminate\Support\Arr;
             this.$watch('rect', (r) => {
                 this.viewBox = `${r.x} ${r.y} ${r.width} ${r.height}`;
             });
-            this.distanceRangeString = this.getDistanceRangeString(this.selectedDistanceRange.min, this.selectedDistanceRange.max);
-            this.$watch('selectedDistanceRange', (range) => {
-                this.$nextTick(() => {
-                    this.distanceRangeString = this.getDistanceRangeString(range.min, range.max);
-                })
+            this.minMaxDistArr = this.minMaxDistanceString.split(',');
+            console.log('minMaxDistanceString', this.minMaxDistanceString);
+            this.maxDistanceOptionsCount = this.countDistancesOver(this.selectedDistanceRange.min);
+            this.minDistanceOptionsCount = this.countDistancesUnder(this.selectedDistanceRange.min);
+            // this.$watch('selectedDistanceRange', (range) => {
+            //     this.$nextTick(() => {
+            //         this.maxDistanceOptionsCount = this.countDistancesOver(range.min);
+            //         this.minDistanceOptionsCount = this.countDistancesUnder(range.min);
+            //         console.log('this.maxDistanceOptionsCount', this.maxDistanceOptionsCount, 'this.minDistanceOptionsCount', this.minDistanceOptionsCount)
+            //     })
+
+            // })
+            this.$watch('minMaxDistanceArr', (arr) => {
+
+                let lastChoice = arr[arr.length - 1];
+                arr.sort((a, b) => a - b);
+                if (arr.size > 2) {
+                    arr.forEach(v => v <= lastChoice)
+                }
+                this.selectedDistanceRange.min = arr[0];
+                this.selectedDistanceRange.max = arr[arr.length - 1];
             })
         }
     }"
@@ -123,7 +135,7 @@ use Illuminate\Support\Arr;
             @isset ($draft['ride_type'])
                 <x-typical-ride.card.selectable-property
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
-                    class="full-row"
+                    class="font-thin"
                     :saved-value="$typicalRide->rideType->name"
                     x-bind:style="selectedRideType.name !== `{{ $typicalRide->rideType->name }}` ? `color: ${selectedRideType.color}; font-style: italic` : ''"
                     key="TYPE"
@@ -154,7 +166,8 @@ use Illuminate\Support\Arr;
             @isset ($typicalRide?->pace?->name)
                 <x-typical-ride.card.selectable-property
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
-                    class="full-row"
+                    class="font-bold"
+                    style="font-style: oblique"
                     :saved-value="$savedPace"
                     key="PACE"
                     x-model="selectedPaceId"
@@ -180,7 +193,6 @@ use Illuminate\Support\Arr;
 
             @isset ($typicalRide?->discipline?->name)
                 <x-typical-ride.card.selectable-property
-                    class="full-row"
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
                     :saved-value="$typicalRide->discipline->name"
                     key="DISC"
@@ -190,75 +202,65 @@ use Illuminate\Support\Arr;
                     <x-slot:selectedvalue
                         x-text="selectedDiscipline.name"
                         x-bind:style="selectedDiscipline.name !== `{{ $savedDiscipline }}` ? `font-style: italic` : ''"></x-slot:selectedvalue>
-
                     @foreach ($disciplines as $discipline)
                         <x-typical-ride.card.selectable-property.option
                             value="{{ $discipline['id'] }}"
                             wire:key="discipline-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $discipline['id'] }}"
                             class="z-30 border-neutral-500"
-                            x-bind:class="disciplines[{{ $loop->iteration }}].name === '{{ $savedDiscipline }}' ? 'border' : 'border-none'">
+                            x-bind:class="rideTypes[{{ $loop->iteration }}].name === '{{ $savedDiscipline }}' ? 'border' : 'border-none'">
                             <span class="w-full self-center">{{ $discipline['name'] }}</span>
                         </x-typical-ride.card.selectable-property.option>
+
                     @endforeach
                 </x-typical-ride.card.selectable-property>
             @endisset
 
             @if ($typicalRide->max_distance || $typicalRide->min_distance)
-                <div class="full-row">
+                <div
+                    x-data="{ showOptions: false }"
+                    x-on:click="showOptions = true"
+                    x-on:click.outside="showOptions = false"
+                    class="full-row relative">
                     <div class="key">DIST</div>
-                    {{-- <div class="val relative flex justify-stretch"> --}}
-                    <x-typical-ride.card.selectable-property.double-select
-                        class="val flex h-fit w-full justify-stretch"
-                        x-bind:class="showOptions ? 'z-30' : 'z-20'">
-                        <x-slot:selectedValue
-                            class="val"
-                            x-bind:class="{
-                                    'italic': '{{ $typicalRide->min_distance }}' != selectedDistanceRange.min
-                                        || '{{ $typicalRide->max_distance }}' != selectedDistanceRange.max
-                                }"
-                            x-text="distanceRangeString"></x-slot:selectedValue>
 
-                        <x-slot::leftSelect
-                            id="min-distance-{{ $typicalRide?->id }}"
-                            x-model="selectedDistanceRange.min"
-                            :size="$distanceCount">
-                            @foreach ($distances as $distance)
-                                <x-typical-ride.card.selectable-property.option
-                                    x-text="{{ $distance }}"
-                                    value="{{ $distance }}"
-                                    wire:key="min-distance-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $distance }}"
-                                    class="z-40 justify-center border-blue-500"
-                                    x-bind:class="{
-                                            'inset-ring-2 inset-ring-accent': {{ $distance }} == '{{ $typicalRide->min_distance }}',
-                                            'border': {{ $distance }} == selectedDistanceRange.min,
-                                            'text-neutral pointer-events-none cursor-text': {{ $distance }} > selectedDistanceRange.max || ({{ $distance }} == '{{ $typicalRide->min_distance }}' && {{ $distance }} == selectedDistanceRange.min),
-                                        }">
-                                </x-typical-ride.card.selectable-property.option>
-                            @endforeach
-                        </x-slot::leftSelect>
+                    {{-- Selected Distance Range Value --}}
+                    <div
+                        class="val cursor-pointer"
+                        x-bind:class="selectedDistanceRange.min != `{{ $typicalRide->min_distance }}` || selectedDistanceRange.max != `{{ $typicalRide->max_distance }}` ? 'italic' : ''"
+                        x-text="distanceRangeString(selectedDistanceRange.min, selectedDistanceRange.max)">
+                        {{--  --}}
+                    </div>
 
-                        <x-slot::rightSelect
-                            id="max-distance-{{ $typicalRide?->id }}"
-                            x-model="selectedDistanceRange.max"
-                            :size="$distanceCount">
-                            @foreach ($distances as $distance)
-                                <x-typical-ride.card.selectable-property.option
-                                    x-text="{{ $distance }} == 0 ? 'Any' : '{{ $distance }}'"
-                                    value="{{ $distance }}"
-                                    wire:key="max-distance-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $distance }}"
-                                    class="z-40 justify-center border-blue-500"
-                                    x-bind:class="{
-                                            'inset-ring-2 inset-ring-accent': {{ $distance }} == '{{ $typicalRide->max_distance }}',
-                                            'border': {{ $distance }} == selectedDistanceRange.max,
-                                            'text-neutral pointer-events-none cursor-text': ({{ $distance }} < selectedDistanceRange.min || ({{ $distance }} == '{{ $typicalRide->max_distance }}' && {{ $distance }} == selectedDistanceRange.max)) && {{ $distance }} != 0,
-                                        }">
-                                </x-typical-ride.card.selectable-property.option>
+                    <div
+                        x-cloak
+                        x-bind:class="
+                            showOptions
+                                ? 'translate-x-0 rotate-x-0 rotate-y-0 scale-100'
+                                : 'translate-y-6 rotate-x-90 rotate-y-90 scale-0'
+                        "
+                        class="border-base-100 relative z-40 flex size-fit origin-top-left items-stretch justify-stretch border-2 transition-transform transition-normal duration-200">
+                        <div>
+                            @foreach (RideDistance::cases() as $distance)
+                                <x-typical-ride.card.checkboxes.checkbox
+                                    x-model="minMaxDistanceArr"
+                                    :value="$distance->value"
+                                    id="distance-checkbox-{{ $distance->value }}">
+                                    {{ $distance->value }}
+                                </x-typical-ride.card.checkboxes.checkbox>
                             @endforeach
-                        </x-slot::rightSelect>
-                    </x-typical-ride.card.selectable-property.double-select>
-                    {{-- </div> --}}
+                        </div>
+                        <div>
+                            @foreach (RideDistance::cases() as $distance)
+                                <x-typical-ride.card.checkboxes.checkbox
+                                    x-model="minMaxDistanceArr"
+                                    :value="$distance->value"
+                                    id="distance-checkbox-{{ $distance->value }}">
+                                    {{ $distance->value }}
+                                </x-typical-ride.card.checkboxes.checkbox>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-
             @endif
 
             <x-typical-ride.card.ride-tags :ride-tags="$typicalRide->rideTags" />
@@ -400,8 +402,7 @@ use Illuminate\Support\Arr;
 
         .half-row {
             display: grid;
-            /* grid-column: span calc(var(--rows) / 2); */
-            grid-column: span calc(var(--cols) / 2);
+            grid-column: span calc(var(--rows) / 2);
             grid-template-columns: subgrid;
             grid-template-rows: subgrid;
 

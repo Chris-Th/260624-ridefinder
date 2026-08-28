@@ -13,7 +13,7 @@
     color-interpolation-filters="sRGB">
     <feTurbulence
         type="fractalNoise"
-        baseFrequency="0.0007"
+        baseFrequency="0.0000001"
         numOctaves="2"
         seed="{{ $seed }}"
         stitchTiles="stitch"
@@ -26,11 +26,11 @@
     <feDiffuseLighting
         in="colored"
         lighting-color="#9CC6EC"
-        surfaceScale="7"
-        diffuseConstant="2.5"
+        surfaceScale="4"
+        diffuseConstant="2"
         result="light">
         <feDistantLight
             azimuth="{{ rand(-10, 10) }}"
-            elevation="5" />
+            elevation="2.5" />
     </feDiffuseLighting>
 </filter>

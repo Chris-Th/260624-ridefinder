@@ -2,11 +2,13 @@
 
 use App\Concerns\HasRideTagMotives;
 use App\Concerns\HasRideTypeMotives;
+use App\Enums\RideDistance;
 use App\Models\Discipline;
 use App\Models\Pace;
 use App\Models\Profile;
 use App\Models\RideType;
 use App\Models\TypicalRide;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Json;
 use Livewire\Component;
@@ -77,6 +79,8 @@ new class extends Component
             'draftTypicalRides.*.ride_type.id' => ['required', 'integer', 'exists:ride_types,id'],
             'draftTypicalRides.*.pace.id' => ['integer', 'exists:paces,id'],
             'draftTypicalRides.*.discipline.id' => ['integer', 'exists:disciplines,id'],
+            'draftTypicalRides.*.distance_range.min' => ['integer', Rule::enum(RideDistance::class)],
+            'draftTypicalRides.*.distance_range.max' => ['integer', Rule::enum(RideDistance::class)],
         ]);
 
         foreach ($this->draftTypicalRides as $typicalRideId => $draft) {
@@ -228,7 +232,7 @@ new class extends Component
         {{-- freq 0.0008: 229, 531, 106 freq 0.0004: 434, 305, 750 (vertical), 298 (horizontal) --}}
         @for ($i = 0; $i < 3; $i++)
             <x-vectors.filters.textures.primitives.metal-plate-3
-                :seed="$i === 0 ? '434' : ($i === 1 ? '305' : '655')"
+                :seed="$i === 0 ? '1' : ($i === 1 ? '237' : '655')"
                 :id="'texture-1-'.$i" />
         @endfor
     </x-vectors.filters.textures.factory>
@@ -267,6 +271,7 @@ new class extends Component
                         :ride-type-count="$this->rideTypeOptions->count()"
                         :pace-count="$this->paceOptions->count()"
                         :discipline-count="$this->disciplineOptions->count()"
+                        :distance-count="collect(Arr::from(RideDistance::cases()))->count()"
                         :ride-type-wire-model="'draftTypicalRides.'.$typicalRide->id.'.ride_type.id'"
                         :pace-wire-model="'draftTypicalRides.'.$typicalRide->id.'.pace.id'"
                         :discipline-wire-model="'draftTypicalRides.'.$typicalRide->id.'.discipline.id'"

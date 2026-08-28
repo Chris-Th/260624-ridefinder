@@ -77,3 +77,82 @@
 <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=Share+Tech+Mono&family=Victor+Mono:ital,wght@0,100..700;1,100..700&display=swap"
     rel="stylesheet" />
+
+<div
+    x-cloak
+    x-bind:class="
+        showOptions ? 'translate-x-0 rotate-x-0 rotate-y-0 scale-100' : 'translate-y-6 rotate-x-90 rotate-y-90 scale-0'
+    "
+    class="border-base-100 relative flex size-fit origin-top-left flex-col items-stretch justify-stretch border-2 transition-transform transition-normal duration-200">
+    {{-- Min-Distance Select --}}
+    <select
+        {{-- size="{{ count(RideDistance::cases()) + 2 }}" --}}
+        x-bind:size="minDistanceOptionsCount"
+        class="bg-base-200 border-base-100 h-full grow origin-top-left p-0"
+        wire:model="{{ $distanceRangeWireModel }}.min"
+        x-model="selectedDistanceRange.min">
+        {{-- <x-typical-ride.card.selectable-property.option
+                                class="pointer-events-none cursor-not-allowed flex-col justify-center px-2 text-neutral-400">
+                                Min:
+                            </x-typical-ride.card.selectable-property.option> --}}
+
+        @foreach (RideDistance::cases() as $distance)
+            <template
+                x-if="Number({{ $distance->value }}) < selectedDistanceRange.min || Number({{ $distance->value }}) === 0">
+                <x-typical-ride.card.selectable-property.option
+                    value="{{ $distance->value }}"
+                    wire:key="min-dist-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $distance->value }}"
+                    x-bind:class="{
+                                            'border-base-100! border-2!': `{{ $distance->value }}` == `{{ $savedMinDistance }}`,
+                                            'bg-base-100! italic text-neutral-400! pointer-events-none cursor-default': `{{ $distance->value }}` == selectedDistanceRange.min,
+                                            // 'text-neutral-500! font-thin pointer-events-none cursor-default':  Number({{ $distance->value }}) > Number(selectedDistanceRange.max)
+                                            'hidden':  Number({{ $distance->value }}) > Number(selectedDistanceRange.max)
+                                        }"
+                    class="cursor-pointer items-center border-2 border-green-300 px-2">
+                    min: {{ $distance->value }}
+                </x-typical-ride.card.selectable-property.option>
+            </template>
+        @endforeach
+    </select>
+
+    {{-- Max-Distance Select --}}
+    <select
+        {{-- size="{{ count(RideDistance::cases()) + 2 }}" --}}
+        x-bind:size="maxDistanceOptionsCount"
+        class="bg-base-200 border-base-100 h-full grow origin-top-left p-0"
+        wire:model="{{ $distanceRangeWireModel }}.max"
+        x-model="selectedDistanceRange.max">
+        {{-- <x-typical-ride.card.selectable-property.option
+                                class="pointer-events-none cursor-not-allowed flex-col justify-center px-2 text-neutral-400">
+                                Max:
+                            </x-typical-ride.card.selectable-property.option> --}}
+
+        @foreach (RideDistance::cases() as $distance)
+            <template
+                x-if="Number({{ $distance->value }}) >= selectedDistanceRange.min && Number({{ $distance->value }}) !== 0">
+                <x-typical-ride.card.selectable-property.option
+                    x-show="Number({{ $distance->value }}) >= Number(selectedDistanceRange.min)"
+                    value="{{ $distance->value }}"
+                    wire:key="max-dist-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $distance->value }}"
+                    x-bind:class="{
+                                        'border-base-100! border-2!': `{{ $distance->value }}` == `{{ $savedMaxDistance }}`,
+                                        'bg-base-100! italic text-neutral-400! pointer-events-none cursor-default': `{{ $distance->value }}` == selectedDistanceRange.max,
+                                        /* 'text-neutral-500! font-thin pointer-events-none cursor-default':  Number({{ $distance->value }}) < Number(selectedDistanceRange.min) */
+
+                                    }"
+                    class="cursor-pointer items-center border-2 border-red-300 px-2">
+                    max: {{ $distance->value }}
+                </x-typical-ride.card.selectable-property.option>
+            </template>
+            <x-typical-ride.card.selectable-property.option
+                x-show="Number({{ $distance->value }}) < Number(selectedDistanceRange.min)"
+                class="relative z-0 bg-transparent!">
+                &nbsp;</x-typical-ride.card.selectable-property.option
+            >
+
+        @endforeach
+        <x-typical-ride.card.selectable-property.option>
+            150&nbsp;+&nbsp;Km
+        </x-typical-ride.card.selectable-property.option>
+    </select>
+</div>
