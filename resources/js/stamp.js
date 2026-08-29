@@ -26,7 +26,7 @@ export default (config = {}) => ({
         center: config.font?.center?.weight || 'normal',
         bottom: config.font?.bottom?.weight || 'normal'
     },
-    maxJitter: config.maxJitter !== undefined ? config.maxJitter : 0.6,
+    maxJitter: config.maxJitter ?? 0.6,
     smearFactor: config.smearFactor !== undefined ? config.smearFactor : 1,
     maxTransform: {
         tx: config.maxTransform?.tx || 0,
@@ -51,8 +51,6 @@ export default (config = {}) => ({
     get iconFilterUrl() {
         if(config.iconFilter === 'soft') {
             return 'url(#soft-ink-grit-filter)';
-        } else if (config.iconFilter === 'softer') {
-            return 'url(#softer-ink-grit-filter)';
         } else if (config.iconFilter === 'none') {
             return '';
         } else {
@@ -62,7 +60,7 @@ export default (config = {}) => ({
     get iconPadding() { return Math.max(5, this.maxJitter * 3); },
     get size() { return (this.radius * 2) + (this.iconPadding * 2); },
     get center() { return this.radius + this.iconPadding; },
-    get viewBox() { console.log('size', this.size); return `0 0 ${this.size} ${this.size}`; },
+    get viewBox() { return `0 0 ${this.size} ${this.size}`; },
 
     get outerRadius() { return this.radius; },
     get innerRadius() { return this.outerBorder === 'none' ? this.radius : this.radius - (this.outerBorder + this.borderGap); },
@@ -133,16 +131,6 @@ export default (config = {}) => ({
 
         stopsAttrRanges.forEach((stop, index) => {
 
-            /*
-                [
-                    [0, 1], // [max-offset, min-opacity]
-                    [70, 0.8],
-                    [90, 0.5],
-                    [97, 0.1],
-                    [100, 0]
-                ];
-
-            */
             // if (!typeof stop === 'Array') return;
             const minOff = index === 0 ? 0 : (index === stopsAttrRanges.length - 1 ? 100 : stops[index - 1].offset);
             const maxOff = index === stopsAttrRanges.length - 1 ? 100 : stop[0];

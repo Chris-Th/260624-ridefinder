@@ -5,6 +5,8 @@
     'size' => null,
 ])
 
+{{--  --}}
+
 <div
     x-data="{
         showOptions: false
@@ -25,11 +27,13 @@
             }}
             size="{{ $size }}"
             x-cloak
-            x-bind:class="
+            {{-- x-bind:class="
                 showOptions
                     ? '-translate-x-12 rotate-x-0 rotate-y-0 scale-100'
                     : 'translate-x-0 -rotate-x-90 rotate-y-45 scale-0'
-            "
+            " --}}
+            x-show="showOptions"
+            x-transition
             class="bg-base-200 border-base-100 relative z-50 w-48 origin-top-left overflow-y-clip border-2 p-0 transition-transform transition-normal duration-200">
             {{ $slot }}
         </select>

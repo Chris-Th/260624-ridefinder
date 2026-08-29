@@ -21,7 +21,6 @@
     <svg
         x-data="{
             init() {
-                console.log('viewBox', viewBox);
                 $el.setAttribute('viewBox', viewBox);
                 gradientStopRanges = [
                     [0, 1],
@@ -156,7 +155,7 @@
                     x-bind:href="'#stamp-text-and-borders-' + id" />
             </g>
 
-            <use opacity="0.6" filter="url(#softer-ink-grit-filter)" x-bind:href="'#stamp-text-and-borders-' + id" />
+            <use opacity="0.6" filter="url(#ink-grit-filter)" x-bind:href="'#stamp-text-and-borders-' + id" />
 
             <g filter="url(#ink-grit-filter)">
                 <use
@@ -168,7 +167,7 @@
                     x-bind:transform="`translate(${1.5 * factorX}, ${1.5 * factorY})`"
                     x-bind:href="'#stamp-motive-' + id" />
             </g>
-            <use opacity="0.7" x-bind:filter="iconFilterUrl" x-bind:href="'#stamp-motive-' + id" />
+            <use opacity="0.7" filter="url(#ink-grit-filter)" x-bind:href="'#stamp-motive-' + id" />
         </g>
     </svg>
 </div>

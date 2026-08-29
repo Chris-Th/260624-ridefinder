@@ -12,15 +12,7 @@ use Illuminate\Support\Arr;
     'disciplines',
     'rideTypeWireModel',
     'savedRideTypeColor',
-    'savedPace',
-    'savedDiscipline',
     'savedMinDistance',
-    'savedMaxDistance',
-    'rideTypeCount',
-    'paceCount',
-    'disciplineCount',
-    // 'distances' => Arr::from(RideDistance::cases()),
-    'distanceCount'
 ])
 @php
     $distances = array_map(
@@ -129,7 +121,7 @@ use Illuminate\Support\Arr;
                     key="TYPE"
                     x-model="selectedRideTypeId"
                     wire:model="{{ $rideTypeWireModel }}"
-                    :size="$rideTypeCount">
+                    :size="$rideTypes->count()">
                     <x-slot:selectedvalue
                         x-text="selectedRideType.name"
                         x-bind:style="selectedRideType.name !== `{{ $typicalRide->rideType->name }}` ? `color: ${selectedRideType.color}; font-style: italic` : ''"></x-slot:selectedvalue>
@@ -155,22 +147,22 @@ use Illuminate\Support\Arr;
                 <x-typical-ride.card.selectable-property
                     x-bind:class="showOptions ? 'z-30' : 'z-20'"
                     class="full-row"
-                    :saved-value="$savedPace"
+                    :saved-value="$typicalRide->pace->name"
                     key="PACE"
                     x-model="selectedPaceId"
                     wire:model="{{ $paceWireModel }}"
-                    :size="$paceCount">
+                    :size="$paces->count()">
                     <x-slot:selectedvalue
                         class="italic"
                         x-text="selectedPace.name"
-                        x-bind:style="selectedPace.name !== `{{ $savedPace }}` ? `font-style: italic` : ''"></x-slot:selectedvalue>
+                        x-bind:style="selectedPace.name !== `{{ $typicalRide->pace->name }}` ? `font-style: italic` : ''"></x-slot:selectedvalue>
 
                     @foreach ($paces as $pace)
                         <x-typical-ride.card.selectable-property.option
                             value="{{ $pace['id'] }}"
                             wire:key="pace-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $pace['id'] }}"
                             class="z-30 border-neutral-500"
-                            x-bind:class="rideTypes[{{ $loop->iteration }}].name === '{{ $savedPace }}' ? 'border' : 'border-none'">
+                            x-bind:class="rideTypes[{{ $loop->iteration }}].name === '{{ $typicalRide->pace->name }}' ? 'border' : 'border-none'">
                             <span class="w-full self-center">{{ $pace['name'] }}</span>
                         </x-typical-ride.card.selectable-property.option>
 
@@ -186,17 +178,17 @@ use Illuminate\Support\Arr;
                     key="DISC"
                     x-model="selectedDisciplineId"
                     wire:model="{{ $disciplineWireModel }}"
-                    :size="$disciplineCount">
+                    :size="$disciplines->count()">
                     <x-slot:selectedvalue
                         x-text="selectedDiscipline.name"
-                        x-bind:style="selectedDiscipline.name !== `{{ $savedDiscipline }}` ? `font-style: italic` : ''"></x-slot:selectedvalue>
+                        x-bind:style="selectedDiscipline.name !== `{{ $typicalRide->discipline->name }}` ? `font-style: italic` : ''"></x-slot:selectedvalue>
 
                     @foreach ($disciplines as $discipline)
                         <x-typical-ride.card.selectable-property.option
                             value="{{ $discipline['id'] }}"
                             wire:key="discipline-dropdown-wire-key-{{ $typicalRide?->id }}-{{ $discipline['id'] }}"
                             class="z-30 border-neutral-500"
-                            x-bind:class="disciplines[{{ $loop->iteration }}].name === '{{ $savedDiscipline }}' ? 'border' : 'border-none'">
+                            x-bind:class="disciplines[{{ $loop->iteration }}].name === '{{ $typicalRide->discipline->name }}' ? 'border' : 'border-none'">
                             <span class="w-full self-center">{{ $discipline['name'] }}</span>
                         </x-typical-ride.card.selectable-property.option>
                     @endforeach
@@ -221,7 +213,8 @@ use Illuminate\Support\Arr;
                         <x-slot::leftSelect
                             id="min-distance-{{ $typicalRide?->id }}"
                             x-model="selectedDistanceRange.min"
-                            :size="$distanceCount">
+                            wire:model="draftTypicalRides.{{ $typicalRide->id }}.distance_range.min"
+                            :size="count($distances)">
                             @foreach ($distances as $distance)
                                 <x-typical-ride.card.selectable-property.option
                                     x-text="{{ $distance }}"
@@ -240,7 +233,8 @@ use Illuminate\Support\Arr;
                         <x-slot::rightSelect
                             id="max-distance-{{ $typicalRide?->id }}"
                             x-model="selectedDistanceRange.max"
-                            :size="$distanceCount">
+                            wire:model="draftTypicalRides.{{ $typicalRide->id }}.distance_range.max"
+                            :size="count($distances)">
                             @foreach ($distances as $distance)
                                 <x-typical-ride.card.selectable-property.option
                                     x-text="{{ $distance }} == 0 ? 'Any' : '{{ $distance }}'"
@@ -270,39 +264,40 @@ use Illuminate\Support\Arr;
                         x-show="selectedRideTypeId == {{ $type['id'] }}"
                         x-cloak
                         wire:key="stamp-{{ $typicalRide->id }}-{{ $type['id'] }}">
-                        <x-vectors.stamps.round-stamp
-                            class="absolute inset-0 flex items-center justify-center"
-                            color="var(--ride-type-color)"
-                            :ridetype="$type['name']"
-                            opacity="0.8"
-                            x-data="stamp({
-                            opacity: 0.7,
-                            radius: 45,
-                            iconSize: 60,
-                            innerBorder: 1,
-                            outerBorder: 3,
-                            borderGap: 1.5,
-                            smearFactor: 1.5,
-                            pressureFaint: 0.8, // 1: default faint effect | < 1: increased random faint | > 1: decreased faint | 'none': no random faint
-                            padding: 6,
-                            maxJitter: 0.8,
-                            // topText: '{{ $typicalRide->name }}',
-                            centerText: '{{ $typicalRide?->discipline?->name }}',
-                            // bottomText: '*{{ $draft['ride_type']['name'] }}*',
-                            font: {top: {size: 'sm', weight: 'bold'}, center: {size: 'md', weight: 'normal'}, bottom:{size: 'lg', weight: 'thin'}},
-                            maxTransform: { tx: 15, ty: 20, rot: 30 },
-                            iconFilter: 'soft',
-                        })">
-                            <x-dynamic-component
-                                uniqueid="typical-ride-{{ $typicalRide->id }}-type-{{ $type['id'] }}"
-                                :component="$type['icon_view_component']"
-                                x-bind:class="`w-[${iconRect.width}px] h-[${iconRect.height}px] origin-center`"
-                                x-bind:x="iconRect.x"
-                                x-bind:y="iconRect.y"
-                                x-bind:width="iconRect.width"
-                                x-bind:height="iconRect.height"
-                                class="mt-4" />
-                        </x-vectors.stamps.round-stamp>
+                        <template x-if="selectedRideTypeId == {{ $type['id'] }}">
+                            <x-vectors.stamps.round-stamp
+                                class="absolute inset-0 flex items-center justify-center"
+                                color="var(--ride-type-color)"
+                                :ridetype="$type['name']"
+                                opacity="0.8"
+                                x-data="stamp({
+                                opacity: 0.5,
+                                radius: 45,
+                                iconSize: 60,
+                                innerBorder: 1,
+                                outerBorder: 3,
+                                borderGap: 1.5,
+                                smearFactor: 1,
+                                pressureFaint: 1, // 1: default faint effect | < 1: increased random faint | > 1: decreased faint | 'none': no random faint
+                                padding: 6,
+                                maxJitter: 0.6,
+                                // topText: '{{ $typicalRide->name }}',
+                                centerText: '{{ $typicalRide?->discipline?->name }}',
+                                // bottomText: '*{{ $draft['ride_type']['name'] }}*',
+                                font: {top: {size: 'sm', weight: 'bold'}, center: {size: 'md', weight: 'normal'}, bottom:{size: 'lg', weight: 'thin'}},
+                                maxTransform: { tx: 15, ty: 20, rot: 30 },
+                            })">
+                                <x-dynamic-component
+                                    uniqueid="typical-ride-{{ $typicalRide->id }}-type-{{ $type['id'] }}"
+                                    :component="$type['icon_view_component']"
+                                    x-bind:class="`w-[${iconRect.width}px] h-[${iconRect.height}px] origin-center`"
+                                    x-bind:x="iconRect.x"
+                                    x-bind:y="iconRect.y"
+                                    x-bind:width="iconRect.width"
+                                    x-bind:height="iconRect.height"
+                                    class="mt-4" />
+                            </x-vectors.stamps.round-stamp>
+                        </template>
                     </div>
                 @endforeach
             </div>

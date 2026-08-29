@@ -17,11 +17,7 @@
         <div {{ $selectedValue->attributes->merge(['class' => 'absolute w-full cursor-pointer']) }}></div>
     @endif
     <div
-        x-bind:class="
-            showOptions
-                ? '-translate-x-12 rotate-x-0 rotate-y-0 scale-100'
-                : 'translate-x-0 -rotate-x-90 rotate-y-45 scale-0'
-        "
+        x-show="showOptions"
         x-cloak
         class="bg-base-200 border-base-100 double-select relative z-50 flex h-fit w-48 origin-top-left justify-stretch border-2 p-0 transition-transform transition-normal duration-200">
         @if (isset($leftSelect))

@@ -218,6 +218,11 @@ select:focus[data-flux-control] {
     display: none !important;
 }
 
+svg {
+    shape-rendering: optimizeSpeed;
+    text-rendering: optimizeSpeed;
+}
+
 /* https://github.com/rubjo/victor-mono : */
 .victor-mono-alternates {
     font-feature-settings:

@@ -259,7 +259,7 @@ new class extends Component
             </div>
 
             <h4 class="victor-mono-italic ms-4 mb-4 text-lg font-bold">Typical Rides:</h4>
-            <div class="mx-auto h-full! w-full columns-[12rem] items-center gap-8">
+            <div class="mx-auto h-full! w-full columns-[12rem] items-center gap-8 border">
                 @foreach ($typicalRides as $typicalRide)
                     <x-typical-ride.card.index
                         :typical-ride="$typicalRide"
@@ -268,18 +268,10 @@ new class extends Component
                         :ride-types="$this->rideTypeOptions"
                         :paces="$this->paceOptions"
                         :disciplines="$this->disciplineOptions"
-                        :ride-type-count="$this->rideTypeOptions->count()"
-                        :pace-count="$this->paceOptions->count()"
-                        :discipline-count="$this->disciplineOptions->count()"
-                        :distance-count="collect(Arr::from(RideDistance::cases()))->count()"
                         :ride-type-wire-model="'draftTypicalRides.'.$typicalRide->id.'.ride_type.id'"
                         :pace-wire-model="'draftTypicalRides.'.$typicalRide->id.'.pace.id'"
                         :discipline-wire-model="'draftTypicalRides.'.$typicalRide->id.'.discipline.id'"
                         :distance-range-wire-model="'draftTypicalRides.'.$typicalRide->id.'.distance_range'"
-                        :saved-pace="$typicalRide->pace->name"
-                        :saved-discipline="$typicalRide->discipline->name"
-                        :saved-min-distance="$typicalRide->min_distance"
-                        :saved-max-distance="$typicalRide->max_distance"
                         :saved-ride-type-color="$this->getRideTypeColorVar(400, $typicalRide->rideType->name)"
                         wire:key="typical-ride-{{ $typicalRide->id }}" />
 
@@ -290,3 +282,8 @@ new class extends Component
 
     {{-- <div class="grid h-full items-center gap-x-5 gap-y-3 md:grid-cols-2 xl:grid-cols-3"> --}}
 </div>
+<style>
+    .typical-rides-grid {
+        display: grid;
+    }
+</style>
